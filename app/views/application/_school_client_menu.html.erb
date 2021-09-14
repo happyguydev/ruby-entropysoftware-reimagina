@@ -1,0 +1,128 @@
+<aside class="main-sidebar">
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section style="height: auto;" class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel">
+      <div class="pull-left image">
+        <%= image_tag 'default-avatar.png', size: '5x5', class: 'img-circle' %>
+      </div>
+
+      <div class="pull-left info" style="padding-top: 13px">
+        <p> Hola, <%= link_to current_user.try(:first_name), '#' %></p>
+        <div>
+          <%= link_to destroy_user_session_path, method: :delete, style: 'padding-top: 13px; color: #d44950;' do %>
+             <i class="fa fa-power-off"></i> Cerrar sesión
+          <% end -%>
+        </div>
+      </div>
+    </div>
+
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu">
+      <li class="header">MENU DE NAVEGACION</li>
+      <% if current_user.has_school_client_role? %>
+        <li class="treeview active">
+          <a href="#">
+            <i class="fa fa-cog"></i> <span>General</span> <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li role='presentation' class='<%= active_link?(:edit_profile) %>'>
+              <a href='<%= edit_profile_path %>'>
+                <i class="fa fa-circle-o text-yellow"></i>Mi Perfil
+              </a>
+            </li>
+            <li role='presentation' class='<%= active_link?(:assigned_school) %>'>
+            <%  unless current_user.has_access?([:cobranza]) %>
+              <% if current_user.has_access?([:daem]) %>
+                <a href='<%= my_school_path %>'>
+                <i class="fa fa-circle-o text-yellow"></i>Mis Establecimientos
+                </a>
+                <% else  %>
+                <a href='<%= my_school_path %>'>
+                <i class="fa fa-circle-o text-yellow"></i>Mi Establecimiento
+                </a>
+            </li>
+            <% end %>
+          </ul>
+        </li>
+        <% end %>
+      <% end %>
+
+      <% if @school.present? %>
+        <% if current_user.has_access?([:daem, :utp, :director]) %>
+          <li class="treeview active">
+            <a href="#">
+              <i class="fa fa-files-o"></i>
+              <span>Evaluaciones</span><i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li role='presentation' class='<%= active_link?(:evaluation) %>'>
+                <a href='/school_clients/evaluation'>
+                  <i class="fa fa-circle-o text-red"></i>Descargar Evaluaciones
+                </a>
+              </li>
+            </ul>
+          </li>
+        <% end -%>
+
+        <% if current_user.has_access?([:daem, :director, :profesor, :utp]) %>
+          <li class="treeview active">
+            <a href="#">
+              <i class="fa fa-th-list"></i>
+              <span>Resultados e informes</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li role='presentation' class='<%= active_link?(:results_n_reports) %>'>
+                <a href="/school_clients/results_n_reports"><i class="fa fa-circle-o text-orange"></i>Resultados / Informes</a>
+              </li>
+                <% if current_user.has_access?([:daem, :director, :utp]) %>
+                  <li class='<%= params[:controller] == "comparatives" ? active_link?(:index) : "" %>'><a href="/comparatives/index"><i class="fa fa-circle-o text-orange"></i>Informes comparativos</a></li>
+                <% end -%>
+            </ul>
+          </li>
+        <% end -%>
+
+        <% if current_user.has_access?([:daem, :cobranza, :director]) %>
+          <li class="treeview active">
+            <a href="#">
+              <i class="fa fa-money"></i>
+              <span>Facturación</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li class='<%= active_link?(:invoice) %>'><a href='/school_clients/invoice'><i class="fa fa-circle-o text-green"></i>Facturas</a></li>
+              <li class='<%= active_link?(:billing) %>'><a href='/school_clients/billing'><i class="fa fa-circle-o text-green"></i>Pagos</a></li>
+            </ul>
+          </li>
+        <% end -%>
+
+        <% if current_user.has_access?([:daem, :director, :utp]) %>
+          <li class="treeview active">
+            <a href="#">
+              <i class="fa fa-edit"></i> <span>Contacto</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li class='<%= active_link?(:feedback) %>'><a href="/school_clients/feedback" data-remote= true><i class="fa fa-circle-o text-orange"></i>Feedback</a></li>
+              <li class='<%= active_link?(:contact_us) %>'><a href="/school_clients/contact"><i class="fa fa-circle-o text-orange"></i>Formulario de contacto</a></li>
+            </ul>
+          </li>
+        <% end -%>
+      <% end %>
+    </ul>
+  </section>
+</aside>
+<%= render 'assigned_schools/assigned_schools_modal' %>
+
+<script>
+  $(document).on('keyup','#feedback_comentario',function(){
+    var btn = $('.update-feed input');
+    if ($(this).val().length > 0){
+      btn.removeAttr("disabled");
+    }
+    else {
+      btn.attr('disabled', 'disabled');
+    }
+  });
+</script>

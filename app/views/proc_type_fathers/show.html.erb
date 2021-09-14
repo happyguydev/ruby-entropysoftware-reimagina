@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @proc_type_father.nombre %>
+</p>
+
+<p>
+  <strong>Short name:</strong>
+  <%= @proc_type_father.short_name %>
+</p>
+
+<%= link_to 'Edit', edit_proc_type_father_path(@proc_type_father) %> |
+<%= link_to 'Back', proc_type_fathers_path %>

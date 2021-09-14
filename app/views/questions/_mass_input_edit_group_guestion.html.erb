@@ -1,0 +1,23 @@
+<%
+  if params[:question_ids].blank? 
+   @group_question.questions.update_all(:group_question_id=> nil)
+   @group_question.destroy
+  end
+%>
+<% @questions = Instrument.find(session[:current_instrument]).instrument_questions_positions.order('position ASC').collect(&:question).uniq %>
+ <!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+  <% @questions.each_with_index do |question, index|%>
+  <% @question = question %>
+   <li role="presentation" id="tab-<%= index %>" class="<%= index==0 ? 'active' : nil %> <%= is_question_edited(@question)%>">
+    <a href="#question-<%= index %>"  role="tab" data-toggle="tab"><%= index+1 %></a></li> 
+  <% end %>
+</ul>
+<div class="tab-content">
+  <% @questions.each_with_index do |question, index|%>
+    <% @question = question %>
+    <div role="tabpanel" class="tab-pane <%= index==0 ? 'active' : nil %>" id="question-<%= index  %>">
+      <%= render 'questions/mass_input_form', :index => index, :sc => params[:alternative_index] %>
+    </div> 
+  <%end%>
+</div>

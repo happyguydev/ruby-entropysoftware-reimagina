@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Feedback:</strong>
+  <%= @feed_form.feedback %>
+</p>
+
+<p>
+  <strong>Feed item:</strong>
+  <%= @feed_form.feed_item %>
+</p>
+
+<p>
+  <strong>Feed score:</strong>
+  <%= @feed_form.feed_score %>
+</p>
+
+<%= link_to 'Edit', edit_feed_form_path(@feed_form) %> |
+<%= link_to 'Back', feed_forms_path %>

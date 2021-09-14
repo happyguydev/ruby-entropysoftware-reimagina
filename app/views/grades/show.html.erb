@@ -1,0 +1,73 @@
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box col-sm-12 col-md-12 col-lg-12">
+                <div class="box-header">
+                    <h3 class="box-title">Mostrando curso</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <p>
+                        <strong>Establecimiento:</strong>
+                        <%= @grade.school.nombre %>
+                    </p>
+
+                    <p>
+                        <strong>Nivel:</strong>
+                        <%= @grade.level.nombre %>
+                    </p>
+
+                    <% if @grade.letra.present?%>
+                    <p>
+                        <strong>Letra:</strong>
+                        <%= @grade.try(:letra) %>
+                    </p>
+                    <% end %>
+                    <p>
+                        <strong>Año:</strong>
+                        <%= @grade.year %>
+                    </p>
+
+                    <div class="field">
+                        <h3>Alumnos del
+                            <%= @grade.level.nombre %>
+                            <%= @grade.try(:letra) %>
+                            <%= link_to '(Editar)', edit_school_grade_path(@school,@grade) %>
+                        </h3>
+
+                        <div class='col-md-12 col-sm-12'>
+                            <table id='students-table' class="table table-bordered table-hover dataTable" data-source='<%= grade_students_path(@grade, format: :json) %>'>
+                                <thead>
+                                    <tr>
+                                        <th>RUT</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <%= link_to 'Nuevo Alumno', new_grade_student_path(@grade), class: 'btn btn-primary pull-right' %>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="box col-sm-12 col-md-12 col-lg-12">
+                                <div class="box-header">
+                                    <h3 class="box-title">Ingreso masivo de alumnos</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+
+                                  <div id='ingreso_students' class='handsontabla'></div>
+                                      <button class='btn btn-success' id='stu_mass_input' data-grade='<%= @grade.id %>'>Enviar ingreso masivo</button>
+
+
+                                    </div>
+                                </section>
+
+
+                <!-- /.box-body -->

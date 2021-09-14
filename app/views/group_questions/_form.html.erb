@@ -1,0 +1,61 @@
+<%= simple_form_for(group_question) do |f| %>
+<%= f.error_notification %>
+
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">Instrucciones</h3>
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+      </button>
+    </div>
+    <!-- /.box-tools -->
+  </div>
+  <!-- /.box-header -->
+  <div class="box-body" style="display: block;">
+    <ol type =1>
+      <li><p>Defina el enunciado general, por ejemplo : "Observe la imagen y conteste las preguntas"</p></li>
+      <li><p>Escriba la etiqueta [PREGUNTAS] para definir la ubicación del número de las preguntas asociadas, ejemplo :
+        "Observe la imagen y conteste las preguntas [PREGUNTAS]" , o "Conteste [PREGUNTAS] en base al texto".
+        </p></li>
+    </ol>   </div>
+  <!-- /.box-body -->
+</div>
+
+<div class="form-inputs">
+  <label>Enunciado General</label>
+  <%= f.input :statement, label: false, input_html: { class: 'rich-text-group-question' } %>
+</div>
+<br />
+<div class="form-actions">
+  <%= f.submit "Enviar", class: 'btn btn-success' %>
+</div>
+<br />
+<% end %>
+<script type='text/javascript'>
+  $('.rich-text-group-question').froalaEditor({ 
+    language: 'es',
+    key: 'FwcnehmbblD6lA-8==',
+    imageUploadToS3: {
+      bucket: $("body").data('bucket'),
+      region: 's3', 
+      keyStart: $("body").data('key-start'),
+      callback: function (url, key) {
+        console.log(url); 
+        console.log(key);
+      },
+      params: { 
+        acl: $("body").data('acl'),
+        AWSAccessKeyId: $("body").data('access-key'),
+        policy: $("body").data('policy'),
+        signature: $("body").data('signature')
+      }
+    },
+    imageManagerLoadURL: '/upload_gallery.json' 
+  });
+  $('.rich-text-group-question').on('froalaEditor.image.inserted', function (e, editor, $img, response) { 
+    var key = $(response).find('key').text()
+    $('#froalaImageTags').find('input[name="froala_image[key]"]').val(key)
+    $('#froalaImageTags').modal()
+  });
+</script>
+

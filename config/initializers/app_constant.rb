@@ -1,0 +1,1 @@
+REPORT_TYPES = ['psu', 'capacitaciones', 'simce', 'unidad', 'nivel', 'simce', 'nivel', 'simce','nivel','simce'].freeze

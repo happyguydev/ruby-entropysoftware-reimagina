@@ -1,0 +1,23 @@
+// Place all the styles related to the comparatives controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.comparative-form {
+  select {
+    width: 100%;
+  }
+}
+
+.comparative-submit {
+   text-align: center;
+}
+
+.comparative-form select {
+  padding: 0 0 0 8px;
+  height: 25px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  background-color: #fff;
+  background-image: linear-gradient(#eeeeee 20%, #ffffff 80%);
+  box-shadow: 0 1px 0 #fff inset;
+}

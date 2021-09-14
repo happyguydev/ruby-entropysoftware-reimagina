@@ -1,0 +1,52 @@
+        
+<script type='text/javascript'>
+ questions = <%=@questions_global.inspect.html_safe%>
+ remedialsTable(questions);
+</script>
+
+<section class="content">
+  <div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title">Instrucciones</h3>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="display: block;">
+      <ol type =1>
+        <li><p>En este menú podrá editar de forma masiva el RC completo de una evaluación.</p></li>
+
+        <li><p>En el caso de los objetivos de aprendizaje sólo se ingresarán correctamente si el número de OA de ese nivel/asignatura existe previamente en la Macrotabla, el campo "Descripción" será ignorado ya que se obtendrá directo de la Macrotabla. </p></li>
+
+        <li><p>Del mismo modo, el campo UNIDAD también será ignorado, ya que las unidades vienen definidas para cada OA en la Macrotabla, sin embargo Ud. puede escribir sobre estas celdas sin problemas para mantener el formato de RC actual. </p></li>
+
+          <li><p>Si la pregunta tiene más de un OA basta con escribir los números separados por guión "-". Ej : OA1-OA2 </p></li>
+
+          <li><p>Si la pregunta corresponde a un año anterior, por ejemplo en pruebas de diagnóstico, deberá especificarlo en la celda "NIVEL" mediante la siguiente nomenclatura : ["pk","k","primero_b", "segundo_b", "tercero_b", "cuarto_b", "quinto_b", "sexto_b", "septimo_b", "octavo_b", "primero_m", "segundo_m", "tercero_m", "cuarto_m"]
+
+ </p></li>
+
+
+          <li><p>En el caso de los demás indicadores (Contenido, Habilidad, Eje, etc), si el nombre ingresado existe en sistema se va a utilizar el ya existente, y si el nombre no existe en sistema éste se va a crear.</p></li>
+
+          <li><p>Dicho esto es <b>de suma importancia</b> que los nombres que se refieran a lo mismo vengan escritos <b>exactamente</b> de la misma manera para evitar la creación de duplicados.</p></li>
+
+      </ol>   </div>
+    <!-- /.box-body -->
+  </div>
+   <div class="row">
+   <div class="col-xs-12">
+   <div class="box col-sm-12 col-md-12 col-lg-12">
+   <div class="box-header">
+      <h3 class="box-title">Corrección masiva de RC  <%= @instrument.nombre %></h3>
+   </div>
+   <div class="box-body">
+        <p class="box-title">Asignatura  : <%= @instrument.evaluation.assignature.nombre %></p>
+       <p class="box-title">Nivel : <%= @instrument.evaluation.level.nombre %></p>
+      <div id='ingreso_remedials' class='handsontabla'></div>
+      <button class='btn btn-success' id='rem_mass_input' data-evaluation='<%= @instrument.try(:id) %>'>Enviar ingreso masivo</button>
+   </div>
+</section>

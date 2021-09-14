@@ -1,0 +1,19 @@
+<%= simple_form_for @axis_program do |f| %>
+<div class="field">
+  <label>Asignatura</label>
+  <%= f.association :assignature, label: false, input_html: {class: "chosen-select"} %>
+</div>
+
+<div class="field">
+  <label>Nombre</label>
+  <%= f.input :nombre, :label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="field">
+  <label>Descripcion</label><br>
+  <%= f.input :descripcion, :label => false, input_html: {class: 'form-control'} %>
+</div>
+<div class="actions">
+  <%= f.submit "Enviar"%>
+</div>
+<% end %>

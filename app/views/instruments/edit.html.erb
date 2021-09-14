@@ -1,0 +1,72 @@
+<section class="content">
+
+  <div class="row">
+    <div class="box box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">Instrucciones</h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+          </button>
+        </div>
+        <!-- /.box-tools -->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" style="display: block;">
+        <ol type =1>
+          <li><p>Defina el orden de las preguntas y alternativas arrastrando y soltando, asegúrese de que todas las preguntas del mismo grupo queden juntas, ya que éstas comparten un enunciado general.</p></li>
+          <li><p>Una vez definido el orden deseado presione "Guardar Cambios".
+            </p></li>
+        </ol>   </div>
+      <!-- /.box-body -->
+    </div>
+
+    <div class="box col-xs-12">
+      <div class="box-header">
+        <div class="pull-right">
+          <%= link_to "Guardar cambios", generate_guide_instrument_path(@instrument), remote: true, method: :post, class: 'btn btn-info btn-sm' %>
+        </div>
+        <h3 class="box-title">Editando Instrumento <%=@instrument.nombre %></h3>
+      </div>
+      <%#= render 'form' %>
+      <div class="box-body">
+        <ol class="decimal" id="instrumentQuestionsPosition" data-update-url="<%= sort_questions_instruments_url %>">
+          <%- @instrument.instrument_questions_positions.order('position ASC').each do |p| %>
+          <%= content_tag_for :li, p do %>
+          <%- if p.question.group_question_id.present? %>
+          <strong class="pull-right">
+            <span class="label label-default">
+              PREGUNTA GRUPO #<%= p.question.group_question_id %>	
+            </span>
+          </strong>
+          <% end -%>
+          <%= link_to   sanitize(p.question.texto+"(Editar)"), edit_question_path(p.question), :target => "_blank" %>
+          <ol class="alpha instrumentAlternativesPosition" data-update-url="<%= sort_alternatives_instruments_url %>">
+            <%- p.instrument_alternatives_positions.order('position ASC').each do |a| %>
+            <%= content_tag_for :li, a, style: a.alternative.correcta ? 'background-color: #5cb85c;' : ''  do %>
+            <%- if a.alternative.correcta %>
+            <span class="badge pull-right">
+              <i class="fa fa-check"></i>
+            </span>
+            <p class="alternative correct">
+              <%= ActionController::Base.helpers.sanitize(a.alternative.texto, :tags => ['img'],:attributes => %w(style class href name src type value width height data)).html_safe %>   
+            <%- else %>
+            </p>
+            
+            <p class="alternative false">
+              <%= ActionController::Base.helpers.sanitize(a.alternative.texto, :tags => ['img'],:attributes => %w(style class href name src type value width height data)).html_safe %>
+            </p>
+            <% end -%>
+            <% end %>	
+            <% end %>
+          </ol>
+          <% end %>
+          <% end %>
+        </ol>
+
+        <%= link_to 'Mostrar', @instrument %> |
+        <%= link_to 'Volver', instruments_path %>
+      </div>
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,86 @@
+<div id="existingQuestions">
+	<div class="box-header">
+      <%= link_to 'Click para crear pregunta', add_new_group_question_path(locales[:group_question].id), remote: true, class: 'btn btn-default pull-right'%>
+		<h3 class="box-title">Agregar preguntas existentes al grupo actual</h3>
+	</div>
+	<div class="box-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="table-responsive" style="overflow-x: auto">
+					<table id='questionsTable' class="table table-bordered table-hover dataTable" >
+					    <thead>
+					      <tr>
+					        <th>Agregar?</th>
+					        <th>Enunciado</th>
+					        <th>Asignatura</th>
+					        <th>Nivel</th>
+					        <th>Contenido</th>
+					        <th>Hab. cognitiva</th>
+					        <th>Hab. prop. asig.</th>
+					        <th>Eje asignatura</th>
+					        <th>Eje programa</th>
+					        <th>Indicador PME</th>
+					        <th>Unidad</th>
+					        <th>OA</th>
+					        <th>Dificultad</th>
+					        <th>Group Question Id</th>
+					      </tr>
+					    </thead>
+					    <tbody>
+					    	<%- locales[:questions].each do |q| %>
+					    		<tr id="question<%= q.id %>">
+					    			<td>
+					    				<%= link_to add_question_group_question_path(locales[:group_question].id, { question_id: q.id }), remote: true, class: 'addQuestionBtn btn btn-info' do %>
+					    					<i class="fa fa-plus"></i>
+					    				<% end -%>
+					    			</td>
+					    			<td>
+					    				<%= link_to question_path(q) do %>
+					    					<%= strip_tags(q.texto) %>
+					    				<% end -%>
+					    			</td>
+					    			<td>
+					    				<%= q.assignature.try(:nombre) %>
+					    			</td>
+					    			<td>
+					    				<%= q.level.try(:nombre) %>
+					    			</td>
+					    			<td>
+					    				<%= q.content.try(:nombre) %>
+					    			</td>
+					    			<td>
+					    				<%= q.bloom_ability.try(:nombre) %>
+					    			</td>
+					    			<td>
+					    				<%= q.assignature_ability.try(:nombre) %>
+					    			</td>
+					    			<td>
+					    				<%= q.axis.try(:nombre) %>
+					    			</td>
+					    			<td>
+					    				<%= q.axis_program.try(:nombre) %>
+					    			</td>
+					    			<td>
+					    				<%= q.pme_ability.try(:nombre) %>
+					    			</td>
+					    			<td>
+					    				<%= q.unit.try(:numero) %>
+					    			</td>
+					    			<td>
+					    				<%= q.learning_goal.try(:numero) %>
+					    			</td>
+					    			<td>
+					    				<%= q.difficulty_level.try(:name) %>
+					    			</td>
+					    			<td>
+					    				<%= q.try(:group_question_id) %>
+					    			</td>
+					    		</tr>
+					    	<% end -%>
+					    </tbody>
+					</table>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

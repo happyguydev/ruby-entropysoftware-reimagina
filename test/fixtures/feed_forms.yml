@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  feedback_id: 
+  feed_item_id: 
+  feed_score_id: 
+
+two:
+  feedback_id: 
+  feed_item_id: 
+  feed_score_id: 

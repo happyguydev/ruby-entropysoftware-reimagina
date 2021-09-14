@@ -1,0 +1,25 @@
+<%= simple_form_for @learning_goal do |f| %>
+<div class="field">
+  <label>Asignatura</label>
+  <%= f.association :assignature, label: false, input_html: {class: "chosen-select change_units"} , disabled: true%>
+</div>
+<div class="field">
+  <label>Nivel</label>
+  <%= f.association :level, label: false, input_html: {class: "chosen-select change_units"}, disabled: true %>
+</div>
+<div class="field">
+  <label>Numero</label>
+  <%= f.input :nombre, :label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<div id="package">
+<%= f.simple_fields_for :learning_goals_units do |oa_u| %>
+   <%= render 'learning_goals_unit_fields', :f => oa_u %>
+<% end %>
+<%= link_to_add_association 'Agregar Unidad', f, :learning_goals_units %>
+</div>
+
+<div class="actions">
+  <%= f.button :submit , 'Enviar'%>
+</div>
+<% end %>

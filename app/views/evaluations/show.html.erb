@@ -1,0 +1,89 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Mostrando Evaluación</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <p>
+            <strong>Año:</strong>
+            <%= @evaluation.try(:year) %>
+          </p>
+          <p>
+            <strong>Nombre:</strong>
+            <%= @evaluation.nombre %>
+          </p>
+
+          <p>
+            <strong>Tipo:</strong>
+            <%= @evaluation.evaluation_type.nombre %>
+          </p>
+
+          <p>
+            <strong>Asignatura:</strong>
+            <%= @evaluation.assignature.nombre %>
+          </p>
+
+          <p>
+            <strong>Nivel:</strong>
+            <%= @evaluation.level.nombre %>
+          </p>
+
+          <div class='col-md-12'>
+            <p>
+              <strong>Preguntas:</strong>
+            </p>
+          </div>
+
+          <div class='col-md-12 col-sm-12'>
+            <section class="content">
+              <% if(@evaluation.questions.present?) %>
+              <% @evaluation.questions.each do |q| %>
+              <div class='col-md-12 col-sm-12'>
+
+                <div class='col-md-12'>
+                  <p>
+                    <strong>Enunciado:</strong>
+                    <%= link_to q.texto.html_safe, question_path(q) %>
+                  </p>
+                </div>
+                <div class='col-md-12'>
+                  <p>
+                    <strong>Alternativas:</strong>
+                  </p>
+                </div>
+
+                <% if(q.alternatives.present?) %>
+                <% q.alternatives.order('id asc').each do |a| %>
+                <div class='col-md-12'>
+                  <table class="table table-bordered table-hover dataTable">
+                    <thead>
+                      <tr>
+                        <th>Texto </th>
+                        <th>Correcta?</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <th><%= a.texto.html_safe %></th>
+                      <th><%= a.correcta? ? "&#10004;".html_safe : "&#10006;".html_safe %></th>
+                    </tbody>
+                  </table>
+                </div>
+                <% end %>
+                <% end %>
+              </div>
+              <% end %>
+              <% end %>
+            </section>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<%= link_to 'Editar', edit_evaluation_path(@evaluation) %> |
+<%= link_to 'Volver', evaluations_path %>

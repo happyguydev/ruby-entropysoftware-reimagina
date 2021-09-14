@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Proccess:</strong>
+  <%= @proccess_instrument.proccess %>
+</p>
+
+<p>
+  <strong>Instrument:</strong>
+  <%= @proccess_instrument.instrument %>
+</p>
+
+<%= link_to 'Edit', edit_proccess_instrument_path(@proccess_instrument) %> |
+<%= link_to 'Back', proccess_instruments_path %>

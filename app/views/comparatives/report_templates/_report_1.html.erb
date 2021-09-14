@@ -1,0 +1,228 @@
+<div style="clear: both; width: 100%; padding: 30px 0px;"></div>
+<div class='col-md-12 heading'>
+  <h3>COMPARATIVO ESTABLECIMIENTO EVALUACIÓN FINAL <%= params[:starting_year] %> - <%= params[:ending_year] %></h3>
+  <h3><%= @for_school.last.nombre %></h3>
+</div>
+
+<div class='col-md-12'>
+  <% @assignatures.map do |assignature_id, data| %>
+    <% get_assignature_abilities(data) %>
+    <div class='heading'>
+      <h3><%= Assignature.find(assignature_id).nombre %></h3>
+    </div>
+    <!-- Result table / graph -->
+    <div class='col-md-12'>
+      <table class='table table-pdf table-bordered table-hover dataTable'>
+        <thead>
+          <th>
+            <%= @for_school.last.try(:nombre) %>
+          </th>
+          <% @assignature_abilities.each do |assign_ability| %>
+            <th>
+              <%= assign_ability.nombre %>
+            </th>
+          <% end %>
+        </thead>
+        <tbody>
+          <% @comparative_years.each do |year| %>
+            <tr>
+              <td><%= 'Final ' + year %></td>
+              <% @assignature_abilities.each do |assign_ability| %>
+                <td>
+                  <%= school_score_n_average(year, assignature_id, assign_ability) %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+
+          <tr>
+            <td>Total general</td>
+            <% @assignature_abilities.each do |assign_ability| %>
+              <td>
+                <%= average_all_year(assignature_id, assign_ability) %>
+              </td>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id='result_graph_<%= assignature_id %>' class='col-md-12' style="min-width: 1125px; margin: 0 auto"></div>
+    <script>
+      var chart = new Highcharts.Chart({
+                    container: "#result_graph_#{ assignature_id }",
+                    colors: ["#7cb5ec", "#f7a35c", "brown", "yellowgreen", "turquoise"],
+                    chart: {
+                      type: 'column',
+                      renderTo: "result_graph_<%= assignature_id %>"
+                    },
+                    title: {
+                      text: 'Logro por habilidad-indicador a nivel Establecimiento'
+                    },
+                    subtitle: {
+                      text: ''
+                    },
+                    xAxis: {
+                      categories: <%= raw (@comparative_years.map{|year| 'Final '+year.to_s }) %>,
+                      crosshair: true
+                    },
+                    yAxis: {
+                      min: 0,
+                      max: 100,
+                      tickInterval: 10,
+                      title: {
+                        text: 'Resultado (%)'
+                      }
+                    },
+                    tooltip: {
+                      headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                      pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y} %</b></td></tr>',
+                      footerFormat: '</table>',
+                      shared: true,
+                      useHTML: true
+                    },
+                    plotOptions: {
+                      column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                      }
+                    },
+                    series: [
+                      <% @assignature_abilities.each do |assign_ability|  %>
+                        {
+                          name: "<%= assign_ability.nombre %>",
+                          data: <%= comparative_graph_data(assignature_id, assign_ability) %>,
+                          dataLabels: {
+                            enabled: true,
+                            rotation: 0,
+                            color: 'gray',
+                            align: 'center',
+                            format: '{point.y}%', // zero decimal
+                            y: 0, // 10 pixels down from the top
+                            style: {
+                              fontSize: '13px',
+                              fontFamily: 'Verdana, sans-serif'
+                            }
+                          }
+                        },
+                      <% end %>
+                    ]
+                  });
+    </script>
+    <div id='brake'></div>
+    <div style="clear: both; width: 100%; padding: 30px 0px;"></div>
+
+    <!-- School achievement based on levels and assignature b/w 2 years -->
+    <% @comparative_years.each do |year| %>
+      <% if levels_has_values?(year, assignature_id) %>
+        <div class='table-heading'>
+          <h3><%= Assignature.find(assignature_id).try(:nombre) %></h3>
+          <h4><%= year %></h4>
+        </div>
+        <div class='col-md-12 report-table' >
+          <table class='table table-pdf table-condensed table-bordered achievement_chart'>
+            <thead>
+              <tr>
+                <th class="no-border"></th>
+                <th colspan="<%= @assignature_abilities.count %>" ><%= 'Final '+year %></th>
+              </tr>
+              <tr>
+                <th><%= @evaluation_type.nombre %></th>
+
+                <% @assignature_abilities.each do |assignature_ability| %>
+                  <th><%= assignature_ability.try(:nombre) %></th>
+                <% end %>
+              </tr>
+            </thead>
+            <tbody>
+              <% @levels.each do |level| %>
+                <% if @result[year][level.id][assignature_id].values.compact.present? %>
+                  <tr>
+                    <td><%= level.try(:nombre) %></td>
+                    <% @assignature_abilities.collect(&:id).each do |assignature_ability_id| %>
+                      <td><%= assignature_ability_score_n_average(year, level, assignature_id, assignature_ability_id) %></td>
+                    <% end %>
+                  </tr>
+                <% end %>
+              <% end %>
+              <tr>
+                <td>Total general</td>
+                <% @assignature_abilities.collect(&:id).each do |assignature_ability_id| %>
+                  <td><%= average_per_ability(assignature_id, assignature_ability_id, year) %></td>
+                <% end %>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id='result_graph_<%= assignature_id %>_<%= year %>' class='col-md-12'style="min-width: 1125px; margin: 0 auto"></div>
+        <script>
+          var chart = new Highcharts.Chart({
+                        // container: "#result_graph_<%= assignature_id %>_<%= assignature_id %>_<%= year %>",
+                        colors: ["#7cb5ec", "#f7a35c", "brown", "yellowgreen", "turquoise"],
+                        chart: {
+                          type: 'column',
+                          renderTo: "result_graph_<%= assignature_id %>_<%= year %>"
+                        },
+                        title: {
+                          text: 'Promedio por asignatura'
+                        },
+                        subtitle: {
+                          text: ''
+                        },
+                        xAxis: {
+                          categories: <%= raw  level_names_for_chart(year, assignature_id) %>,
+                          crosshair: true
+                        },
+                        yAxis: {
+                          min: 0,
+                          max: 100,
+                          tickInterval: 10,
+                          title: {
+                            text: 'Resultado (%)'
+                          }
+                        },
+                        tooltip: {
+                          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y} %</b></td></tr>',
+                          footerFormat: '</table>',
+                          shared: true,
+                          useHTML: true
+                        },
+                        plotOptions: {
+                          column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                          }
+                        },
+                        series: [
+                          <% @assignature_abilities.each do |ability|
+                            scores = get_graph_data(year, assignature_id, ability).reject{|s| s==0}
+                            if scores.present? %>
+                              {
+                                name: "<%= ability.nombre %>",
+                                data: <%= raw scores %>,
+                                dataLabels: {
+                                  enabled: true,
+                                  rotation: 0,
+                                  color: 'gray',
+                                  align: 'center',
+                                  format: '{point.y}%', // zero decimal
+                                  y: 0, // 10 pixels down from the top
+                                  style: {
+                                    fontSize: '13px',
+                                    fontFamily: 'Verdana, sans-serif'
+                                  }
+                                }
+                              },
+                            <% end %>
+                          <% end %>
+                        ]
+                      });
+        </script>
+      <% end %>
+    <% end %>
+    <% if @assignatures.keys.last != assignature_id %>
+      <div id='brake'></div>
+      <div style="clear: both; width: 100%; padding: 30px 0px;"></div>
+    <% end %>
+  <% end %>
+</div>

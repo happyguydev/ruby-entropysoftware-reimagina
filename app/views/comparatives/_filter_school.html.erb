@@ -1,0 +1,6 @@
+<div class='col-md-3'>
+  <b>Seleccione Establecimiento:</b>
+</div>
+<div class='col-md-5'>
+  <%= select_tag 'school', options_for_select(@schools), class: 'select_school chosen-select', onchange: 'getFilterProccess()' %>
+</div><br><br>

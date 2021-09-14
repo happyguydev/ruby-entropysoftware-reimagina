@@ -1,0 +1,33 @@
+<html>
+  <head><meta charset="utf-8" />
+      <%= stylesheet_link_tag wicked_pdf_asset_base64("bootstrap_and_overrides")%>
+      <%= stylesheet_link_tag wicked_pdf_asset_base64("results.scss")%>
+
+  </head>
+  <body>
+        <div class="box col-sm-12 col-md-12 col-lg-12">
+          <h3 class="box-title">Pauta de correccion <%= @instrument.nombre %>, <%= @instrument.evaluation.assignature.nombre %>, <%= @instrument.evaluation.level.nombre %>, <%= @instrument.evaluation.try(:year) %></h3>
+          <!-- /.box-header -->
+            <div class='col-md-8 col-sm-8 col-lg-8'>
+              <table class='table table-condensed table-bordered text-center'>
+                <thead>
+                  <th class='text-center'>Reactivo</th>
+                  <th class='text-center'>Clave</th>
+                  <th class='text-center'>Contenido</th>
+                </thead>
+                <tbody>
+                  <% @instrument.guides.order(:question_index).each do |g| %>
+                  <tr>
+                    <td><%= g.question_index %></td>
+                    <td><%= g.alternative_index %></td>
+                    <td><%= g.question.content.try(:nombre).try(:mb_chars).try(:upcase) %></td>
+                  </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+        </div>
+        <!-- /.box-body -->
+  </body>
+</html>
+

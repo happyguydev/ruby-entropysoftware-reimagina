@@ -1,0 +1,17 @@
+<p>
+  <strong>Pme ability:</strong>
+  <%= @ability_content.pme_ability %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @ability_content.nombre %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @ability_content.descripcion %>
+</p>
+
+<%= link_to 'Edit', edit_ability_content_path(@ability_content) %> |
+<%= link_to 'Back', ability_contents_path %>

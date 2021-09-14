@@ -1,0 +1,36 @@
+<!-- RESUMEN POR HABILIDAD -->
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12'>&nbsp;</div>
+  <h3>Resumen de estado por estudiante por  <%=@resumen_estado_title%></h3>
+</div>
+
+
+<div id="chart_heatmap"  style="height: 1200px; min-width: 1200px; margin: 0 auto" class='col-md-12'></div>
+
+<!-- GRAFICO RESUMEN POR HABILIDAD -->
+<script type='text/javascript'>
+  chartHeatMapGenerator({container: "#chart_heatmap"},{xAxis: { categories: <%= @categories_heatmap[0].inspect.html_safe %> },yAxis: { categories: <%= @categories_heatmap[1].inspect.html_safe %>}, colorAxis: { stops: <%= @color_stops.inspect.html_safe %> }, series:{ data: <%= @alumno_pme.map{|al| al}.inspect.html_safe %>
+
+  ,} }); </script>
+<div class ='col-md-12'>
+  <div class ='col-md-4 centered'></div>
+  <div class ='col-md-4 centered'>
+    <table class='centered-table table table-pdf table-condensed table-bordered ' >
+      <thead>
+        <th class='text-center'>Rango</th>
+        <% if @letter == 'f' || @letter == 'g' %><th class='text-center'>Porcentaje</th> <% end %>
+        <th class='text-center'>Nivel</th>
+      </thead>
+      <tbody>
+        <% @color_ranges.each do |c| %>
+          <tr>  
+            <td class='text-center'><%= c.min.to_s+@sufix+" - "+c.max.to_s+@sufix %></td>
+            <%# if @letter == 'f' || @letter == 'g' %><td class='text-center'><%#= to_porcentaje(c.min).to_s+"% - "+to_porcentaje(c.max).to_s+"%" %></td> <%# end %>
+            <td class='text-center' style="background-color: <%= c.color %>;"><%= c.nombre %></td>    
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

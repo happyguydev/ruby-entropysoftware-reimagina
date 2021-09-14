@@ -1,0 +1,25 @@
+<%= form_for([@axis, @axes_content]) do |f| %>
+<% if @axes_content.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(@axes_content.errors.count, "error") %> prohibited this axes_content from being saved:</h2>
+
+  <ul>
+    <% @axes_content.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+<div class="field">
+  <%= f.label :nombre %><br>
+  <%= f.text_field :nombre %>
+</div>
+<div class="field">
+  <%= f.label :descripcion %><br>
+  <%= f.text_area :descripcion %>
+</div>
+<div class="actions">
+  <%= f.submit "Enviar"%>
+</div>
+<% end %>

@@ -1,0 +1,4 @@
+$('#assigned_schools').modal('show');
+$('#assigned_schools').find('.modal-title').html('Encuesta de satisfacción');
+$('#assigned_schools').find('.modal-body').html("<%= escape_javascript render partial: 'feedback_form' %>");
+$('.update-feed input').attr('disabled', 'disabled');

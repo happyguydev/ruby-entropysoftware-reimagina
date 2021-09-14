@@ -1,0 +1,30 @@
+<h1>Contenidos Habilidad</h1>
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Pme ability</th>
+      <th>Nombre</th>
+      <th>Descripcion</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ability_contents.each do |ability_content| %>
+      <tr>
+        <td><%= ability_content.pme_ability %></td>
+        <td><%= ability_content.nombre %></td>
+        <td><%= ability_content.descripcion %></td>
+        <td><%= link_to 'Show', ability_content %></td>
+        <td><%= link_to 'Edit', edit_ability_content_path(ability_content) %></td>
+        <td><%= link_to 'Destroy', ability_content, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Nuevo contenido Habilidad PME', new_pme_ability_ability_content_path(@pme_ability) %>

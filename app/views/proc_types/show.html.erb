@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @proc_type.nombre %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @proc_type.descripcion %>
+</p>
+
+<%= link_to 'Edit', edit_proc_type_path(@proc_type) %> |
+<%= link_to 'Back', proc_types_path %>

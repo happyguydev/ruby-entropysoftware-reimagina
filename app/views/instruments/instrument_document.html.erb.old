@@ -1,0 +1,106 @@
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body.grande {
+        font-family: "Arial";
+        font-size: 14pt;
+      }
+
+      body.chico {
+        font-family: "Arial";
+        font-size: 12pt;
+      }
+
+    </style>
+  </head>
+  <body class="<%= set_style(@instrument) %>">
+    <br>
+    <%
+new_guide = 0
+if @instrument.guides.count == 0 
+  new_guide = 1
+end
+%>
+
+    <p align='center'><b><%= @instrument.evaluation.nombre.mb_chars.upcase.to_s %></br>
+      <%= @instrument.evaluation.assignature.nombre.mb_chars.upcase.to_s %></br>
+  <%= @instrument.evaluation.level.nombre.mb_chars.upcase.to_s %></p></b>
+
+<%if set_style(@instrument) == "chico" %>
+<table>
+  <tr>
+    <td width="80%">Nombre:_________________________________________________ &nbsp;</td><td width="20%">Curso:_____________</td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="30%">Puntaje Máximo: _______________&nbsp; </td><td width="30%">Puntaje Obtenido: ____________&nbsp; </td><td width="20%"> Nota: _____________</td>
+  </tr>
+</table>
+<% else %>
+
+<table>
+  <tr>
+    <td width="80%">Nombre:_____________________________________________&nbsp;</td><td width="20%">Curso:_________</td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="30%">Puntaje Máximo: __________&nbsp; </td><td width="30%">Puntaje Obtenido: _________&nbsp; </td><td width="20%"> Nota: ___________</td>
+  </tr>
+</table>
+<% end %>
+<br>
+<p>
+  <u>INSTRUCCIONES:</u>
+<ul>
+  <li>
+    Lee con atención cada uno de los textos y luego encierra la alternativa que estimes
+    correcta en cada pregunta.
+  </li>
+
+</ul>
+</p>
+<br>
+<% letter_index_arr = ("A".."ZZ").to_a %>
+<% questions = @instrument.evaluation.questions.order('group_question_id DESC') %>
+<% questions.each_with_index do |q, i| %>
+<div style="page-break-inside: avoid;">
+  <div>
+    <% if q.group_question_id.present? %>
+      <% if !q.group_question_id.eql?(questions[(i-1)].group_question_id) %>
+        <strong>
+          <%= sanitize(q.group_question.statement) %>  
+        </strong>
+      <% end %>
+    <% end %>
+    <%= "#{q.texto.insert(3, (i+1).to_s+". ")}".html_safe  %>
+  </div>
+  <br>  
+  <div style="line-height: 70%;">
+    <% guide_hash = { alternative: nil, alternative_index: nil } %>
+    <% #q.alternatives.shuffle.each_with_index do |a, ai| %>
+    <% q.alternatives.each_with_index do |a, ai| %>
+    <div>  
+      <%= "#{a.texto.insert(3, '     '+letter_index_arr[ai]+') ')}".html_safe %>
+      <% if a.correcta %>
+      <% guide_hash[:alternative] = a %>
+      <% guide_hash[:alternative_index] = letter_index_arr[ai] %>
+      <% end %>
+    </div>
+    <% end %>
+  </div>
+</div>
+<br>
+<%
+if new_guide == 1
+  @instrument.guides.create(nombre: @instrument.nombre, question: q, alternative: guide_hash[:alternative], question_index: i+1, alternative_index: guide_hash[:alternative_index])
+end
+%>
+<% end %>
+</body>
+</html>

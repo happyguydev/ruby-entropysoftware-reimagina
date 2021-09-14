@@ -1,0 +1,33 @@
+<div class='col-md-6 col-sm-6 col-lg-6'>
+  <div class="panel-group" id="alumnos" role="tablist" aria-multiselectable="true">
+  <%= form_for [@proccess_instrument, @answer] do |i| %>
+    <% @proccess_instrument.grade.students.each do |s| %>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" data-parent="#alumnos" href="#<%= s.id%>" aria-expanded="false" aria-controls="collapseOne">
+              <%= "#{ s.nombre } #{s.apellido}" %> <i class="fa fa-caret-down pull-right"></i>
+            </a>
+          </h4>
+        </div>
+      </div>
+      <div id="<%= s.id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+      <% @instrument.guides.order(:question_index).each do |g| %>
+        <%= i.fields_for :answers,@proccess_instrument.answers do |answers| %>
+          <% answers.fields_for s.id.to_s do |a| %>
+            <% a.fields_for g.question_id.to_s do |a2| %>
+              <div class="panel-body">
+                Pregunta <%= g.question_index %> : 
+                <%= a2.text_field :letra %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      </div>
+    <% end %>
+    <%= i.submit "Ingresar resultados", class: "btn" %>
+  <% end %>
+  </div>
+</div>
+

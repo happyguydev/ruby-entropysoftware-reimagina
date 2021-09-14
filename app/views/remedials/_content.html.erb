@@ -1,0 +1,8 @@
+<label>Contenido</label>
+<div class='select_field'>
+  <%= select_tag 'remedial[content_id]', options_for_select(@data), label: false, class: "chosen-select" %>
+</div>
+
+<script>
+  $('.chosen-select').chosen();
+</script>

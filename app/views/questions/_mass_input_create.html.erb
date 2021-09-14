@@ -1,0 +1,221 @@
+<h2> this is example static data of how a 5 rows grid should look like after submitting grid </h2>
+<h2> we use questions/_form for each question inside questions_collection and all question attributes were filled in Step 1, we only need Question.texto and Question.alternatives </h2>
+<h2> when create alternatives we dont ask for correct because its in the grid you must delete Correcta? checkbox in this scenario</h2>
+<h2> We need to add a way to dynamic create GroupQuestion and add questions to groups from this screen, feel free to propose</h2>
+
+<h3>Show evaluation data:</h3> <%= @test%>
+<ul>
+<li>Creating evaluation : :evaluation_name </li>
+<li>Evaluation Type : :evaluation_type </li>
+<li>Evaluation Year : :evaluation_year </li>
+<li>Evaluation Assignature : :evaluation_assignature </li>
+<li>Evaluation Level : :evaluation_level </li>
+</ul>
+
+<% @questions_collection.each do |question|%>
+ <%= render 'show' , :question => question%>
+<% end %>
+
+Question 1
+<button class='btn' id="mq_bt">Add GroupQuestion here</button>
+<%= simple_form_for @question, defaults: { input_html: { class: '' } } do |f| %>
+<div class='col-md-12 col-sm-12'>
+  <% if @question.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+    <ul>
+      <% @question.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <% if @group_question && !@group_question.nil? %>
+    <%= f.input :group_question_id, as: :hidden, input_html: { value: @group_question.id } %>
+  <% end %>
+  <div class='row col-md-12'>
+    <%= f.label "Enunciado pregunta" %><br><br>
+    <%= f.text_area :texto, class: 'rich-text-area-question', input_html: { class: 'form-control' } %>
+  </div>
+  <!-- Nested Form Alternatives -->
+  <%= f.simple_fields_for :alternatives do |al| %>
+  <div class='row col-md-12'>
+    <br/>
+    <label class="string optional">Alternativas</label>
+    <%= render 'questions/alternative_fields', :f => al %>
+    <br/>
+    <div class='links text-center'>
+      <%= link_to_add_association 'Agregar alternativa', f, :alternatives, class: 'btn btn-success' %>
+    </div>
+    <br/>
+  </div>
+  <% end %>
+
+  <!-- Nested Form Alternatives -->
+</div>
+<% end %>
+
+Question 2
+
+<button class='btn' id="mq_bt">Add GroupQuestion here</button>
+<%= simple_form_for @question, defaults: { input_html: { class: '' } } do |f| %>
+<div class='col-md-12 col-sm-12'>
+  <% if @question.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+    <ul>
+      <% @question.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <% if @group_question && !@group_question.nil? %>
+    <%= f.input :group_question_id, as: :hidden, input_html: { value: @group_question.id } %>
+  <% end %>
+  <div class='row col-md-12'>
+    <%= f.label "Enunciado pregunta" %><br><br>
+    <%= f.text_area :texto, class: 'rich-text-area-question', input_html: { class: 'form-control' } %>
+  </div>
+  <!-- Nested Form Alternatives -->
+  <%= f.simple_fields_for :alternatives do |al| %>
+  <div class='row col-md-12'>
+    <br/>
+    <label class="string optional">Alternativas</label>
+    <%= render 'questions/alternative_fields', :f => al %>
+    <br/>
+    <div class='links text-center'>
+      <%= link_to_add_association 'Agregar alternativa', f, :alternatives, class: 'btn btn-success' %>
+    </div>
+    <br/>
+  </div>
+  <% end %>
+
+  <!-- Nested Form Alternatives -->
+</div>
+<% end %>
+
+Question 3
+
+<button class='btn' id="mq_bt">Add GroupQuestion here</button>
+<%= simple_form_for @question, defaults: { input_html: { class: '' } } do |f| %>
+<div class='col-md-12 col-sm-12'>
+  <% if @question.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+    <ul>
+      <% @question.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <% if @group_question && !@group_question.nil? %>
+    <%= f.input :group_question_id, as: :hidden, input_html: { value: @group_question.id } %>
+  <% end %>
+  <div class='row col-md-12'>
+    <%= f.label "Enunciado pregunta" %><br><br>
+    <%= f.text_area :texto, class: 'rich-text-area-question', input_html: { class: 'form-control' } %>
+  </div>
+  <!-- Nested Form Alternatives -->
+  <%= f.simple_fields_for :alternatives do |al| %>
+  <div class='row col-md-12'>
+    <br/>
+    <label class="string optional">Alternativas</label>
+    <%= render 'questions/alternative_fields', :f => al %>
+    <br/>
+    <div class='links text-center'>
+      <%= link_to_add_association 'Agregar alternativa', f, :alternatives, class: 'btn btn-success' %>
+    </div>
+    <br/>
+  </div>
+  <% end %>
+
+  <!-- Nested Form Alternatives -->
+</div>
+<% end %>
+
+Question 4
+
+<button class='btn' id="mq_bt">Add GroupQuestion here</button>
+<%= simple_form_for @question, defaults: { input_html: { class: '' } } do |f| %>
+<div class='col-md-12 col-sm-12'>
+  <% if @question.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+    <ul>
+      <% @question.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <% if @group_question && !@group_question.nil? %>
+    <%= f.input :group_question_id, as: :hidden, input_html: { value: @group_question.id } %>
+  <% end %>
+  <div class='row col-md-12'>
+    <%= f.label "Enunciado pregunta" %><br><br>
+    <%= f.text_area :texto, class: 'rich-text-area-question', input_html: { class: 'form-control' } %>
+  </div>
+  <!-- Nested Form Alternatives -->
+  <%= f.simple_fields_for :alternatives do |al| %>
+  <div class='row col-md-12'>
+    <br/>
+    <label class="string optional">Alternativas</label>
+    <%= render 'questions/alternative_fields', :f => al %>
+    <br/>
+    <div class='links text-center'>
+      <%= link_to_add_association 'Agregar alternativa', f, :alternatives, class: 'btn btn-success' %>
+    </div>
+    <br/>
+  </div>
+  <% end %>
+
+  <!-- Nested Form Alternatives -->
+
+</div>
+<% end %>
+
+Question 5
+
+<button class='btn' id="mq_bt">Add GroupQuestion here</button>
+<%= simple_form_for @question, defaults: { input_html: { class: '' } } do |f| %>
+<div class='col-md-12 col-sm-12'>
+  <% if @question.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+    <ul>
+      <% @question.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <% if @group_question && !@group_question.nil? %>
+    <%= f.input :group_question_id, as: :hidden, input_html: { value: @group_question.id } %>
+  <% end %>
+  <div class='row col-md-12'>
+    <%= f.label "Enunciado pregunta" %><br><br>
+    <%= f.text_area :texto, class: 'rich-text-area-question', input_html: { class: 'form-control' } %>
+  </div>
+  <!-- Nested Form Alternatives -->
+  <%= f.simple_fields_for :alternatives do |al| %>
+  <div class='row col-md-12'>
+    <br/>
+    <label class="string optional">Alternativas</label>
+    <%= render 'questions/alternative_fields', :f => al %>
+    <br/>
+    <div class='links text-center'>
+      <%= link_to_add_association 'Agregar alternativa', f, :alternatives, class: 'btn btn-success' %>
+    </div>
+    <br/>
+  </div>
+  <% end %>
+
+  <!-- Nested Form Alternatives -->
+
+  <div class="form-group row col-md-12">
+    <%= f.submit "Enviar ingreso masivo", class: "btn btn-primary" %>
+  </div>
+</div>
+<% end %>

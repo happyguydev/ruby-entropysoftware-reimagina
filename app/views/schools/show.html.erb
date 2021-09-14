@@ -1,0 +1,101 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class='col-md-12 col-sm-12'>
+
+          <div class='col-md-12 col-sm-12'>
+            <div class="box box-primary">
+              <div class="box-body box-profile">
+               <%if@school.logo.present?%>
+                 <div class="profile-username text-center pull-left"><%=image_tag @school.logo.url(:thumb)%></div>
+               <%end%>
+                <h3 class="profile-username text-center"><%= @school.nombre %><%= link_to ' (Editar)', edit_school_path(@school) %></h3>
+                <p class="text-muted text-center"><%= @school.commune.try(:name) %>,<%= @school.try(:commune).try(:region).try(:name) %></p>
+                <ul class="list-group list-group-unbordered">
+                  <li class="list-group-item">
+                    <b>RBD</b> <a class="pull-right"><%= @school.try(:rbd) %></a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Dependencia</b><a class="pull-right"><%= @school.try(:dependencia) %> </a>
+                  </li>
+                  <li class="list-group-item">
+                     <b>RUT Facturas</b><a class="pull-right"><%= @school.try(:rut) %></a>
+                  </li>
+                  <li class="list-group-item">
+                     <b>Razón Social</b><a class="pull-right"><%= @school.try(:socialmean) %></a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Direccion</b><a class="pull-right"><%= @school.try(:direccion) %> </a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Teléfono</b><a class="pull-right"><%= @school.try(:telefono) %> </a>
+                  </li>
+                  <li class="list-group-item">
+                   <b>E-mail</b><a class="pull-right"> <%= @school.try(:email) %> </a>
+                  </li>
+                </ul>
+              </div>
+              <!-- /.box-body -->
+            </div>
+          </div>
+
+          <h4>Cuentas de usuario asociadas a este Establecimiento</h4>
+        <%if  @school_users.count > 0 %>
+          <% @school_users.each do |su|%>
+            <div class='col-md-6 col-sm-6'>
+              <div class="box box-primary">
+                <div class="box-body box-profile">
+                  <h3 class="profile-username text-center"><%= su.try(:first_name)+" "+su.try(:second_name) %><%= link_to ' (Editar)', update_client_user_users_path(id: su.id) %> - <%= link_to('(Borrar)', user_path(su), method: :delete, data: { confirm: 'Seguro que quieres eliminar el registro?' }) %></h3>
+                  <p class="text-muted text-center"><%=  su.try(:user_type).try(:name) %></p>
+                  <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item">
+                      <b>Mail</b> <a class="pull-right"><%=su.try(:email) %></a>
+                    </li>
+                    <li class="list-group-item">
+                      <b>Teléfono</b> <a class="pull-right"><%=su.try(:tel) %></a>
+                    </li>
+                  </ul>
+                </div>
+                <!-- /.box-body -->
+              </div>
+            </div>
+          <%end%>
+        <%else%>
+        <p>No hay cuentas asociadas a este Establecimiento, diríjase a "Editar" junto al nombre del Establecimiento para agregar cuentas.</p>
+        <%end%>
+          <div class='col-md-12 col-sm-12'>
+            <div class ="field">
+              <h3>Cursos  <%= @school.nombre %> </h3>
+
+              <div class='col-md-12 col-sm-12'>
+                <table id='grades-table' class="table table-bordered table-hover dataTable" data-source='<%= school_grades_path(@school, format: :json) %>'>
+                  <thead>
+                    <tr>
+                      <th>Nivel</th>
+                      <th>Año</th>
+                      <th>Cant. de alumnos</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+
+                </table>
+                <%= link_to 'Nuevo Curso', new_school_grade_path(@school), class: 'btn btn-primary pull-right' %>
+
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+                    <%= link_to 'Volver', schools_path %>
+
+
+        </section>
+      <!-- /.box-body -->

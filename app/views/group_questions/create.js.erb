@@ -1,0 +1,7 @@
+$('#myModal').modal("hide");
+$('#overlay, #please-wait').hide();
+$('.group_question_form')[0].reset();
+//$('body').append("<%#= escape_javascript(render('group_questions/edit_statement_links')) %>");
+// $('#myModal2').modal("show");
+$('.question-tabs-container').html("<%= escape_javascript(render('questions/mass_input_edit_group_guestion', group_question: @group_question, question_ids: params[:all_question_ids])) %>");
+

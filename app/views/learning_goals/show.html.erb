@@ -1,0 +1,22 @@
+<p>
+  <strong>Numero:</strong>
+  <%= @learning_goal.numero %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @learning_goal.descripcion %>
+</p>
+
+<p>
+  <strong>Assignature:</strong>
+  <%= @learning_goal.assignature %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @learning_goal.level %>
+</p>
+
+<%= link_to 'Edit', edit_learning_goal_path(@learning_goal) %> |
+<%= link_to 'Back', learning_goals_path %>

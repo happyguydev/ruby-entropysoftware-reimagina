@@ -1,0 +1,40 @@
+<div class='col-md-12 col-sm-12'>
+
+  <div class='col-md-12 col-sm-12'>
+    <table class="table table-bordered table-hover dataTable">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Monto</th>
+          <th>Comentario</th>
+          <th>Estado</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @order.payments.order(:fecha).each do |p| %>
+        <tr>
+          <td><%= p.try(:fecha).try(:to_date) %></td>
+          <td><%= number_to_clp(p.try(:monto)) %></td>
+          <td><%= p.try(:comentario) %></td>
+          <td><%= (p.paid?) ? 'Pagado' : 'Pendiente' %></td>
+          <td> <%= link_to( '<i class="fa fa-pencil"></i>'.html_safe, edit_order_payment_path(@order,p)) %>
+
+            <%= link_to( '<i class="fa fa-trash-o"></i>'.html_safe, order_payment_path(@order,p, :anchor => 'pagos'), method: :delete, data: { confirm: 'Seguro que quieres eliminar el registro?' }) %>
+
+
+            <%= link_to approve_link_text(p),
+toggle_approve_order_payment_path(@order,p),
+:remote => true, :id => "approve_link_#{p.id}" %>
+
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <h3>Agregar Pago</h3>
+
+    <%= render :template => "payments/_form" %>
+
+  </div>
+</div>

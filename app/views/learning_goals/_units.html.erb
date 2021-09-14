@@ -1,0 +1,8 @@
+<label>Unidades</label>
+<div class='select_goal'>
+  <%= select_tag 'unit[unit_ids]', options_for_select(@units), label: false, multiple: true, class: "chosen-select" %>
+</div>
+
+<script>
+  $('.chosen-select').attr("data-placeholder", "Seleccione Unidad(es)").chosen();
+</script>

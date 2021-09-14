@@ -1,0 +1,476 @@
+<!--Item habilidad/eje/ PME--> 1
+<div class='col-md-12'>&nbsp;</div>
+<div class='col-md-12'>
+  <h3><%= @pme_titles %></h3>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'><%= @pme_title %></th>
+      <th class='text-center'>Cantidad preguntas</th>
+      <th class='text-center'>Promedio respuestas correctas</th>
+    </thead>
+    <tbody>
+      <% @pme_table.each do |p| %>
+        <tr>
+          <td><%= p[:nombre_pme] %></td>    
+          <td class='text-center'><%= p[:cantidad_preguntas] %></td>
+          <td class='text-center'><%= p[:porcentaje] %>%</td>    
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!--Grafico Habilidades/ejes PME--> 1 
+<div id='chart_pme' class='col-md-12' style="min-width: 1150px; height: 700px; margin: 0 auto" ></div>
+
+<script type='text/javascript'>
+  chartBarContentsGenerator({
+    colors: <%=@chart_colors.inspect.html_safe%>,
+    container: "#chart_pme", 
+    title: { text: <%= @pme_titles.inspect.html_safe %> }, 
+                            subtitle: { text: "Asignatura "+ <%= @instrument.evaluation.assignature.nombre.inspect.html_safe %> }, 
+                            }, { 
+                            labels: <%= @pme_table.map{|pme| pme[:nombre_pme]}.inspect.html_safe %>,
+                            series: { data: <%= @pme_table.each_with_index.map{|pme,i| {y: pme[:porcentaje], color: @chart_colors[i]}}.to_json.html_safe %> }
+
+                            });  
+</script>
+
+
+<div class='col-md-12'>
+  <div class='col-md-12 text-center'>
+    <h5 style='font-size: 20px;'>Habilidad <span style='color:green;'>mejor</span> lograda fue: <b><%= @pme_table.sort_by{|pme| pme[:porcentaje] }.last[:nombre_pme] %></b> con <%= @pme_table.sort_by{|pme| pme[:porcentaje] }.last[:porcentaje] %>%</h5>
+  </div>
+</div>
+<div class='col-md-12'>
+  <div class='col-md-12 text-center'>
+    <h5 style='font-size: 20px;'>Habilidad <span style='color: red;'>menos</span> lograda: <b><%= @pme_table.sort_by{|pme| pme[:porcentaje] }.first[:nombre_pme] %></b> con un <%= @pme_table.sort_by{|pme| pme[:porcentaje] }.first[:porcentaje] %>%</h5>
+  </div>
+</div>
+
+
+<!-- NIVEL LOGRO ESTUDIANTES  --> 2
+
+<div class='col-md-12 pb_before'>
+  <hr>
+  <h3>Tabla Nivel de logro de acuerdo a HABILIDAD - INDICADOR</h3>
+</div>
+<table class="table table-pdf table-bordered table-hover dataTable">
+  <thead>
+    <tr class='tablazul' rowspan=2>
+      <th style='visibility: hidden;'></th>
+      <th  class='text-center' colspan=<%= @color_ranges.count+1 %> >Nivel de Logro <br /> Número de Estudiantes</th>
+    </tr>
+    <tr>
+      <th>Habilidad/indicador PME</th>
+      <th style="background-color: gray; color: black !important;" class='col-sm-1 text-center'>Ausente</th>
+      <% @color_ranges.each do |c| %>
+      <th style="background-color: <%= c.color %>; color: black !important;" class='col-sm-1 text-center'><%= c.nombre %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tabla_lg.each do |hab|%>
+      <tr>
+        <% hab.each do |rg|%>
+          <td class='text-center'> <%= rg %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class='col-md-12'>&nbsp;</div>
+
+
+<!--GRAFICO NIVEL LOGRO ESTUDIANTES  --> 2
+<div id='chart_logro' class='col-md-12'  style="min-width: 1125px; min-height: 500px; margin: 0 auto"></div>
+
+<script type='text/javascript'>
+  chartBarCombinedGenerator({
+    container: "#chart_logro", 
+    title: { text: "Nivel de logro estudiantes" }, 
+    subtitle: { text: "Porcentaje de logro a nivel curso" }, 
+  }, {
+    xAxis: {categories: <%= @pme_table.map{|pme| pme[:nombre_pme]}.inspect.html_safe %> },
+            series: [<% @tabla_lh.each do |tl| %>{
+              dataLabels: {
+                format: '{y}%',
+                enabled: true,
+                align: 'right',
+                color: 'black',
+                x: -10,
+                style: {
+                  textShadow: false,
+                  fontSize:'16px'
+                }
+
+              },
+              name: '<%= tl[:nombre]%>' ,
+              data: <%= tl[:data]%>,
+              color: '<%= tl[:color]%>'
+            },<% end %>]
+
+           });  
+</script>
+
+
+
+<div class ='col-md-12'>
+  <div class ='col-md-4 centered'></div>
+  <div class ='col-md-4 centered'>
+    <table class='table centered-table table-pdf table-condensed table-bordered ' >
+      <thead>
+        <th class='text-center'>Rango</th>
+        <th class='text-center'>Nivel</th>
+      </thead>
+      <tbody>
+        <% @color_ranges.each do |c| %>
+          <tr>  
+            <td class='text-center'><%= c.min.to_s+@sufix+" - "+c.max.to_s+@sufix %></td>
+            <td class='text-center' style="background-color: <%= c.color %>;"><%= c.nombre %></td>    
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+<!--Item Contenidos habilidad/eje PME--> 3
+
+<div class='col-md-12 pb_before'>
+  <hr>
+  <h3>Contenidos Habilidad PME</h3>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+<% @ability_table.each_with_index do |ac,i| %>
+  <% chart_id = "chart_contents_pme"+i.to_s %>
+  <div class='col-md-12'>&nbsp;</div>
+  <h4><%= ac[0][:nombre_pme]%></h4>
+  <div class='col-md-12'>
+    <table class='table table-pdf table-condensed table-bordered'>
+      <thead>
+        <th class='text-center'>Habilidad PME</th>
+        <th class='text-center'>Contenido</th>
+        <th class='text-center'>Cantidad preguntas</th>
+        <th class='text-center'>Promedio resp correctas</th>
+      </thead>
+      <tbody>
+        <% ac.each_with_index do |aa,i| %>
+          <tr>
+            <td><%= aa[:nombre_pme] %></td>
+            <td><%= aa[:nombre_contenido] %></td>
+            <td class='text-center'><%= aa[:cantidad_preguntas] %></td>
+            <td class='text-center'><%= aa[:porcentaje] %>%</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div id= <%=chart_id%> class='col-md-12'style="min-width: 1125px; margin: 0 auto">></div>
+
+  <!--Grafico Contenidos Habilidades/ejes PME--> 3
+  <script type='text/javascript'>
+    chartBarContentsGenerator({ 
+      container: "<%="#"+chart_id%>", 
+      title: { text: <%=  ac[0][:nombre_pme].inspect.html_safe %> }, 
+                              subtitle: { text: "Asignatura "+ <%= @instrument.evaluation.assignature.nombre.inspect.html_safe %> }, 
+                              }, { 
+                              labels: <%= ac.map{|pme| pme[:nombre_contenido]}.inspect.html_safe %>,
+                              series: { data: <%= ac.map{|pme| {y: pme[:porcentaje], color: @chart_colors[i]}}.to_json.html_safe %> }
+                              });  
+  </script>
+  <div class='col-md-12 text-center'>
+    <h5 style='font-size: 20px;'>Contenido <span style='color:green;'>mejor</span> logrado fue: <b><%= ac.sort_by{|pme| pme[:porcentaje] }.last[:nombre_contenido] %></b> con <%= ac.sort_by{|pme| pme[:porcentaje] }.last[:porcentaje] %>%</h5>
+  </div>
+  <div class='col-md-12 text-center pb_after'>
+    <h5 style='font-size: 20px;'>Contenido <span style='color: red;'>menos</span> logrado: <b><%= ac.sort_by{|pme| pme[:porcentaje] }.first[:nombre_contenido] %></b> con un <%= ac.sort_by{|pme| pme[:porcentaje] }.first[:porcentaje] %>%</h5>
+  </div>
+<% end %>
+
+<div class='col-md-12'>&nbsp;</div>
+<div class='col-md-12 jumbo-color'>
+  <div class='col-md-12'>&nbsp;</div>
+</div>
+
+<!--Item 4 Contenidos habilidad/eje PME-->  
+
+<div class='col-md-12'>
+  <hr>
+  <h3>Habilidad - Indicador y OA de cada pregunta</h3>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'>N°</th>
+      <th class='text-center'>Habilidad/indicador PME</th>
+      <th class='text-center'>Contenido</th>
+      <th class='text-center'>OA/AE/OF</th>
+      <th class='text-center'>Alumnos lograron</th>
+      <th class='text-center'>Alumnos no lograron</th>
+    </thead>
+    <tbody>
+      <% @pme_oa.each do |aa| %>
+        <tr <% if aa[:lograron] <= @descendidos %> style="background-color: yellow;" <% end %>>
+          <td><%= aa[:num] %></td>
+          <td><%= aa[:pme] %></td>
+          <td><%= aa[:contenido] %></td>
+          <td class='text-center'><%= aa[:oa] %></td>
+          <td class='text-center'><%= aa[:lograron] %></td>
+          <td class='text-center'><%= aa[:no_lograron] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+</div>
+<div id='chart_contents_pme' class='col-md-12'></div>
+</div>
+<!-- /.box-body -->
+<!-- Glosario OA -->
+
+<div class='col-md-12 pb_before'>
+  <hr>
+  <h3>Glosario Objetivos de aprendizaje (OA)</h3>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'>Objetivo de aprendizaje</th>
+      <th class='text-center'>OA Numero</th>
+    </thead>
+    <tbody>
+      <% @glosario_objectivo_aprendizaje.each do |oa| %>
+        <tr>
+          <td class='col-md-10'><%= oa.descripcion %></td>
+          <td class='text-center'>OA <%= oa.nombre %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<!-- REMEDIALES  -->
+
+<div class='col-md-12 pb_before'>
+  <hr>
+  <h3>Remediales por contenido</h3>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'>Pregunta</th>
+      <th class='text-center'>Contenido</th>
+      <th class='text-center'>Remediales</th>
+    </thead>
+    <tbody>
+      <% @remediales_table.each do |oa| %>
+        <tr>
+          <td class='text-center'><%= oa[:num] %></td>
+          <td class='text-center'><%= oa[:contenido] %></td>
+          <td class='text-left'><%= oa[:remedial] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!-- LOGRO POR ALUMNO -->
+<div class='col-md-12 pb_before'>
+  <hr>
+  <h3>Logro por alumno</h3>
+</div>
+
+<div class='col-md-6 col-sm-6 col-lg-6 pbi_avoid'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th>Nombre</th>
+      <th>Porcentaje</th>
+    </thead>
+    <tbody>
+      <% @student_results.each do |sr| %>
+      <% student = @students.find(sr[:student_id]) %>
+      <tr>
+        <td><%= "#{student.nombre} #{student.apellido}" %></td>
+        <td class="text-center" ><%= sr[:correctas] > 0 ? ((sr[:correctas] / @total_preguntas.to_f)*100).to_i : 0 %>%</td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class='col-md-6'>
+  <table style='width: 500px; margin: 0 auto;'>
+    <tr> 
+      <td>Promedio Curso porcentaje de logro</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @promedio_curso %>%</td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr> 
+      <td>Nivel de logro promedio curso</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @logro_curso %></td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr> 
+      <td>N° Alumnos que rindieron la evaluación</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @asistencia %></td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr> 
+      <td>N° Alumnos ausentes</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%=@total_alumnos - @asistencia %></td>
+    </tr>
+  </table>
+</div>
+
+<!-- RANKING POR LOGRO TOTAL -->
+
+<div class='col-md-12 pb_before'>
+  <hr>
+  <h3>Análisis de porcentaje de logro por alumno</h3>
+</div>
+
+<div id='chart_bar_students' style="height: 1500px; min-width: 500px; margin: 0 auto" class='col-md-12'></div>
+
+<script type='text/javascript'>
+  chartBarStudentsGenerator({ 
+    container: "#chart_bar_students", 
+    title: { text: 'Ranking alumnos' }, 
+    subtitle: { text: 'El color de la barra indica el nivel de logro total' }, 
+  }, { 
+    xAxis: { categories: [ 
+      <% @colors.each do |c| %>
+      ' <%= c[2] %>',
+      <% end %>
+    ]},
+    series: { data: [
+      <% @colors.each_with_index do |c,i| %>   
+      {y: <%= c[0] %>, color: ' <%= c[1] %>'}, 
+
+       <% end %>]
+      }
+      }); 
+</script>
+
+<table class="table table-pdf table-bordered table-hover dataTable">
+  <thead>
+    <tr>
+      <th style="background-color: gray; color: black !important;" class='col-sm-1 text-center'>Ausente</th>
+      <% @color_ranges.each do |c| %>
+      <th style="background-color: <%= c.color %>; color: black !important;" class='col-sm-1 text-center'><%= c.nombre %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <% @tabla_lg_tot.each do |hab|%>
+      <td class='text-center'> Total : <%= hab %></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>
+
+<div class='col-md-12 centered'>
+  <i>Gráfico muestra el porcentaje obtenido por el alumno en relación al total de preguntas.</i>
+</div>
+
+<!-- RANKING POR HABILIDAD -->
+<div class='col-md-12 pb_before'>
+  <hr>
+  <h3>Análisis Alumnos por Habilidad - Indicador</h3>
+</div>
+
+<% indicador = @pme_abilities 
+evaluacion = @instrument.evaluation
+
+if evaluacion.assignature.short_name == 'hgcs' && evaluacion.level.short_name = 'septimo_b' || evaluacion.level.short_name = 'octavo_b'
+  indicador =  @instrument.evaluation.questions.map{|q| q.assignature_ability }.uniq
+end%>
+<% indicador.each_with_index do |ac,i| %>
+<% chart_rank_id = "chart_ranking_pme"+i.to_s %>
+<div class='col-md-12'>
+</div>
+<div id= <%=chart_rank_id%> class='col-md-12' style="height: 1125px; min-width: 500px; "></div>
+
+<!--Grafico Contenidos Habilidades/ejes PME-->
+
+<script type='text/javascript'>
+  chartBarStudentsGenerator({ 
+    container: "<%="#"+chart_rank_id%>", 
+    title: { text: <%=  ac.nombre.inspect.html_safe %> }, 
+                            subtitle: { text: 'El color de la barra indica el nivel de logro' }, 
+                            }, { 
+                            xAxis: { categories: [ 
+                            <% set_colors_pme(ac).each do |c| %>
+                            ' <%= c[2] %>',
+                            <% end %>
+                            ]},
+                            series: { data: [
+                            <% set_colors_pme(ac).each_with_index do |c,i| %>   
+                            {y: <%= c[0] %>, color: ' <%= c[1] %>'}, 
+
+                            <% end %>]
+                            }
+                            }); 
+</script>
+
+<% end %>
+
+
+<!-- RESUMEN POR HABILIDAD -->
+
+<div class='col-md-12 pb_before'>
+  <hr>
+  <h3>Resumen de estado por estudiante por Habilidad - Indicador</h3>
+</div>
+
+
+<div id="chart_heatmap"  style="height: 1200px; min-width: 1200px; margin: 0 auto" class='col-md-12'></div>
+<% indicador = @alumno_pme
+categorias = @instrument.evaluation.questions.map{|q| q.pme_ability.nombre}
+evaluacion = @instrument.evaluation
+
+if evaluacion.assignature.short_name == 'hgcs' && evaluacion.level.short_name = 'septimo_b' || evaluacion.level.short_name = 'octavo_b'
+  indicador =  @alumno_assignature_ability
+  categorias = @instrument.evaluation.questions.map{|q| q.assignature_ability.nombre}
+end%>
+<!-- GRAFICO RESUMEN POR HABILIDAD -->
+<script type='text/javascript'>
+  chartHeatMapGenerator({container: "#chart_heatmap"},{xAxis: { categories: <%=categorias.push("<b>Promedio Logro</b>").uniq.inspect.html_safe%>},yAxis: { categories: <%=@proccess_instrument.answers.map{|a| a.student.nombre+" "+a.student.apellido}.push("<b>PROMEDIO</b>").uniq.inspect.html_safe%>}, series:{ data: <%= indicador.map{|al| al}.inspect.html_safe %>
+
+  ,} }); </script>
+<div class ='col-md-12'>
+  <div class ='col-md-4 centered'></div>
+  <div class ='col-md-4 centered'>
+    <table class='centered-table table table-pdf table-condensed table-bordered ' >
+      <thead>
+        <th class='text-center'>Rango</th>
+        <th class='text-center'>Nivel</th>
+      </thead>
+      <tbody>
+        <% @color_ranges.each do |c| %>
+        <tr>  
+          <td class='text-center'><%= c.min.to_s+@sufix+" - "+c.max.to_s+@sufix %></td>
+          <td class='text-center' style="background-color: <%= c.color %>;"><%= c.nombre %></td>    
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

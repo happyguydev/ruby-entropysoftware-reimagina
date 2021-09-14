@@ -1,0 +1,38 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Procesos asociados a orden #<%= @order.id %> <%= @order.school.nombre %></h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class='col-md-12 col-sm-12'>
+            <section class="content">
+              <div class='col-md-12 col-sm-12'>
+                <h3>Procesos</h3>
+                  <div class='nested-fields'>
+                      <div class="form-group col-md-3">
+                        <label>Proceso</label>
+                        <%= f.association :proc_type,:label_method => :nombre, :label => false, input_html: { class: 'form-control' } %></div>
+
+                      <div class="form-group col-md-2">
+                        <label>Fecha activación</label>
+                        <%= f.input :fecha, :as => :date_picker , :label => false, input_html: {class: 'form-control'} %>
+                      </div>
+
+                      <div class="form-group col-md-2">
+                        <label>Monto</label>
+                        <%= f.input :monto, :label => false, input_html: {class: 'form-control'} %>
+                      </div>
+                    <%= link_to_remove_association "remove task", f %>
+                  </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>

@@ -1,0 +1,33 @@
+<h1><%= @axis.nombre %> <%= link_to 'Editar', edit_axis_path(@axis) %></h1>
+<p>
+  <strong>Nombre:</strong>
+  <%= @axis.nombre %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @axis.descripcion %>
+</p>
+
+<div class ="field">
+  <h3>Contenidos Eje  <%= @axis.nombre %> </h3>
+
+  <div class='col-md-12 col-sm-12'>
+    <table id='axes_contents-table' class="table table-bordered table-hover dataTable" data-source='<%= axis_axes_contents_path(@axis, format: :json) %>'>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Descripcion</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+
+    </table>
+    <%= link_to 'Nuevo Contenido', new_axis_axes_content_path(@axis), class: 'btn btn-primary pull-right' %>
+  </div>
+
+
+</div>
+<%= link_to 'Volver', axes_path %>

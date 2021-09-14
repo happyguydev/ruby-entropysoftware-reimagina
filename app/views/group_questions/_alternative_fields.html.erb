@@ -1,0 +1,19 @@
+<!-- I have duplicated this file - BAD PRACTICE - but temporary workaround. Debug later-->
+<br/>
+<div class='row col-md-12 nested-fields'>
+  <br/>
+  <div class='col-md-12'>
+    <%= f.input :texto, input_html: { class: "rich-text-alternative" } %>
+  </div>
+  <div class='col-md-2'>
+    <%= f.input :correcta, inline_label: 'Correcta?' %>
+  </div>
+  <div class='col-md-1'>
+    <%= link_to_remove_association "X Eliminar", f, class: 'btn btn-danger' %>
+  </div>
+  <br/>
+</div>
+<br/>
+<script type='text/javascript'>
+  $('.rich-text-alternative').froalaEditor({ language: 'es', key: 'FwcnehmbblD6lA-8==' });
+</script>

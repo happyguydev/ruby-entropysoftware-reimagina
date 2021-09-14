@@ -1,0 +1,27 @@
+<div class='col-md-12 col-sm-12'>
+  <div class='col-md-12 col-sm-12'>
+    <table class="table table-bordered table-hover dataTable">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Comentario</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @order.order_statuses.each do |os| %>
+        <tr>
+          <td><%= (os.created_at - 3.hours ).strftime("%d-%m-%Y %H:%M") %></td>
+          <td><%= os.status_type.try(:nombre) %></td>
+          <td><%= os.comentario %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <h3>Agregar estado</h3>
+    <%= render :template => "order_statuses/_form" %>
+  </div>
+</div>
+
+

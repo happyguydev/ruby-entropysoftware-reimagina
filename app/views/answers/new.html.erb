@@ -1,0 +1,75 @@
+<script type='text/javascript'>
+
+  var header = ["RUT","NOMBRES","APELLIDOS"];
+  <% @instrument.guides.order(:question_index).each do |g| %>
+  header.push(<%= g.question_index.inspect.html_safe %>)
+    <% end %>
+
+  var students_partial = []
+  var students_global = []
+  students_global.push(header);
+
+  <% @proccess_instrument.grade.students.order(:rut).each do |s| %>
+  students_partial
+  students_partial.push(<%=s.try(:rut).try(:inspect).try(:html_safe) %>);
+  students_partial.push(<%=s.try(:nombre).try(:inspect).try(:html_safe) %>);
+  students_partial.push(<%=s.try(:apellido).try(:inspect).try(:html_safe) %>);
+  students_global.push(students_partial);
+  students_partial = [];
+  <% end %>
+
+  answerTable(students_global);
+</script>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="box-body box-profile">
+            <h3 class="profile-username text-center"> <%= @instrument.try(:nombre) %></h3>
+            <p class="text-muted text-center"><%= @proccess_instrument.grade.school.try(:nombre) %></p>
+            <ul class="list-group list-group-unbordered">
+              <li class="list-group-item">
+                <b>Año</b> <a class="pull-right"> <%= @proccess_instrument.grade.try(:year) %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Asignatura</b> <a class="pull-right"> <%= @proccess_instrument.instrument.evaluation.assignature.try(:nombre) %></a>
+              </li>
+
+              <li class="list-group-item">
+                <b>Curso</b> <a class="pull-right"> <%= "#{@proccess_instrument.grade.level.nombre} #{@proccess_instrument.grade.letra.try(:upcase)}" %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Alumnos a evaluar</b><a class="pull-right"><%= @proccess_instrument.grade.students.count %> </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-md-12 col-lg-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Ingreso masivo de respuestas</h3>
+        </div>
+        <!-- /.box-header -->
+          <div id='ingreso_answers' class='handsontabla'></div>
+          <div><%= check_box_tag 'send_mail_status', checked = false %> <%= label_tag 'Enviar informe por correo' %></div>
+          <button class='btn btn-success' id='ans_mass_input' data-proccess_instrument_id='<%= @proccess_instrument.id %>'>Enviar ingreso masivo</button>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<!--<%= link_to 'Back', proccess_instrument_answers_path %>-->

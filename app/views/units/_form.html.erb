@@ -1,0 +1,33 @@
+<%= simple_form_for @unit do |f| %>
+  <div class="field">
+    <label>Asignatura</label>
+    <%= f.association :assignature, label: false, input_html: {class: "chosen-select change_goals"} %>
+  </div>
+
+  <div class="field">
+    <label>Nivel</label>
+    <%= f.association :level, label: false, input_html: {class: "chosen-select change_goals"} %>
+  </div>
+
+  <div class="field">
+    <label>Numero</label>
+    <%= f.input :numero, :label => false, input_html: {class: 'form-control'} %>
+  </div>
+
+  <div class="field">
+    <label>Descripcion</label>
+    <%= f.input :descripcion , :label => false, input_html: {class: 'form-control'} %>
+  </div>
+
+  <div class="field learning_goals_field">
+    <label>Objetivos de aprendizaje</label>
+    <%= f.association :learning_goals, label: false, input_html: {class: "chosen-select"} %>
+  </div>
+
+  <div class="actions">
+    <%= f.button :submit , 'Enviar'%>
+  </div>
+
+<% end %>
+<script>
+</script>

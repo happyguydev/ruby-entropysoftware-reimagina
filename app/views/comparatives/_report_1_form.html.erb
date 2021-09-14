@@ -1,0 +1,43 @@
+<%= form_tag(compare_report_path, method: :post) do |f| %>
+  <%= hidden_field_tag 'report', params[:report] %>
+  <%= hidden_field_tag 'proc_type_id', ProcType.where(nombre: 'NIVEL').try(:last).try(:id) %>
+
+  <% if current_user.user_type.role.eql?('admin') || current_user.has_role?(:daem) %>
+    <div class='col-md-3'>
+      <b>Seleccione Establecimiento:</b>
+    </div>
+
+    <div class='col-md-5'>
+      <%= select_tag 'school', options_for_select(school_options, params[:school_id]), class: 'select_school chosen-select' %>
+    </div><br><br>
+  <% else %>
+    <%= hidden_field_tag 'school', @comparative_school.try(:id) %>
+  <% end %>
+
+  <% if @comparative_school.orders.count < 2 %>
+    <div class='col-md-8'>
+      No hay suficientes ordenes para comparar
+    </div>
+  <% else %>
+    <div class='col-md-3'>
+      <b>Año inicial :</b>
+    </div>
+
+    <div class='col-md-3'>
+      <%= select_tag 'starting_year', options_for_select(order_years_option, default_order_year_option(:start)) %>
+    </div><br><br>
+
+    <div class='col-md-3'>
+      <b>Año final :</b>
+    </div>
+
+    <div class='col-md-3'>
+      <%= select_tag 'ending_year', options_for_select(order_years_option,default_order_year_option(:end)) %>
+    </div>
+    <br><br><br>
+
+    <div class='col-md-8 comparative-submit'>
+      <%= submit_tag 'Generar informe', class: 'btn btn-primary' %>
+    </div>
+  <% end if @comparative_school.present? %>
+<% end %>

@@ -1,0 +1,121 @@
+<!-- LOGRO POR ALUMNO -->
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12'>&nbsp;</div>
+  <div class='col-md-12' style='text-align: right;'><h4>Total Alumnos Rendidos <%=@asistencia%></h4></div>
+  <h3>Tabla: Análisis de logro de los alumnos y OA/AE/OF generales</h3>
+</div>
+
+<div class='col-md-6 col-sm-6 col-lg-6 pbi_avoid'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <% @headers_logro_simce[0..12].each do |ls|%>
+        <th><%= ls %></th>
+      <% end %>
+    </thead>
+    <tbody>
+      <% Array(@tabla_logro_simce).each_with_index do |ts,i| %>
+        <tr>
+          <% ts[0..12].each_with_index do |td,i| %>
+            <td class='text-center'><%= td %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% if @headers_logro_simce.count > 13 %>
+  <div class='col-md-6 col-sm-6 col-lg-6 pbi_avoid'>
+    <table class='table table-pdf table-condensed table-bordered'>
+      <thead>
+        <th><%= @headers_logro_simce[0] %></th>      
+        <% @headers_logro_simce[13..25].each do |ls|%>
+        <th><%= ls %></th>
+        <% end %>
+      </thead>
+      <tbody>
+        <% Array(@tabla_logro_simce).each_with_index do |ts,i| %>
+          <tr>
+            <td class='text-center'><%= ts[0] %></td>          
+            <% ts[13..25].each_with_index do |td,i| %>
+              <td class='text-center'><%= td %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<% if @headers_logro_simce.count > 26 %>
+  <div class='col-md-6 col-sm-6 col-lg-6 pbi_avoid'>
+    <table class='table table-pdf table-condensed table-bordered'>
+      <thead>
+        <th><%= @headers_logro_simce[0] %></th>      
+        <% @headers_logro_simce[26..38].each do |ls|%>
+        <th><%= ls %></th>
+        <% end %>
+      </thead>
+      <tbody>
+        <% Array(@tabla_logro_simce).each_with_index do |ts,i| %>
+          <tr>
+            <td class='text-center'><%= ts[0] %></td>          
+            <% ts[26..38].each_with_index do |td,i| %>
+              <td class='text-center'><%= td %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<% if @headers_logro_simce.count > 39 %>
+  <div class='col-md-6 col-sm-6 col-lg-6 pbi_avoid'>
+    <table class='table table-pdf table-condensed table-bordered'>
+      <thead>
+        <th><%= @headers_logro_simce[0] %></th>      
+        <% @headers_logro_simce[39..-1].each do |ls|%>
+        <th><%= ls %></th>
+        <% end %>
+      </thead>
+      <tbody>
+        <% Array(@tabla_logro_simce).each_with_index do |ts,i| %>
+          <tr>
+            <td class='text-center'><%= ts[0] %></td>          
+            <% ts[39..-1].each_with_index do |td,i| %>
+              <td class='text-center'><%= td %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<div class='col-md-6'>
+  <table style='width: 500px; margin: 0 auto;'>
+    <tr>
+      <td>Promedio Curso porcentaje de logro</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @promedio_curso[0] %>%</td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>N° Alumnos que rindieron la evaluación</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @total_alumnos - @ausentes %></td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>N° Alumnos ausentes</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%=@ausentes %></td>
+    </tr>
+  </table>
+  <i>* Objetivo de aprendizaje del curso anterior</i>
+</div>

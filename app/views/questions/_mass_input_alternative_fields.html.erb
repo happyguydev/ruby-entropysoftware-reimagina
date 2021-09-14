@@ -1,0 +1,48 @@
+<br/>
+<div class='row col-md-12 nested-fields'>
+  <br/>
+  <div class='col-md-1'>
+    <% alphabet = alphabet(@nested_counter) %>
+     <span class="<%= alphabet  == @question.alternative_index.try(:upcase) ? 'green' : nil %>"><%= alphabet  %></span>
+
+    <% @nested_counter = @nested_counter + 1 %>
+  </div>
+  <div class='col-md-11'>
+    <%= f.input :texto, input_html: { class: "rich-text-alternative" } %>
+  </div>
+
+  <div class='col-md-1'>
+    <%= link_to_remove_association "X Eliminar", f, class: 'btn btn-danger' %>
+  </div>
+  <br/>
+</div>
+<br/>
+<script type='text/javascript'>
+  $('.rich-text-alternative').froalaEditor({
+    placeholderText: 'Ingrese texto...',
+    language: 'es',
+    key: 'FwcnehmbblD6lA-8==',
+    toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'undo', 'redo', 'clearFormatting','subscript','superscript'],
+    imageUploadToS3: {
+      bucket: $("body").data('bucket'),
+      region: 's3',
+      keyStart: $("body").data('key-start'),
+      callback: function (url, key) {
+        console.log(url);
+        console.log(key);
+      },
+      params: {
+        acl: $("body").data('acl'),
+        AWSAccessKeyId: $("body").data('access-key'),
+        policy: $("body").data('policy'),
+        signature: $("body").data('signature')
+      }
+    },
+    imageManagerLoadURL: '/upload_gallery.json'
+  });
+  $('.rich-text-alternative').on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+    var key = $(response).find('key').text()
+    $('#froalaImageTags').find('input[name="froala_image[key]"]').val(key)
+    $('#froalaImageTags').modal()
+  });
+</script>

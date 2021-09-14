@@ -1,0 +1,42 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Facturas</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="dataTables_wrapper form-inline dt-bootstrap" id="example2_wrapper">
+            <div class="row">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <table id='school-invoices-table' class="table table-bordered table-hover dataTable" data-source='<%= school_client_invoice_path(format: :json) %>'>
+                  <thead>
+                    <tr>
+                      <th>Numero</th>
+                      <th>Monto</th>
+                      <th>Comentario</th>
+                      <th>Fecha</th>
+                      <th>Descargar Factura</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row"></div>
+            <div class="col-sm-7"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<%= render 'assigned_schools/assigned_schools_modal' %>

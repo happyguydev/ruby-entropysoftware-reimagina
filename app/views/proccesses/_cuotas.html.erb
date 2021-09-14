@@ -1,0 +1,19 @@
+<%= simple_form_for [@order,@proccess], url: generate_cuotas_order_proccesses_path(@order) do |f| %>
+
+  <%= f.error_notification %>
+
+<div class="form-group col-md-2">
+  <label>Cantidad de cuotas</label>
+  <%= f.input :cuotas, :label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="form-group col-md-2">
+  <label>Fecha primera cuota</label>
+  <%= f.input :fecha_cuota, :as => :date_picker , :label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="form-group col-md-12">
+  <%= f.button :submit , 'Enviar'%>
+</div>
+
+<% end %>

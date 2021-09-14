@@ -1,0 +1,39 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Puntajes fidelización</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table class="table table-bordered table-hover dataTable">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Puntaje (%)</th>
+                <th colspan="2"></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @feed_scores.each do |feed_score| %>
+              <tr>
+                <td><%= feed_score.nombre %></td>
+                <td><%= feed_score.score %></td>
+                <td><%= link_to 'Editar', edit_feed_score_path(feed_score) %></td>
+                <td><%= link_to 'Eliminar', feed_score, method: :delete, data: { confirm: 'Seguro de que quieres eliminar el registro?' } %></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <h3>Agregar puntaje</h3>
+
+          <%= render 'form' %>
+
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>

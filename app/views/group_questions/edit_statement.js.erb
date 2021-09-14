@@ -1,0 +1,3 @@
+$('#myModal2').modal("hide");
+$('.edit_statement_<%=@question.id %>').html("<%= escape_javascript(render('group_questions/edit_statement_modal')) %>");
+$('#edit_statement_<%=@question.id %>').modal("show");

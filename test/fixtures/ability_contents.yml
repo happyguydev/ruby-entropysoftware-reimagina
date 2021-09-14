@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pme_ability_id: 
+  nombre: MyString
+  descripcion: MyText
+
+two:
+  pme_ability_id: 
+  nombre: MyString
+  descripcion: MyText

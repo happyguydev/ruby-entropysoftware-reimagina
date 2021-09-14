@@ -1,0 +1,110 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Mostrando pregunta</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+
+          <p>
+            <strong>Asignatura:</strong>
+            <%= question.assignature.try(:nombre) %>
+          </p>
+
+          <p>
+            <strong>Nivel:</strong>
+            <%= question.level.try(:nombre) %>
+          </p>
+
+          <p>
+            <strong>Contenido:</strong>
+            <%= question.content.try(:nombre) %>
+          </p>
+
+          <p>
+            <strong>Habilidad cognitiva:</strong>
+            <%= question.bloom_ability.try(:nombre) %>
+          </p>
+
+          <p>
+            <strong>Habilidad propia de la asignatura:</strong>
+            <%= question.assignature_ability.try(:nombre) %>
+          </p>
+
+          <p>
+            <strong>Eje asignatura:</strong>
+            <%= question.axis.try(:nombre) %>
+          </p>
+
+          <p>
+            <strong>Eje programa:</strong>
+            <%= question.axis_program.try(:nombre) %>
+          </p>
+
+          <p>
+            <strong>Indicador PME:</strong>
+            <%= question.pme_ability.try(:nombre) %>
+          </p>
+
+          <p>
+            <strong>Unidade(s):</strong>
+             <%= question.try(:learning_goals).try(:map){|oa| oa.try(:units).try(:map){|u| u.try(:numero)}.try(:sort)}.try(:uniq).try(:join, ("-")) %>
+          </p>
+
+          <p>
+            <strong>OA/AE/AF:</strong>
+            <%= question.try(:learning_goals).try(:map){|oa| oa.try(:nombre)}.reject { |e| e.to_s.empty? }.try(:sort).try(:join, ("-")) %>
+          </p>
+
+          <p>
+            <strong>Dificultad:</strong>
+            <%= question.difficulty_level.try(:name) %>
+          </p>
+
+          <div class='col-md-12 col-sm-12'>
+            <section class="content">
+              <div class='col-md-12 col-sm-12'>
+                <div class='col-md-12'>
+                  <p>
+                    <strong>Enunciado:</strong>
+                    <%= question.try(:texto).try(:html_safe) %>
+                  </p>
+                </div>
+                <div class='col-md-12'>
+                  <p>
+                    <strong>Alternativas:</strong>
+                  </p>
+                </div>
+
+                <% if(question.alternatives.present?) %>
+                <% question.alternatives.order('id asc').each do |a| %>
+                <div class='col-md-12'>
+                  <table class="table table-bordered table-hover dataTable">
+                    <thead>
+                      <tr>
+                        <th>Texto </th>
+                        <th>Correcta?</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <th><%= a.texto.html_safe %></th>
+                      <th><%= a.correcta? ? "&#10004;".html_safe : "&#10006;".html_safe %></th>
+                    </tbody>
+                  </table>
+                </div>
+                <% end %>
+                <% end %>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<%= link_to 'Editar', edit_question_path(question) %> |
+<%= link_to 'Volver', questions_path %>

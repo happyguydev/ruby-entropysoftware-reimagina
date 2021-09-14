@@ -1,0 +1,212 @@
+   <!--Item Logro por curso-->
+
+            <h1>Análisis de porcentaje de logro por alumno</h1>
+
+            <div id='chart_bar_students' class='col-md-12'</div>
+            <div class='col-md-12'>&nbsp;</div>
+
+
+            <!--Grafico Logro por curso-->
+
+            <script type='text/javascript'>
+              chartBarStudentsGenerator({ 
+                container: "#chart_bar_students", 
+                title: { text: 'Ranking alumnos' }, 
+                subtitle: { text: 'El color de la barra indica el nivel de logro' }, 
+              }, { 
+                xAxis: { categories: [ 
+                  <% @colors.each do |c| %>
+                  ' <%= c[2] %>',
+                  <% end %>
+                ]},
+
+
+                series: { data: [
+                  <% @colors.each_with_index do |c,i| %>   
+                  {y: <%= c[0] %>, color: ' <%= c[1] %>'}, 
+
+                   <% end %>]
+                  }
+                  }); 
+            </script>
+
+            <!--Item habilidad/eje/ PME-->
+            <div class='col-md-12'>&nbsp;</div>
+            <div class='col-md-12'>
+              <h3><%= @pme_titles %></h3>
+            </div>
+            <div class='col-md-12'>&nbsp;</div>
+            <div class='col-md-12'>
+              <table class='table table-condensed table-bordered'>
+                <thead>
+                  <th class='text-center'><%= @pme_title %></th>
+                  <th class='text-center'>Cantidad preguntas</th>
+                  <th class='text-center'>Promedio respuestas correctas</th>
+                </thead>
+                <tbody>
+                  <% @pme_table.each do |p| %>
+                  <tr>
+                    <td><%= p[:nombre_pme] %></td>    
+                    <td class='text-center'><%= p[:cantidad_preguntas] %></td>
+                    <td class='text-center'><%= p[:porcentaje] %>%</td>    
+                  </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+
+            <div id='chart_pme' class='col-md-12'></div>
+
+            <!--Grafico Habilidades/ejes PME-->
+
+            <script type='text/javascript'>
+              chartColumnGenerator({ 
+                container: "#chart_pme", 
+                title: { text: <%= @pme_titles.inspect.html_safe %> }, 
+                        subtitle: { text: "Asignatura "+ <%= @instrument.evaluation.assignature.nombre.inspect.html_safe %> }, 
+                                  }, { 
+                        labels: <%= @pme_table.map{|pme| pme[:nombre_pme]}.inspect.html_safe %>,
+                        series: { data: <%= @pme_table.map{|pme| pme[:porcentaje]}.inspect.html_safe %> }
+              });  
+            </script>
+
+
+            <div class='col-md-12 jumbo-color'>
+              <div class='col-md-12 text-center'>
+                <h4>En esta evaluación la habilidad <span style='color:green;'>mejor</span> lograda fue: <b><%= @pme_table.sort_by{|pme| pme[:porcentaje] }.last[:nombre_pme] %></b> con un <%= @pme_table.sort_by{|pme| pme[:porcentaje] }.last[:porcentaje] %>%</h4>
+              </div>
+            </div>
+            <div class='col-md-12'>&nbsp;</div>
+            <div class='col-md-12 jumbo-color'>
+              <div class='col-md-12 text-center'>
+                <h4>En esta evaluación la habilidad <span style='color: red;'>peor</span> lograda fue: <b><%= @pme_table.sort_by{|pme| pme[:porcentaje] }.first[:nombre_pme] %></b> con un <%= @pme_table.sort_by{|pme| pme[:porcentaje] }.first[:porcentaje] %>%</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class='col-md-12'>&nbsp;</div>
+
+          <!--Item Contenidos habilidad/eje PME-->
+
+          <div class='col-md-12'>
+            <h3>Contenidos Habilidad PME</h3>
+          </div>
+          <div class='col-md-12'>&nbsp;</div>
+
+          <div class='col-md-12'>
+            <table class='table table-condensed table-bordered'>
+              <thead>
+                <th class='text-center'>Habilidad PME</th>
+                <th class='text-center'>Contenidos habilidad</th>
+                <th class='text-center'>Cantidad preguntas</th>
+                <th class='text-center'>Promedio resp correctas</th>
+              </thead>
+              <tbody>
+                <% @ability_table.each do |ac| %>
+                <tr>
+                  <td><%= ac[:nombre_pme] %></td>
+                  <td><%= ac[:nombre_habilidad] %></td>
+                  <td class='text-center'><%= ac[:cantidad_preguntas] %></td>
+                  <td class='text-center'><%= ac[:porcentaje] %>%</td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+          <div class='col-md-12'>&nbsp;</div>
+          <div class='col-md-12 jumbo-color'>
+
+            <div class='col-md-12'>&nbsp;</div>
+
+            <!-- Glosario OA -->
+
+            <div class='col-md-12'>
+              <h3>Glosario Objetivos de aprendizaje (OA)</h3>
+            </div>
+            <div class='col-md-12'>&nbsp;</div>
+
+            <div class='col-md-12'>
+              <table class='table table-condensed table-bordered'>
+                <thead>
+                  <th class='text-center'>Objetivo de aprendizaje</th>
+                  <th class='text-center'>OA Numero</th>
+                </thead>
+                <tbody>
+                  <% @glosario_objectivo_aprendizaje.each do |oa| %>
+                  <tr>
+                    <td class='col-md-10'><%= oa.descripcion %></td>
+                    <td class='text-center'>OA <%= oa.numero %></td>
+                  </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+
+            <!--Grafico STD-->
+
+            <div id='test_chart' class='col-md-12'></div>
+            <script type='text/javascript'>
+              chartBarGenerator({ 
+                container: "#test_chart", 
+                title: { text: "p1n3s" }, 
+                subtitle: { text: "pines2" }, 
+                yAxis: { 
+                  title: { 
+                    text: "sickeiro" 
+                  } 
+                } 
+              }, { 
+                labels: ['Ciencias de la vida', 'Ciencias de la vida: Cuerpo Humano y Salud', 'Ciencias Físicas y Químicas', 'Ciencias de la tierra y el universo']
+                , series: [
+                  {
+                    dataLabels: {
+                      format: '{y}%',
+                      enabled: true,
+                      align: 'right',
+                      color: '#FFFFFF',
+                      x: -10
+                    },
+                    name: '81% - 100% - Alto',
+                    data: [50, 35, 10, 0],
+                    color: 'green'
+                  }, 
+                  {
+                    dataLabels: {
+                      format: '{y}%',
+                      enabled: true,
+                      align: 'right',
+                      color: '#FFFFFF',
+                      x: -10
+                    },
+                    name: '61% - 80% - Medio alto',
+                    data: [15, 35, 10, 0],
+                    color: 'yellow'
+                  }, 
+                  {
+                    dataLabels: {
+                      format: '{y}%',        
+                      enabled: true,
+                      align: 'right',
+                      color: '#FFFFFF',
+                      x: -10
+                    },
+                    name: '51% - 60% - Medio Bajo',
+                    data: [15, 20, 50, 50],
+                    color: 'orange'
+                  },      
+                  {
+                    dataLabels: {
+                      format: '{y}%',
+                      enabled: true,
+                      align: 'right',
+                      color: '#FFFFFF',
+                      x: -10
+                    },
+                    name: '0% - 50% - Bajo',
+                    data: [20, 10,30, 50],
+                    color: 'red'
+                  }
+                ]
+              });  
+            </script>
+          </div>

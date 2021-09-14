@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @fact_status.order %>
+</p>
+
+<p>
+  <strong>Fact status type:</strong>
+  <%= @fact_status.fact_status_type %>
+</p>
+
+<p>
+  <strong>Comentario:</strong>
+  <%= @fact_status.comentario %>
+</p>
+
+<%= link_to 'Edit', edit_fact_status_path(@fact_status) %> |
+<%= link_to 'Back', fact_statuses_path %>

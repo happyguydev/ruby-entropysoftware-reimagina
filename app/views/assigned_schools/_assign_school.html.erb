@@ -1,0 +1,26 @@
+<%= form_tag url: assign_assigned_schools_path, method: :post do |f| %>
+<%= hidden_field_tag 'user_id', @user.id %>
+<div class="field">
+
+  <% if @user.has_role?(:daem) %>
+  <label>Seleccione establecimiento(s)</label><br>
+
+  <%= select_tag :assign, options_for_select(School.list, @user.assigned_schools.collect(&:school_id)), multiple: true, label: false, class: 'form-control chosen-select' %>
+  <% else %>
+  <label>Seleccione establecimiento</label><br>
+
+  <%= select_tag :assign, options_for_select(School.list, @user.assigned_schools.try(:first).try(:school_id)), label: false, class: 'form-control chosen-select' %>
+  <% end %>
+
+</div>
+<div class="actions assign-school-action">
+  <%= submit_tag 'Asignar', class: 'btn btn-primary' %>
+</div>
+<% end %>
+
+<script>
+  $(document).ready(function(){
+    $(".chosen-select").chosen();
+    $('.chosen-container').attr('style', 'width: 100%;');
+  });
+</script>

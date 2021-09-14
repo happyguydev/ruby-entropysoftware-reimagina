@@ -1,0 +1,12 @@
+<% if params[:report] != '9' &&  params[:report] != '10'%>
+  <div class='col-md-3'>
+    <b>Seleccione proceso:</b>
+  </div>
+  <div class='col-md-5'>
+    <%= select_tag 'proccess', options_for_select(@proccesses), class: 'select_proccess chosen-select' %>
+  </div><br><br>
+<% end %>
+
+  <div class='col-md-8 comparative-submit'>
+    <%= submit_tag 'Generar informe', class: 'btn btn-primary get_report' if @proccesses.size > 1 %>
+  </div>

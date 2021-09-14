@@ -1,0 +1,13 @@
+$('#overlay, #please-wait').hide();
+$('#edit_statement_<%= params[:question_id] %> ').modal("hide");
+$('.modal-backdrop').removeClass('modal-backdrop');
+$('.group_question_form')[0].reset();
+
+$('.question-tabs-container').html("<%= escape_javascript(render('questions/mass_input_edit_group_guestion', group_question: @group_question, question_ids: params[:all_question_ids])) %>");
+$('#flash-message').html("<%= escape_javascript(render('layouts/flash')) %>");
+$('.flash').show();
+
+setTimeout(function() {
+    $('.flash').hide();
+}, 4000); // <-- time in milliseconds\
+<% flash[:notice] = nil %>

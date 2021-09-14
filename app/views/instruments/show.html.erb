@@ -1,0 +1,12 @@
+<p>
+  <strong>Nombre:</strong>
+  <%= @instrument.nombre %>
+</p>
+
+<p>
+  <strong>Evaluacion:</strong>
+  <%= @instrument.evaluation %>
+</p>
+
+<%= link_to 'Editar', edit_instrument_path(@instrument) %> |
+<%= link_to 'Volver', instruments_path %>

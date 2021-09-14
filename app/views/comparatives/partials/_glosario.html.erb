@@ -1,0 +1,31 @@
+<!-- Glosario OA -->
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12'>&nbsp;</div>
+  <h3>Glosario OA/AE/OF</h3>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'>OA/AE/OF</th>
+      <th class='text-center'>OA/AE/OF Numero</th>
+    </thead>
+    <tbody>
+      <% @glosario[0].each do |oa| %>
+        <tr>
+          <td class='col-md-10'><%= oa.descripcion %></td>
+          <td class='text-center'><%= 
+          if oa.level == @glosario[1].evaluation.level 
+            oa.nombre 
+          else 
+            "#{oa.nombre}*" 
+          end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <i>* Objetivo de aprendizaje del curso anterior</i>  
+</div>

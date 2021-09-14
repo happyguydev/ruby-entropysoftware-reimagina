@@ -1,0 +1,54 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Contacto</h3>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <%= simple_form_for(@contact, url: school_client_contact_us_path) do |f| %>
+
+                <%= f.hidden_field :school_id, value: @school.id %>
+                <%= f.hidden_field :user_id, value: current_user.id %>
+
+                <div class="col-md-6">
+                  <label>Nombre</label>
+                  <%= f.input :name, label: false, input_html: {class: 'form-control'} %>
+                </div>
+
+                <div class="col-md-6">
+                  <label>Teléfono</label>
+                  <%= f.input :contact, label: false, input_html: {class: 'form-control'} %>
+                </div>
+
+                <div class="col-md-6">
+                  <label>Email</label>
+                  <%= f.input :email, label: false, input_html: {class: 'form-control'} %>
+                </div>
+
+                <div class="col-md-6">
+                  <label>Asunto</label>
+                  <%= f.input :subject, label: false, input_html: {class: 'form-control'} %>
+                </div>
+
+                <div class="col-md-12">
+                  <label>Mensaje</label>
+                  <%= f.input :message, as: :text , label: false, input_html: {class: 'form-control'} %>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="actions submit-contact">
+                    <%= f.button :submit , 'Enviar'%>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>

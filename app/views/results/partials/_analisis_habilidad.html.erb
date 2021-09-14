@@ -1,0 +1,59 @@
+<!--Item habilidad/eje/ PME-->
+<div class='col-md-12'>&nbsp;</div>
+<div class='col-md-12'>
+  <h3>Análisis por <%= @analisis_habilidad_title%> </h3>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'><%= @analisis_habilidad_title%></th>
+      <th class='text-center'>Cantidad preguntas</th>
+      <th class='text-center'>Promedio respuestas correctas</th>
+    </thead>
+    <tbody>
+      <% @analisis_habilidad.each do |p| %>
+        <tr>
+          <td><%= p[:nombre_pme].try(:mb_chars).try(:upcase).to_s %></td>    
+          <td class='text-center'><%= p[:cantidad_preguntas] %></td>
+          <td class='text-center'><%= p[:porcentaje] %>%</td>    
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!--Grafico Habilidades/ejes PME-->
+<div id='chart_pme' class='col-md-12' style="min-width: 1150px; margin: 0 auto" ></div>
+
+<script type='text/javascript'>
+  chartBarContentsGenerator({
+    colors: <%=@chart_colors.inspect.html_safe%>,
+    container: "#chart_pme", 
+    title: { text: 'Habilidades-Indicadores' }, 
+                            subtitle: { text: "Asignatura "+ <%= @instrument.evaluation.assignature.nombre.inspect.html_safe %> }, 
+                            }, { 
+                            labels: <%= @analisis_habilidad.map{|pme| pme[:nombre_pme]}.inspect.html_safe %>,
+                            series: { data: <%= @analisis_habilidad.each_with_index.map{|pme,i| {y: pme[:porcentaje], color: @chart_colors[i]}}.to_json.html_safe %> }
+
+                            });  
+</script>
+<% if @letter == 'f' || @letter == 'g' %>
+  <div class ='col-md-12'>
+    <div class ='col-md-4 text-center text-center tablazul' ><h2>Puntaje Aprox. Modelo SG por Curso : <%= (@promedio_curso[0]*2.05+156).to_f.round %></h2></div>
+  </div>
+  <div class='col-md-12'>&nbsp;</div>
+<% end %>
+
+<% if @analisis_habilidad.sort_by{|pme| pme[:porcentaje] }.last[:porcentaje] != @analisis_habilidad.sort_by{|pme| pme[:porcentaje] }.first[:porcentaje] %>
+  <div class='col-md-12'>
+    <div class='col-md-12 text-center'>
+      <h5 style='font-size: 20px;'> <%= @analisis_habilidad_title%> <span style='color:green;'>mejor</span> lograda/o fue: <b><%= @analisis_habilidad.sort_by{|pme| pme[:porcentaje] }.last[:nombre_pme].try(:mb_chars).try(:upcase).to_s %></b> con <%= @analisis_habilidad.sort_by{|pme| pme[:porcentaje] }.last[:porcentaje] %>%</h5>
+    </div>
+  </div>
+  <div class='col-md-12'>
+    <div class='col-md-12 text-center'>
+      <h5 style='font-size: 20px;'> <%= @analisis_habilidad_title%> <span style='color: red;'>menos</span> lograda/o: <b><%= @analisis_habilidad.sort_by{|pme| pme[:porcentaje] }.first[:nombre_pme].try(:mb_chars).try(:upcase).to_s %></b> con un <%= @analisis_habilidad.sort_by{|pme| pme[:porcentaje] }.first[:porcentaje] %>%</h5>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,205 @@
+<%= form_for(@school) do |f| %>
+<% if @school.errors.any? %>
+<div id="error_explanation">
+    <h2><%= pluralize(@school.errors.count, "error") %> prohibited this school from being saved:</h2>
+
+    <ul>
+        <% @school.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+    </ul>
+</div>
+<% end %>
+
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="box col-sm-12 col-md-12 col-lg-12">
+          <div class="box-header">
+            <h3 class="box-title">Datos Establecimiento</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div class="field">
+                <%= f.label 'RBD' %><br>
+                <%= f.text_field :rbd %>
+            </div>
+            <div class="field">
+                <%= f.label :nombre %><br>
+                <%= f.text_field :nombre %>
+            </div>
+              <% if !@school.new_record? and @school.commune %>
+              <div class="field">
+                <%= f.label 'Region' %><br>
+                <%= f.select :region , Region.all.map{ |r| [r.name , r.id] }, :selected => @school.commune.region.id %>
+              </div>
+              <div class="field">
+                <%= f.label 'Comuna' %><br>
+                <%= f.select :commune_id, [[@school.commune.name, @school.commune.id]] %>
+              </div>
+              <% else %>
+              <div class="field">
+                <%= f.label 'Region' %><br>
+                <%= f.select :region , Region.all.map{ |r| [r.name , r.id] }, :include_blank => "Seleccione Región" %>
+              </div>
+              <div class="field">
+                <%= f.label 'Comuna' %><br>
+                <%= f.select :commune_id, [] %>
+              </div>
+              <% end %>
+            <div class="field">
+                <%= f.label :dependencia %><br>
+                <%= f.select :dependencia , ["Municipal", "Particular Subvencionado", "Particular No Subvencionado"] , input_html: { class: 'form-control chosen-select'} %>
+            </div>
+            <div class="field">
+                <%= f.label 'RUT Facturas' %><br>
+                <%= f.text_field :rut %>
+            </div>
+            <div class="field">
+                <%= f.label :direccion %><br>
+                <%= f.text_field :direccion %>
+            </div>
+            <div class="field">
+                <%= f.label :email %><br>
+                <%= f.text_field :email %>
+            </div>
+            <div class="field">
+                <%= f.label :telefono %><br>
+                <%= f.text_field :telefono %>
+            </div>
+            <div class="field">
+                <%= f.label 'Comentarios' %><br>
+                <%= f.text_field :info_contacto %>
+            </div>
+          </div>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <div class="col-xs-6 col-md-6">
+        <div class="box box-default collapsed-box">
+          <div class="box-header with-border">
+            <h3 class="box-title">Agregar Cuenta Director (opcional)</h3>
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+              </button>
+            </div>
+            <!-- /.box-tools -->
+          </div>
+          <!-- /.box-header -->
+          <div style="display: none;" class="box-body">
+              <div class='col-md-4 col-sm-4'>
+                  <div class="field">
+                      <%= f.label 'Nombre' %><br>
+                      <%= f.text_field :dir_nombre %>
+                  </div>
+                  <div class="field">
+                      <%= f.label 'e-mail' %><br>
+                      <%= f.text_field :dir_mail %>
+                  </div>
+                  <div class="field">
+                      <%= f.label 'Teléfono' %><br>
+                      <%= f.text_field :dir_telefono %>
+                  </div>
+              </div>
+          </div>
+          <!-- /.box-body -->
+        </div>
+      </div>
+
+      <div class="col-xs-6 col-md-6">
+        <div class="box box-default collapsed-box">
+          <div class="box-header with-border">
+            <h3 class="box-title">Agregar Cuenta UTP (opcional)</h3>
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+              </button>
+            </div>
+            <!-- /.box-tools -->
+          </div>
+          <!-- /.box-header -->
+          <div style="display: none;" class="box-body">
+              <div class='col-md-4 col-sm-4'>
+                  <div class="field">
+                      <%= f.label 'Nombre' %><br>
+                      <%= f.text_field :utp_nombre %>
+                  </div>
+                  <div class="field">
+                      <%= f.label 'e-mail' %><br>
+                      <%= f.text_field :utp_mail %>
+                  </div>
+                  <div class="field">
+                      <%= f.label 'Teléfono' %><br>
+                      <%= f.text_field :utp_telefono %>
+                  </div>
+              </div>
+          </div>
+          <!-- /.box-body -->
+        </div>
+      </div>
+
+      <div class="col-xs-6 col-md-6">
+        <div class="box box-default collapsed-box">
+          <div class="box-header with-border">
+            <h3 class="box-title">Agregar Cuenta Profesor (opcional)</h3>
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+              </button>
+            </div>
+            <!-- /.box-tools -->
+          </div>
+          <!-- /.box-header -->
+          <div style="display: none;" class="box-body">
+              <div class='col-md-4 col-sm-4'>
+                  <div class="field">
+                      <%= f.label 'Nombre' %><br>
+                      <%= f.text_field :prof_nombre %>
+                  </div>
+                  <div class="field">
+                      <%= f.label 'e-mail' %><br>
+                      <%= f.text_field :prof_mail %>
+                  </div>
+                  <div class="field">
+                      <%= f.label 'Teléfono' %><br>
+                      <%= f.text_field :prof_telefono %>
+                  </div>
+              </div>
+          </div>
+          <!-- /.box-body -->
+        </div>
+      </div>
+      <div class="col-xs-6 col-md-6">
+        <div class="box box-default collapsed-box">
+          <div class="box-header with-border">
+            <h3 class="box-title">Agregar Cuenta Cobranza (opcional)</h3>
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+              </button>
+            </div>
+            <!-- /.box-tools -->
+          </div>
+          <!-- /.box-header -->
+          <div style="display: none;" class="box-body">
+              <div class='col-md-4 col-sm-4'>
+                  <div class="field">
+                      <%= f.label 'Nombre' %><br>
+                      <%= f.text_field :fact_nombre %>
+                  </div>
+                  <div class="field">
+                      <%= f.label 'e-mail' %><br>
+                      <%= f.text_field :fact_mail %>
+                  </div>
+                  <div class="field">
+                      <%= f.label 'Teléfono' %><br>
+                      <%= f.text_field :fact_telefono %>
+                  </div>
+              </div>
+          </div>
+          <!-- /.box-body -->
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="actions">
+    <%= f.submit "Enviar"%>
+</div>
+<% end %>

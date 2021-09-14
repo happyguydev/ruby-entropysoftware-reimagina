@@ -1,0 +1,7 @@
+<div class="box-header">
+  <%= link_to 'Click para agregar preguntas existentes', add_existing_group_question_path(@group_question), remote: true, class: 'btn btn-default pull-right'%>
+	<h3 class="box-title">Agregar pregunta al grupo actual</h3>
+</div>
+<div class="box-body">
+	<%= render 'questions/form' %> 
+</div>

@@ -1,0 +1,75 @@
+<!-- LOGRO POR ALUMNO -->
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12'>&nbsp;</div>
+  <h3>Logro por alumno</h3>
+</div>
+
+<div class='col-md-6 col-sm-6 col-lg-6 pbi_avoid'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th>Nombre</th>
+      <th>Porcentaje</th>
+    </thead>
+    <tbody>
+      <% @student_results.each do |sr| %>
+        <% student = @students.find(sr[:student_id]) %>
+        <tr>
+          <td><%= "#{student.nombre} #{student.apellido}" %></td>
+          <td class="text-center" ><%= sr[:correctas] > 0 ? ((sr[:correctas] / @total_preguntas.to_f)*100).to_i : 0 %>%</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class='col-md-6 col-sm-6 col-lg-6 pbi_avoid'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th>Nombre</th>
+      <th>Porcentaje</th>
+    </thead>
+    <tbody>
+      <% @student_results_2.each do |sr| %>
+        <% student = @students.find(sr[:student_id]) %>
+        <tr>
+          <td><%= "#{student.nombre} #{student.apellido}" %></td>
+          <td class="text-center" ><%= sr[:correctas] > 0 ? ((sr[:correctas] / @total_preguntas.to_f)*100).to_i : 0 %>%</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class='col-md-6'>
+  <table style='width: 500px; margin: 0 auto;'>
+    <tr> 
+      <td>Promedio Curso porcentaje de logro</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @promedio_curso[0] %>%</td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr> 
+      <td>Nivel de logro promedio curso</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @promedio_curso[1] %></td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr> 
+      <td>N° Alumnos que rindieron la evaluación</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @total_alumnos - @ausentes %></td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr> 
+      <td>N° Alumnos ausentes</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%=@ausentes %></td>
+    </tr>
+  </table>
+</div>

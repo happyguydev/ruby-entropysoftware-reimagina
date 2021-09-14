@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @feed_score.nombre %>
+</p>
+
+<p>
+  <strong>Score:</strong>
+  <%= @feed_score.score %>
+</p>
+
+<%= link_to 'Edit', edit_feed_score_path(@feed_score) %> |
+<%= link_to 'Back', feed_scores_path %>

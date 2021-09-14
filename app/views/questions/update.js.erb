@@ -1,0 +1,8 @@
+$("#tab-<%= params[:tab_index] %>").removeClass('active')
+$("#tab-<%= params[:tab_index] %>").addClass('edited')
+$('#flash-message').html("<%= escape_javascript(render('layouts/flash')) %>");
+$('.flash').show();
+setTimeout(function() {
+    $('.flash').hide();
+}, 4000); // <-- time in milliseconds
+<% flash[:notice] = nil %>

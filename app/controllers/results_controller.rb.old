@@ -1,0 +1,590 @@
+class ResultsController < ApplicationController
+  skip_before_action :verify_authenticity_token
+  before_action :set_instrument , only: [:index, :grade,:report_pdf,:report ]
+  before_action :set_admin_menu
+  before_action :grade, only: [:report_pdf,:report ]
+  layout :resolve_layout
+  before_action :set_titles, only: [:report_pdf, :report ]
+  before_action :report, only: [:report_pdf ]
+  include MassInputConcern
+  require 'json'
+  helper_method :set_colors_pme
+
+  def index
+
+  end
+
+  def mass_input
+    @fluid = true
+  end
+
+  def download_report
+    rid = params["rid"]
+    report = ReportsBypass.find(rid)
+    file = File.open(report.report.path)
+    send_file file, :type => 'text/html; charset=utf-8', :filename => "#{report.nombre}.pdf"
+    file.close
+  end
+
+  def mass_input_pdf
+
+    datos = JSON.parse(params[:form_data])
+
+    pauta = datos["pauta"]
+    respuestas = datos["respuestas"]
+    nombre_instrumento = datos["nombre_instrumento"]
+    nombre_colegio = datos["nombre_colegio"]
+    asignatura = datos["asignatura"]
+    curso = datos["curso"]
+
+    @vc = view_context
+    @data = prepareReport(datos)
+
+    html = render_to_string 'mass_input_report', :layout => 'to_pdf'
+
+    header = render_to_string 'report_header', layout: false
+    footer = render_to_string 'report_footer', layout: false
+
+    pdf = WickedPdf.new.pdf_from_string(html, {
+      margin: {
+        top: 43,
+        bottom: 33,
+        left: 0,
+        right: 0
+        },
+      header: {
+        :spacing => 10,
+        content: header 
+        },
+      footer: {
+        content:  footer 
+        },
+      javascript_delay: 10000, 
+      encoding: 'utf-8', 
+      page_size: 'A4'
+      })
+
+    pdf_report = ReportsBypass.new(nombre: "#{nombre_colegio}-#{nombre_instrumento}-#{asignatura}-#{curso}", report: StringIO.new(pdf))
+
+    pdf_report.save
+
+    render json: { url: "/results/download_report/#{pdf_report.id}" }
+  end
+
+  def mass_input_post_data
+
+    pauta = params[:pauta]
+    respuestas = params[:respuestas]
+    nombre_instrumento = params[:nombre_instrumento]
+    nombre_colegio = params[:nombre_colegio]
+    asignatura = params[:asignatura]
+    curso = params[:curso]
+
+    @data = prepareReport(JSON.parse(params[:form_data]))
+
+    #render 'mass_input_report', layout: false
+    render json: @data
+
+  end
+
+  def report_pdf
+
+    render  :pdf => "#{@instrument.nombre.gsub(" ", "_")}", :disposition => 'attachment'    ,:template => 'results/report_pdf.html.erb', :margin => {:top => 20, :bottom =>10 },:header =>  { :spacing => 1, html: {            template: 'results/report_pdf_header.pdf' }}, :footer => { right: '[page]/[topage]' }, :page_size => 'Legal'
+
+end
+
+def show_report
+  render :template => 'results/report_pdf.html.erb',:layout => false
+end
+
+def grade
+  # Resultado curso
+  @answers = @proccess_instrument.answers
+  @guides = @instrument.guides
+  @students = @proccess_instrument.grade.students
+  @student_results = []
+  @total_preguntas = @instrument.evaluation.questions.count
+  @student_results = Result.student_results
+end
+
+def report
+  @sufix = sufix
+  @color_ranges = color_ranges
+  @asistencia, @total_alumnos = asistencia
+  @ausentes = @total_alumnos - @asistencia
+  @promedio_curso = promedio_curso
+  @logro_curso = logro_curso
+  @tabla_lh = tabla_logro_habilidad
+  @tabla_lg = tabla_logro_rangos
+  @tabla_lg_tot = tabla_logro_totales
+  @pme_table = habilidad_pme
+  @assignature_ability_table = habilidad_asignatura
+  @pme_oa = pme_oa
+  @descendidos = descendidos
+  @remediales_table = remediales_table
+  @ability_table = habilidad_contenido_pme
+  @glosario_objectivo_aprendizaje = glosario_objectivo_aprendizaje
+  @alumno_pme = tabla_promedio_alumno_pme
+  @alumno_assignature_ability = tabla_promedio_alumno_assignature_ability
+  @totals = self.grade
+  self.grade
+  @colors = set_colors
+  @chart_colors = Result.color_set
+end
+
+private
+
+def set_titles
+
+  @pme_title = "Habilidad/Indicador PME"
+  @pme_titles = "Habilidades/Indicadores PME"
+
+end
+
+def set_colors
+  color_bars = []
+  stu_color = 'asdf'
+  @student_results.each do |s|
+    student = @students.find(s[:student_id])
+    porcentaje = s[:correctas] > 0 ? ((s[:correctas] / @total_preguntas.to_f)*100).to_i : 0
+    @color_ranges.each do |c|
+      if (c.min..c.max).include?( porcentaje ) 
+        stu_color = c.color
+      end
+    end
+    color_bars << [porcentaje,  stu_color, student.nombre+' '+student.apellido]
+  end
+  return color_bars.sort_by{ |val| val[0] }.reverse
+end
+
+def set_colors_pme(pme)
+  evaluacion = @instrument.evaluation
+  eshgcs = false
+
+  if evaluacion.assignature.short_name == 'hgcs' && evaluacion.level.short_name = 'septimo_b' || evaluacion.level.short_name = 'octavo_b'
+    eshgcs = true
+  end
+  color_bars = []
+  stu_color = 'asdf'
+  @student_results.each do |s|
+    student = @students.find(s[:student_id])
+    if eshgcs == true
+      porcentaje = (cantidad_correctas_alumno_assignature_ability(student,pme)*100)/@instrument.evaluation.questions.where(:assignature_ability => pme).count 
+    else
+      porcentaje = (cantidad_correctas_alumno_pme(student,pme)*100)/@instrument.evaluation.questions.where(:pme_ability => pme).count
+    end
+    @color_ranges.each do |c|
+      if (c.min..c.max).include?(porcentaje) 
+        stu_color = c.color
+      end
+    end
+    color_bars << [porcentaje,  stu_color, student.nombre+' '+student.apellido]
+  end
+  return color_bars.sort_by{ |val| val[0] }.reverse
+end
+
+def promedio_curso
+  suma_correctas = @student_results.map {|sr| sr[:correctas] > 0 ? ((sr[:correctas] / @total_preguntas.to_f)*100).to_i : 0}
+  if @asistencia > 0
+    promed_curso = suma_correctas.reduce(:+) / @asistencia if suma_correctas 
+  else
+    promed_curso = 0
+  end
+  promed_curso
+end
+
+def logro_curso
+  nivel_logro_curso = ""
+  prom_curso = @promedio_curso
+  if @instrument.evaluation.evaluation_type.short_name == 'psu' 
+    #(600/X)*Y+250
+    #donde X = numero de preguntas evaluacion, Y = cantidad de respuestas correctas.
+    x = @instrument.evaluation.questions.count
+    y = (@promedio_curso*x)/100
+    prom_curso = (600/x)*y+250
+  end
+
+  if @instrument.evaluation.evaluation_type.short_name == 'simce' 
+    prom_curso = (@promedio_curso*2.05)+156
+  end
+
+  @color_ranges.each do |c|
+    if (c.min..c.max).include?(prom_curso) 
+      nivel_logro_curso = c.nombre
+    end
+  end
+  nivel_logro_curso
+end
+
+def set_instrument
+  @instrument = ProccessInstrument.find(params[:id]).instrument
+  @proccess_instrument = ProccessInstrument.find(params[:id])
+end
+
+def asistencia
+  [@proccess_instrument.answers.pluck(:student_id).uniq.count, @proccess_instrument.grade.students.count]
+end
+
+def habilidad_pme
+  @pme_abilities = PmeAbility.includes(questions: {evaluations: :instruments}).where(instruments: {id: @instrument.id})
+  @pme_table = []
+  @pme_abilities.find_each do |pmea|
+    nombre_pmea = pmea.nombre
+    cantidad_preguntas = @instrument.evaluation.questions.where(pme_ability_id: pmea.id).count
+    ccpme = cantidad_correctas_pme(pmea)
+    porcentaje = @asistencia > 0 ? (ccpme/(cantidad_preguntas*@asistencia.to_f)*100).to_i : 0
+    @pme_table << { nombre_pme: nombre_pmea, cantidad_preguntas: cantidad_preguntas, porcentaje: porcentaje }
+  end
+  @pme_table
+end
+
+def cantidad_correctas_pme(pme)
+  preg = @instrument.evaluation.questions.where(pme_ability_id: pme.id)
+  correctas = 0
+  preg.find_each do |p|
+    correctas += Answer.where(question_id: p.id, proccess_instrument: @proccess_instrument, letra: @instrument.guides.find_by(question_id: p.id).alternative_index).count
+  end
+  correctas
+end
+
+def habilidad_asignatura
+  @assignature_abilities = AssignatureAbility.includes(questions: {evaluations: :instruments}).where(instruments: {id: @instrument.id})
+  @assability_table = []
+  @assignature_abilities.each do |pmea|
+    nombre_pmea = pmea.nombre
+    cantidad_preguntas = @instrument.evaluation.questions.where(assignature_ability_id: pmea.id).count
+    ccpme = cantidad_correctas_assability(pmea)
+    porcentaje = @asistencia > 0 ? (ccpme/(cantidad_preguntas*@asistencia.to_f)*100).to_i : 0
+    @assability_table << { nombre_pme: nombre_pmea, cantidad_preguntas: cantidad_preguntas, porcentaje: porcentaje }
+  end
+  @assability_table
+end
+
+def cantidad_correctas_assability(pme)
+  preg = @instrument.evaluation.questions.where(assignature_ability: pme.id)
+  correctas = 0
+   preg.find_each do |p|
+    correctas += Answer.where(question_id: p.id, proccess_instrument: @proccess_instrument, letra: @instrument.guides.find_by(question_id: p.id).alternative_index).count
+  end
+  correctas
+end
+
+def cantidad_correctas(question)
+  correctas = 0
+  correctas += Answer.where(question_id: question.id, proccess_instrument: @proccess_instrument, letra: @instrument.guides.find_by(question_id: question.id).alternative_index).count
+  correctas
+end
+
+def pme_oa
+  pme_oa_table = []
+  #guia = Guide.where(:instrument => @instrument).order(:question_index)
+  guia = Guide.includes(question: [:content, :learning_goal]).where(:instrument => @instrument).order(:question_index)
+  guia.each do |g|
+    lograron = cantidad_correctas(g.question)
+    no_lograron = @asistencia - lograron
+    pme = g.question.pme_ability.nombre
+    contenido = g.question.content.nombre
+    oa = g.question.learning_goal.numero
+    index = g.question_index
+    pme_oa_table << {num: index, pme: pme, contenido: contenido, oa: oa,lograron: lograron, no_lograron: no_lograron}
+  end
+  pme_oa_table
+end
+
+def descendidos
+  #metodo que entrega cantidad de correctas maximas que puede tener una pregunta para ser descendida
+  #primero ordeno la tabla de preguntas por logro 
+  #luego tomo los 3 más bajos
+  cantidad_correctas = 0
+  ultimo = []
+  penultimo = []
+  antepenultimo = []
+  ordenados = @pme_oa.sort_by { |que| que[:lograron] }.uniq.first(3) 
+  ultimo =  @pme_oa.select {|log| log[:lograron] == ordenados[0][:lograron] }
+  if ordenados.count > 1 
+    penultimo = @pme_oa.select {|log| log[:lograron] == ordenados[1][:lograron] } 
+  end
+  if ordenados.count > 2 
+    antepenultimo = @pme_oa.select {|log| log[:lograron] == ordenados[2][:lograron] } 
+  end
+
+  #luego pregunto por cada uno si suman 3 preguntas, si no suman 3 preguntas
+  #se pasa al siguiente
+  if ultimo.count > 2 
+    cantidad_correctas = ultimo.first[:lograron]
+  elsif ultimo.count + penultimo.count > 2
+    cantidad_correctas = penultimo.first[:lograron]
+  else
+    if antepenultimo.first != nil
+      cantidad_correctas = antepenultimo.first[:lograron]
+    end
+  end
+  return cantidad_correctas
+end
+
+
+def remediales_table
+  remediales_table = []
+  guia = Guide.where(:instrument => @instrument).order(:question_index)
+  guia.each do |g|
+    index = g.question_index
+    contenido = g.question.content
+    remedial = Remedial.where(:content => contenido, :level => @instrument.evaluation.level).last.try(:nombre) || "Sin remediales disponibles"
+    remediales_table << {num: index, contenido: contenido.nombre, remedial: remedial }
+  end
+  remediales_table
+end
+
+def habilidad_contenido_pme
+  #saco habilidades PME presentes en la evaluacion
+  @pmes = @instrument.evaluation.questions.map{ |q| q.pme_ability }.uniq
+  @pme_content_table = []
+  @pmes.each do |pm|
+    pme_parcial = []
+    #query que entrega contenido -> cantidad de preguntas de cierta habilidad pme
+    preguntas_pme = @instrument.evaluation.questions.where(:pme_ability_id => pm.id).joins(:content).group('contents.id').count
+    #recorro el arreglo para agregarle a cada fila el % de correctas
+    preguntas_pme.each do |key,value| 
+      contenido = Content.find(key.to_i)
+      cc = cantidad_correctas_pme_contenido(pm,contenido)
+      porcentaje = @asistencia > 0 ? (cc/(value*@asistencia.to_f)*100).to_i : 0
+      pme_parcial << {nombre_pme: pm.nombre, nombre_contenido: contenido.nombre, cantidad_preguntas: value, porcentaje: porcentaje }
+    end
+    @pme_content_table << pme_parcial
+  end
+  @pme_content_table
+end
+
+def cantidad_correctas_ability(ability)
+  preg = @instrument.evaluation.questions.map{|q| q if q.ability_content_id == ability.id }.compact
+  correctas = 0
+  preg.each do |p|
+    Answer.where(question_id: p.id, proccess_instrument: @proccess_instrument).each do |a|
+      if a.letra == @instrument.guides.find_by(question_id: p.id).alternative_index
+        correctas+=1
+      end
+    end
+  end
+  correctas
+end
+
+def cantidad_correctas_pme_contenido(pme,content)
+  preg = @instrument.evaluation.questions.map{|q| q if q.pme_ability_id == pme.id && q.content_id == content.id }.compact
+  correctas = 0
+  preg.each do |p|
+    Answer.where(question_id: p.id, proccess_instrument: @proccess_instrument).each do |a|
+      if a.letra == @instrument.guides.find_by(question_id: p.id).alternative_index
+        correctas+=1
+      end
+    end
+  end
+  correctas
+end
+
+def cantidad_correctas_pme(pme)
+  preg = @instrument.evaluation.questions.where(pme_ability_id: pme.id)
+  correctas = 0
+  preg.find_each do |p|
+    correctas += Answer.where(question_id: p.id, proccess_instrument: @proccess_instrument, letra: @instrument.guides.find_by(question_id: p.id).alternative_index).count
+  end
+  correctas
+end
+
+def cantidad_correctas_alumno_pme(alumno,pme)
+  preg = @instrument.evaluation.questions.where(pme_ability_id: pme.id)
+  correctas = 0
+  preg.find_each do |p|
+    correctas += Answer.where(student_id: alumno.id).where(question_id: p.id, proccess_instrument: @proccess_instrument, letra: @instrument.guides.find_by(question_id: p.id).alternative_index).count
+  end
+  correctas
+end
+
+def cantidad_correctas_alumno_assignature_ability(alumno,pme)
+  preg = @instrument.evaluation.questions.where(assignature_ability_id: pme.id)
+  correctas = 0
+  preg.find_each do |p|
+    correctas += Answer.where(student_id: alumno.id).where(question_id: p.id, proccess_instrument: @proccess_instrument, letra: @instrument.guides.find_by(question_id: p.id).alternative_index).count
+  end
+  correctas
+end
+
+def tabla_logro_habilidad
+  #tabla que entrega un array de hashes formato [{:nombre => "Alto", :color => #12345, :data => [20,25,30]}]
+  #para llenar garfico barCombined
+  pme = @instrument.evaluation.questions.includes(:pme_ability).map{|q| q.pme_ability}.uniq
+  alumnos = @proccess_instrument.answers.includes(:student).map{|a| a.student}.uniq
+  tots_array = []
+  tots_hash = []
+  #Por cada rango agregamos 1 hash al array
+  #count dice cuantos alumnos sacaron cada rango segun su % de acierto en cada habilidad 
+  @color_ranges.each do |cr|
+    pme.each do |ha|
+      count = 0 
+      alumnos.each do |st|
+        porcentaje = (cantidad_correctas_alumno_pme(st,ha)*100)/@instrument.evaluation.questions.where(:pme_ability => ha).count
+        if (cr.min..cr.max).include?(porcentaje) 
+          count = count + 1
+        end
+      end
+      #calculamos a que % del total de alumnos equivale count 
+      porcentaje_rango = (count*100)/@asistencia
+      #llenamos el array chico del key "data"
+      tots_array.push(porcentaje_rango)
+    end
+    tots_hash << {nombre: cr.nombre+" - "+cr.min.to_s+@sufix+" - "+cr.max.to_s+@sufix, color: cr.color, data: tots_array}
+    tots_array = []
+  end
+  tots_hash
+end
+
+def tabla_logro_rangos
+  #tabla que entrega un array formato [["Nombre PME", ausentes, pme1,pme2,pme...]]
+  #para llenar tabla de logro con colspan 
+  evaluacion = @instrument.evaluation
+  pme = @instrument.evaluation.questions.includes(:pme_ability).map{|q| q.pme_ability}.uniq
+  eshgcs = false
+
+  if evaluacion.assignature.short_name == 'hgcs' && evaluacion.level.short_name = 'septimo_b' || evaluacion.level.short_name = 'octavo_b'
+    pme = @instrument.evaluation.questions.includes(:assignature_ability).map{|q| q.assignature_ability}.uniq
+    eshgcs = true
+  end
+
+  alumnos = @proccess_instrument.answers.map{|a| a.student}.uniq
+  tots_array = []
+  tots_hash = []
+  #Por cada habilidad agregamos 1 array al array
+  #count dice cuantos alumnos sacaron cada rango segun su % de acierto en cada habilidad 
+  pme.each do |ha|
+    #inicializamos cada array chico con el nombre de la habilidad y el numero de ausentes
+    tots_array.push(ha.nombre,@ausentes)
+    @color_ranges.order(:min).each do |cr|
+      count = 0 
+      alumnos.each do |st|
+        if eshgcs == true
+          porcentaje = (cantidad_correctas_alumno_assignature_ability(st,ha)*100)/@instrument.evaluation.questions.where(:assignature_ability => ha).count
+        else
+          porcentaje = (cantidad_correctas_alumno_pme(st,ha)*100)/@instrument.evaluation.questions.where(:pme_ability => ha).count
+        end
+        if (cr.min..cr.max).include?(porcentaje) 
+          count = count + 1
+        end
+      end
+      #llenamos el array chico con el valor de count de cada rango
+      tots_array.push(count)
+    end
+    #metemos cada array chico en el array grande
+    tots_hash.push(tots_array)
+    tots_array = []
+  end
+  tots_hash
+end
+
+def tabla_logro_totales
+  #tabla que entrega un array formato [10,20,30,40] total alumnos de cada rango
+  #para llenar tabla con totales abajo del grafico
+  pme = @instrument.evaluation.questions.map{|q| q.pme_ability}.uniq
+  alumnos = @proccess_instrument.answers.map{|a| a.student}.uniq
+  tots_array = []
+  tots_array.push(@ausentes)
+  @color_ranges.order(:min).each do |cr|
+    count = 0 
+    @student_results.each do |st|
+      porcentaje = (st[:correctas]*100)/@instrument.evaluation.questions.count
+      if (cr.min..cr.max).include?(porcentaje) 
+        count = count + 1
+      end
+    end
+    #llenamos el array chico con el valor de count de cada rango
+    tots_array.push(count)
+  end
+  tots_array
+end
+
+def tabla_promedio_alumno_pme
+  tabla_prom_pme = []
+  pme = @instrument.evaluation.questions.map{|q| q.pme_ability}.uniq
+  alumnos = @proccess_instrument.answers.map{|a| a.student}.uniq
+  pme.each_with_index do |pm,i|
+    acum_parcial = 0
+    alumnos.each_with_index do |al,k|
+      porcentaje = (cantidad_correctas_alumno_pme(al,pm)*100)/@instrument.evaluation.questions.where(:pme_ability => pm).count
+      tabla_prom_pme.push([i,k,porcentaje])
+      acum_parcial += porcentaje
+    end
+    tabla_prom_pme.push([i,alumnos.count,(acum_parcial/alumnos.count.to_f).round])
+  end
+  #se agregan los promedios
+  acum_total = 0 
+  alumnos.each_with_index do |al,i|
+    promedio = 0
+    pme.each do |pm|
+      promedio += (cantidad_correctas_alumno_pme(al,pm)*100)/@instrument.evaluation.questions.where(:pme_ability => pm).count
+    end
+    tabla_prom_pme.push([pme.count,i,(promedio/pme.count.to_f).round])
+    acum_total += (promedio/pme.count.to_f).round
+  end
+  tabla_prom_pme.push([pme.count,alumnos.count,(acum_total/alumnos.count.to_f).round])
+  tabla_prom_pme
+end
+
+def tabla_promedio_alumno_assignature_ability
+  tabla_prom_pme = []
+  pme = @instrument.evaluation.questions.map{|q| q.assignature_ability}.uniq
+  alumnos = @proccess_instrument.answers.map{|a| a.student}.uniq
+  pme.each_with_index do |pm,i|
+    acum_parcial = 0
+    alumnos.each_with_index do |al,k|
+      porcentaje = (cantidad_correctas_alumno_assignature_ability(al,pm)*100)/@instrument.evaluation.questions.where(:assignature_ability => pm).count
+      tabla_prom_pme.push([i,k,porcentaje])
+      acum_parcial += porcentaje
+    end
+    tabla_prom_pme.push([i,alumnos.count,(acum_parcial/alumnos.count.to_f).round])
+  end
+  #se agregan los promedios
+  acum_total = 0 
+  alumnos.each_with_index do |al,i|
+    promedio = 0
+    pme.each do |pm|
+      promedio += (cantidad_correctas_alumno_assignature_ability(al,pm)*100)/@instrument.evaluation.questions.where(:assignature_ability => pm).count
+    end
+    tabla_prom_pme.push([pme.count,i,(promedio/pme.count.to_f).round])
+    acum_total += (promedio/pme.count.to_f).round
+  end
+  tabla_prom_pme.push([pme.count,alumnos.count,(acum_total/alumnos.count.to_f).round])
+  tabla_prom_pme
+end
+
+def color_ranges
+  colors = ColorRange.
+    where(:assignature => @instrument.evaluation.assignature).
+    where(:level => @instrument.evaluation.level).
+    where(:evaluation_type => @instrument.evaluation.evaluation_type)
+  colors.order(:min)
+end
+
+def sufix
+  if(@instrument.evaluation.evaluation_type.nombre == "SIMCE")
+    sufix = ""
+  else
+    sufix ="%"
+  end
+  sufix
+end
+
+def glosario_objectivo_aprendizaje
+  @instrument.evaluation.questions.map{|q| q.learning_goal }.uniq
+end
+
+def set_admin_menu
+  @admin_menu = true
+end
+
+def resolve_layout
+  case action_name
+  when "mass_input"
+    "nomenu"
+  else 
+    "application"
+  end
+end
+end

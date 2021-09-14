@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Reimagina</title>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag 'https://cdn.datatables.net/tabletools/2.2.4/css/dataTables.tableTools.css'%>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'https://cdn.datatables.net/tabletools/2.2.4/js/dataTables.tableTools.js' %>
+    <%= csrf_meta_tags %>
+    <%= growlyflash_static_notices %>
+
+    <!-- <link rel="stylesheet" href="https://www.datatables.net/release-datatables/extensions/TableTools/css/dataTables.tableTools.css">
+    <script type="text/javascript" src="https://www.datatables.net/release-datatables/extensions/TableTools/js/dataTables.tableTools.js"></script> -->
+  </head>
+  <span id="flash-message">
+  <!-- <div class="flash" style= "display:none;">
+    <div class="alert alert-info alert-dismissable growlyflash growlyflash-right fade in" role="alert" style="top: 20px; position: fixed;"><button type="close" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><strong>Info!</strong> Ingreso masivo creado con exito.</div>
+  </div> -->
+  </span>
+  <%- if user_signed_in? %>
+    <body class="hold-transition skin-blue sidebar-mini" style='background-color: #ECF0F5;'
+      data-bucket="<%= @hash[:bucket] %>"
+      data-acl="<%= @hash[:acl] %>"
+      data-key-start="<%= @hash[:key_start] %>"
+      data-access-key="<%= @hash[:access_key] %>"
+      data-policy="<%= @hash[:policy] %>"
+      data-signature="<%= @hash[:signature] %>" >
+      <div class='wrapper' style='position: static !important;'>
+
+        <% # if current_user %>
+        <%  if true && !controller_name.eql?("errors")%>
+
+        <header class="main-header">
+
+          <!-- Logo -->
+          <a href="#" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>SUR</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Reimagina</b><small>SUR</small></span>
+          </a>
+
+          <!-- Header Navbar: style can be found in header.less -->
+          <nav class="navbar navbar-static-top" role="navigation">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+          </nav>
+            <!-- Sidebar toggle button-->
+            <!-- Navbar Right Menu -->
+
+        </header>
+
+        <% end %>
+        <% if !@fluid %>
+          <div >
+            <%=
+              if @admin_menu && !controller_name.eql?("errors")
+                render :partial => 'admin_menu'
+              elsif @school_client_menu && !controller_name.eql?("errors")
+                render :partial => 'school_client_menu'
+              end
+            %>
+          </div>
+        <% end %>
+        <%- if controller_name.eql?("errors") %>
+          <div class="content-wrapper" height='100%' style="margin-left: 0 !important;">
+        <%- else %>
+          <div class="content-wrapper" height='100%'>
+        <% end -%>
+          <%= yield %>
+        </div>
+
+        <%- if controller_name.eql?("errors") %>
+          <!-- <footer class="main-footer" style="margin-left: 0 !important;"> -->
+        <%- else %>
+          <!-- <footer class="main-footer"> -->
+        <% end -%>
+          <!-- <strong>© 2015 <a href="http://www.reimagina.cl">Reimagina Educación</a>.</strong> Sistema Unificado Reimagina Versión 1.0.0 -->
+        </footer>
+      </div>
+      <%= render 'group_questions/manage_group_question_modal' %>
+      <%= render 'images/image_tags' %>
+    </body>
+  <%- else %>
+    <body  class="hold-transition skin-blue" style='padding-top: 50px; background-color: #ECF0F5;'>
+      <div class="container">
+        <%= yield %>
+      </div>
+    </body>
+  <% end -%>
+
+
+</html>

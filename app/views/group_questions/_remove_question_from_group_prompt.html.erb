@@ -1,0 +1,27 @@
+<div id="removeQuestionFromGroup<%= question.id %>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby=" removeQuestionFromGroupLabel">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content text-center">
+      <div class="modal-body">
+      	<div class="row">
+      		<div class="col-md-12">
+      			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><br />
+      			<h4 class="modal-title" id="myModalLabel">Quitar pregunta del grupo?</h4>		
+      		</div>
+      	</div>
+      	<br />
+      	<div class="row">
+      		<div class="col-md-12">
+      			<div class="row">
+      				<div class="col-md-6">
+      					<%= link_to 'desasignar', remove_question_group_question_path(question.group_question_id, { commit: 'unassign', question_id: question.id }), remote: true, class: 'removeQuestionBtn btn btn-info' %>		
+      				</div>
+      				<div class="col-md-6">
+      					<%= link_to 'borrar', remove_question_group_question_path(question.group_question_id, { commit: 'delete', question_id: question.id }), remote: true, data: { confirm: "Estás seguro?"}, class: 'removeQuestionBtn btn btn-danger' %>	
+      				</div>
+      			</div>
+      		</div>
+      	</div>
+      </div>
+    </div>
+  </div>
+</div>

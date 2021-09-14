@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Order:</strong>
+  <%= @buy_order.order %>
+</p>
+
+<p>
+  <strong>Monto:</strong>
+  <%= @buy_order.monto %>
+</p>
+
+<p>
+  <strong>Fecha:</strong>
+  <%= @buy_order.fecha %>
+</p>
+
+<p>
+  <strong>Numero:</strong>
+  <%= @buy_order.numero %>
+</p>
+
+<p>
+  <strong>Num licitacion:</strong>
+  <%= @buy_order.num_licitacion %>
+</p>
+
+<p>
+  <strong>Comentario:</strong>
+  <%= @buy_order.comentario %>
+</p>
+
+<%= link_to 'Edit', edit_buy_order_path(@buy_order) %> |
+<%= link_to 'Back', buy_orders_path %>

@@ -1,0 +1,27 @@
+<h1>Listing Evaluation Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Descripcion</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @evaluation_types.each do |evaluation_type| %>
+      <tr>
+        <td><%= evaluation_type.nombre %></td>
+        <td><%= evaluation_type.descripcion %></td>
+        <td><%= link_to 'Show', evaluation_type %></td>
+        <td><%= link_to 'Edit', edit_evaluation_type_path(evaluation_type) %></td>
+        <td><%= link_to 'Destroy', evaluation_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Evaluation type', new_evaluation_type_path %>

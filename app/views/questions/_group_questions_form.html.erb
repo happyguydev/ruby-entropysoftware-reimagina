@@ -1,0 +1,113 @@
+<%= simple_form_for(group_question, :remote => true, :html => {:class => "group_question_form", :id=> 'create-group-question'}) do |f| %>
+<%= f.error_notification %>
+
+<div class="box box-info">
+  <div class="box-header with-border">
+    <h3 class="box-title">Instrucciones</h3>
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+      </button>
+    </div>
+    <!-- /.box-tools -->
+  </div>
+  <!-- /.box-header -->
+  <div class="box-body" style="display: block;">
+    <ol type =1>
+      <li><p>Defina el enunciado general, por ejemplo : "Observe la imagen y conteste las preguntas"</p></li>
+      <li><p>Escriba la etiqueta [PREGUNTAS] para definir la ubicación del número de las preguntas asociadas, ejemplo :
+        "Observe la imagen y conteste las preguntas [PREGUNTAS]" , o "Conteste [PREGUNTAS] en base al texto".
+        </p></li>
+    </ol>   </div>
+  <!-- /.box-body -->
+</div>
+
+<div class="form-inputs">
+  <label>Enunciado General</label>
+  <%= f.input :statement, label: false, input_html: { class: 'rich-text-group-question', id: 'statement' } %>
+  <div class="validate-statement"></div>
+</div>
+<br />
+<% if question_ids.present? %>
+    <br>
+    <p><label>Seleccione preguntas</label></p>
+    <% @questions = Instrument.find(session[:current_instrument]).instrument_questions_positions.order('position ASC').collect(&:question).uniq %>
+    <div class="btn-toolbar" >
+      <% @questions.each_with_index do |question, index|%>
+       <!-- <div class="btn-group" data-toggle="buttons"> -->
+          <!-- <label class="btn btn-default"> -->
+          <div class="checkbox" style="margin-top: -5px !important;display: inline-block;margin-left: 20px !important;">
+            <label style="font-size: 1.5em">
+          <%#= check_box_tag "question_ids[]", question.id, false, :autocomplete=>"off" %><%#= index+1  %>
+            <%= f.check_box :question_ids, {multiple: true}, question.id, nil %>
+            <% if index < 9 %>0<% end %><%= index+1 %>
+                          &nbsp;&nbsp;
+
+            <!-- <input type="checkbox" value="">checkbox -->
+            </label>
+          </div>
+          <!-- </label> -->
+
+          <%= hidden_field_tag "all_questions_ids[]", nil, :value => question.id %>
+      <!-- </div> -->
+      <% end %>
+    </div>
+    <div class="validate-question"></div>
+
+<% end %>
+<br />
+<div class="form-actions">
+<a href="#-" class="btn btn-success" id="submit-create-button">Enviar!</a>
+  <%#= f.submit "Enviar", class: 'btn btn-success' %>
+</div>
+<br />
+<% end %>
+<script type='text/javascript'>
+  $('.rich-text-group-question').froalaEditor({
+    language: 'es',
+    key: 'FwcnehmbblD6lA-8==',
+    imageUploadToS3: {
+      bucket: $("body").data('bucket'),
+      region: 's3',
+      keyStart: $("body").data('key-start'),
+      callback: function (url, key) {
+        console.log(url);
+        console.log(key);
+      },
+      params: {
+        acl: $("body").data('acl'),
+        AWSAccessKeyId: $("body").data('access-key'),
+        policy: $("body").data('policy'),
+        signature: $("body").data('signature')
+      }
+    },
+    imageManagerLoadURL: '/upload_gallery.json'
+  });
+  $('.rich-text-group-question').on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+    var key = $(response).find('key').text()
+    $('#froalaImageTags').find('input[name="froala_image[key]"]').val(key)
+    $('#froalaImageTags').modal()
+  });
+
+    $('#submit-create-button').click(function(e){
+        if(validarFormularioCreate()==false){
+            e.preventDefault();
+        }
+        else{
+          $('#myModal').modal("hide");
+          $('#overlay, #please-wait').show();
+          $('#create-group-question').submit();
+        }
+    });
+
+    function validarFormularioCreate(){
+        var valido = true;
+        var fecha1=$('#statement').val();
+        var fecha2=$("input[type=checkbox]:checked");
+        if (fecha1.length < 1){ $('.validate-statement').html('<span style="color:red;"> Ingresar enunciado. </span>') ;    valido = false;}
+        else{$('.validate-statement').html("");}
+        if (fecha2.length < 1){  $('.validate-question').html('<span style="color:red;">Marque al menos 1 pregunta.</span>') ;  valido = false;     } else{$('.validate-question').html("");}
+        
+        return valido;
+   }
+
+</script>

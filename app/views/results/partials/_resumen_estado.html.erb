@@ -1,0 +1,82 @@
+<!-- RESUMEN POR HABILIDAD -->
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12'>&nbsp;</div>
+  <h3>Resumen de estado por estudiante por  <%=@resumen_estado_title%></h3>
+</div>
+  <% column_count = 12 %>
+  <% total_count = @categories_heatmap[0].count %>
+  <% start_counter, total_tables = 0, total_count/(column_count+1) %>
+  <% total_tables += 1 if total_count % (column_count+1) != 0 %>
+  <% total_tables.times do |table_index| %>
+    <div id='brake'></div>
+    <div class ='col-md-12' >
+      <table class='centered-table table table-pdf table-condensed table-bordered' style='max-width:100%;'>
+        <thead>
+          <th class='text-center'>Alumno</th>
+          <% @categories_heatmap[0][start_counter..(start_counter+column_count)].each_with_index do |cat, index| %>
+           <th class='text-center'><%= @categories_heatmap[0].count > 6 ? (start_counter+index+1) : cat.try(:mb_chars).try(:upcase).to_s %></th>
+          <% end %>
+        </thead>
+          <tbody>
+          <% @categories_heatmap[1].each_with_index do |al,i| %>
+            <tr>
+              <td class='text-center'><%= al %></td>
+              <% @alumno_pme.each_with_index do |pj,j| %>
+                <% if pj[1] == i && (start_counter..(start_counter+column_count)).include?(pj[0]) %>
+                  <td class='text-center' style="background-color: <%= pj[3] %>;"><%= pj[2].try(:mb_chars).try(:upcase).to_s %></td>
+                <% end %>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <% start_counter += column_count+1 %>
+  <% end %>
+<div id='brake'></div>
+
+
+<% if @categories_heatmap[0].count > 6 %>
+  <div class ='col-md-12'>
+    <div class ='col-md-4 centered'></div>
+    <div class ='col-md-4 centered'>
+      <table class='centered-table table table-pdf table-condensed table-bordered ' >
+        <thead>
+          <th class='text-center'>#</th>
+          <th class='text-center'>Nombre</th>
+        </thead>
+        <tbody>
+          <% @categories_heatmap[0].each_with_index do |cat, i| %>
+            <tr>
+              <td class='text-center'><%= "#{i+1}" %></td>
+              <td class='text-center'><%= cat.try(:mb_chars).try(:upcase).to_s %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div> 
+<% end %>
+
+<div class ='col-md-12'>
+  <div class ='col-md-4 centered'></div>
+  <div class ='col-md-4 centered'>
+    <table class='centered-table table table-pdf table-condensed table-bordered ' >
+      <thead>
+        <th class='text-center'>Rango</th>
+        <% if @letter == 'f' || @letter == 'g' %><th class='text-center'>Porcentaje</th> <% end %>
+        <th class='text-center'>Nivel</th>
+      </thead>
+      <tbody>
+        <% @color_ranges.each do |c| %>
+          <tr>
+            <td class='text-center'><%= c.min.to_s+@sufix+" - "+c.max.to_s+@sufix %></td>
+            <% if @letter == 'f' || @letter == 'g' %><td class='text-center'><%= to_porcentaje(c.min).to_s+"% - "+to_porcentaje(c.max).to_s+"%" %></td> <% end %>
+            <td class='text-center' style="background-color: <%= c.color %>;"><%= c.nombre %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

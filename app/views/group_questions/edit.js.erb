@@ -1,0 +1,3 @@
+$('#manageGroupQuestion .modal-title').text("Editar grupo de preguntas");
+$('#manageGroupQuestion .modal-body').html("<%= escape_javascript(render('group_questions/form', group_question: @group_question)) %>");
+$('#manageGroupQuestion').modal();

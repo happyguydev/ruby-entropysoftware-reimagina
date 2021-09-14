@@ -1,0 +1,56 @@
+<% if current_user.has_role?(:daem) || current_user.user_type.role.eql?('admin') %>
+  <%= form_tag(compare_report_path, method: :post) do |f| %>
+    <%= hidden_field_tag 'report', params[:report] %>
+
+    <% if current_user.user_type.role.eql?('admin') %>
+      <div class='col-md-3'>
+        <b>Seleccione usuario DAEM:</b>
+      </div>
+
+      <div class='col-md-5'>
+        <%= select_tag 'daem_user', options_for_select(daem_users_list, params[:daem_user_id]), class: 'select_daem_user chosen-select' %>
+      </div>
+    <% else %>
+      <%= hidden_field_tag 'daem_user', current_user.id %>
+
+      <div class='col-md-3'>
+        <b>Establecimientos a comparar:</b>
+      </div>
+
+      <div class='col-md-5'>
+        <%= current_user.assigned_schools.collect(&:school).collect(&:nombre).join(' / ') %>
+      </div>
+    <% end %><br><br>
+
+    <% if @daem_user.assigned_schools.count < 2 %>
+      <div class='col-md-8'>
+        No tiene suficientes Establecimientos asignados para comparar
+      </div>
+    <% elsif ((@daem_user.assigned_schools.collect(&:school).compact.flatten.collect(&:orders).compact.flatten.collect(&:year).compact.try(:uniq).count < 2) rescue nil) %>
+      <div class='col-md-8'>
+      No hay suficientes ordenes para comparar
+      </div>
+    <% else %>
+      <div class='col-md-3'>
+      <b>Año inicial :</b>
+      </div>
+
+      <div class='col-md-3'>
+        <%= select_tag 'starting_year', options_for_select(assigned_school_order_years_option, default_assigned_school_order_year_option(:start)) %>
+      </div><br><br>
+
+      <div class='col-md-3'>
+      <b>Año final :</b>
+      </div>
+
+      <div class='col-md-3'>
+        <%= select_tag 'ending_year', options_for_select(assigned_school_order_years_option,default_assigned_school_order_year_option(:end)) %>
+      </div>
+      <br><br><br>
+
+      <div class='col-md-8 comparative-submit'>
+        <%= submit_tag 'Generar informe', class: 'btn btn-primary' %>
+      </div>
+    <% end if @daem_user.present? %>
+  <% end %>
+<% end %>

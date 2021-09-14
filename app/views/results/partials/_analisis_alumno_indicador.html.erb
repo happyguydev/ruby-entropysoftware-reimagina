@@ -1,0 +1,34 @@
+  <!-- RANKING POR HABILIDAD 9 -->
+  <div class='col-md-12 pb_before'>
+    <div class='col-md-12'>&nbsp;</div>
+    <h3>Análisis Alumnos por HABILIDAD-INDICADOR</h3>
+  </div>
+
+  <% @abilities.each_with_index do |ac,i| %>
+    <% chart_rank_id = "chart_ranking_pme"+i.to_s %>
+    <div class='col-md-12'>
+    </div>
+    <div id= <%=chart_rank_id%> style="height: 1500px; min-width: 500px; margin: 0 auto" class='col-md-12'></div>
+
+    <!--Grafico Contenidos Habilidades/ejes PME-->
+    <script type='text/javascript'>
+      chartBarStudentsGenerator({ 
+        container: "<%="#"+chart_rank_id%>", 
+        title: { text: <%=  ac.nombre.inspect.html_safe %> }, 
+                                subtitle: { text: 'El color de la barra indica el nivel de logro' }, 
+                                }, { 
+                                xAxis: { categories: [ 
+                                <% set_colors_hab(ac).each do |c| %>
+                                ' <%= c[2].try(:mb_chars).try(:upcase).to_s %>',
+                                <% end %>
+                                ]},
+                                series: { data: [
+                                <% set_colors_hab(ac).each_with_index do |c,i| %>   
+                                {y: <%= c[0] %>, color: ' <%= c[1] %>'}, 
+
+                                <% end %>]
+                                }
+                                }); 
+    </script>
+
+  <% end %>

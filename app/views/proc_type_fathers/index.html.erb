@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Proc Type Fathers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Short name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @proc_type_fathers.each do |proc_type_father| %>
+      <tr>
+        <td><%= proc_type_father.nombre %></td>
+        <td><%= proc_type_father.short_name %></td>
+        <td><%= link_to 'Show', proc_type_father %></td>
+        <td><%= link_to 'Edit', edit_proc_type_father_path(proc_type_father) %></td>
+        <td><%= link_to 'Destroy', proc_type_father, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Proc type father', new_proc_type_father_path %>

@@ -1,0 +1,57 @@
+
+<!--
+Evaluation.last.questions.map do |q|
+q.alternatives.map do |a|
+"La pregunta #{q.texto}-#{q.id} la correcta es #{a.texto}" if a.correcta
+end.compact
+end-->
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Resultados evaluación N°<%=@proccess_instrument.instrument.id%></h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <ul class="nav nav-tabs">
+            <li role="presentation"><a href="<%= results_proccess_instrument_path(@proccess_instrument)  %>">Portada</a></li>
+            <li role="presentation" class='active' ><a href="<%= results_grade_proccess_instrument_path(@proccess_instrument) %>">Resultado curso</a></li>
+            <li role="presentation"><a href="<%= results_report_proccess_instrument_path(@proccess_instrument) %>">Informe Web</a></li>
+                        <li role="presentation"><a href="<%= results_report_pdf_proccess_instrument_path(@proccess_instrument) %>">Informe PDF</a></li>
+          </ul>
+          <br />
+          <br />
+          <br />
+
+          <div class='col-md-6 col-sm-6 col-lg-6'>
+            <table class='table table-condensed table-bordered'>
+              <thead>
+                <th>Nombre Alumno</th>
+                <th>Correctas</th>
+                <th>Total preguntas</th>
+                <th>% de exito</th>
+              </thead>
+              <tbody>
+                <% @student_results.each do |sr| %>
+                <% student = @students.find(sr[:student_id]) %>
+                <tr>
+                  <td><%= "#{student.nombre} #{student.apellido}" %></td>
+                  <td><%= sr[:correctas] %></td>
+                  <td><%= @total_preguntas %></td>
+                  <td><%= sr[:correctas] > 0 ? ((sr[:correctas] / @total_preguntas.to_f)*100).to_i : 0 %>%</td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+
+
+
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>

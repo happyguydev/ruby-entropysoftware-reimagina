@@ -1,0 +1,16 @@
+<section class="content">
+  <div class='col-md-12 col-sm-12'>
+    <div class='col-md-3 col-sm-3'>
+      <b>Numero</b> <a class="pull-right"><%= @order_invoice.try(:numero) %></a>
+    </div>
+    <div class='col-md-3 col-sm-3'>
+      <b>Fecha</b> <a class="pull-right"><%= @order_invoice.try(:fecha) %></a>
+    </div>
+    <div class='col-md-3 col-sm-3'>
+      <b>Monto</b> <a class="pull-right"><%= @order_invoice.try(:monto) %> </a>
+    </div>
+    <div class='col-md-3 col-sm-3'>
+      <b>Comentario</b> <a class="pull-right"><%= @order_invoice.try(:comentario) %></a>
+    </div>
+  </div>
+</section>

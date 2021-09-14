@@ -1,0 +1,23 @@
+<div class="modal fade" id="froalaImageTags" tabindex="-1" role="dialog" aria-labelledby="froalaImageTagsLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="froalaImageTagsLabel">Asignar etiquetas a la imagen</h4>
+      </div>
+      <%= form_tag froala_images_path, remote: true do %>
+        <div class="modal-body">
+            <%= hidden_field_tag 'froala_image[key]', '' %>
+            <div class="form-group">
+              <label>Ingresa etiquetas para la imagen seleccionada</label>
+              <%= text_field_tag 'froala_image[tag_list]', nil, placeholder: "Ingresa etiquetas separadas por coma, ej: lenguaje,literatura", class: 'form-control' %>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <%= button_tag "Guardar etiquetas", class: 'btn btn-primary', data: { disable_with: "Cargando..." } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

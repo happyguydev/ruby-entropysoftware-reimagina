@@ -1,0 +1,6 @@
+$('#questionsTable > tbody > tr#question<%= @question.id %>').remove();
+if ("<%= @assigned %>" ==  "true") {
+	$('.presentQuestions > tbody').append("<%= escape_javascript(render('group_questions/add_question_partial', question: @question)) %>");
+	$('.existingQuestionsTable').prepend("<%= escape_javascript(render('group_questions/remove_question_from_group_prompt', question: @question)) %>");
+	$.bootstrapGrowl("Pregunta agregada con éxito", { type: 'success'});	
+}

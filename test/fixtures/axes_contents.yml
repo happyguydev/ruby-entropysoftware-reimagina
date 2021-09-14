@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  axis_id: 
+  nombre: MyString
+  descripcion: MyText
+
+two:
+  axis_id: 
+  nombre: MyString
+  descripcion: MyText

@@ -1,0 +1,9 @@
+development:
+  adapter: postgresql
+  encoding: utf8
+  database: reimagina_development
+  pool: 5
+  timeout: 5000
+  username: reimagina
+  password:
+  host: localhost

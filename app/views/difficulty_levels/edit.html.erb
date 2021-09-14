@@ -1,0 +1,26 @@
+<script type="text/javascript">
+  alert("Importante : Si al cambiar el nombre de un item ya existe en sistema estos se van a fusionar, quedando solo uno en sistema con todas las preguntas asociadas.")
+</script>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Editando nivel de dificultad</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <%= render 'form' %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<%= link_to 'Volver', difficulty_levels_path %>

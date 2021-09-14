@@ -1,0 +1,85 @@
+<!-- NIVEL LOGRO ESTUDIANTES  --> 
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12'>&nbsp;</div>
+  <div class='col-md-12' style='text-align: right;'><h4>Total Alumnos Rendidos <%=@asistencia%></h4></div>
+  <h3>Tabla Nivel de logro de acuerdo a HABILIDAD - INDICADOR</h3>
+</div>
+<table class="table table-pdf table-condensed table-bordered">
+  <thead>
+    <tr class='tablazul' rowspan=2>
+      <%if @letter == 'd' %> <th style='visibility: hidden;'></th> <%end%>
+      <th style='visibility: hidden;'></th>
+      <th class='text-center' colspan=<%= @color_ranges.count+@colspan %> >Nivel de Logro <br /> Número de Estudiantes</th>
+    </tr>
+    <tr>
+      <th>HABILIDAD - INDICADOR</th>
+      <th style="background-color: gray; color: black !important;" class='col-sm-1 text-center'>Ausente</th>
+      <% @color_ranges.each do |c| %>
+        <th style="background-color: <%= c.color %>; color: black !important;" class='col-sm-1 text-center'><%= c.nombre.try(:mb_chars).try(:upcase).to_s %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody> 
+    <% @tabla_lg.each_with_index do |hab,i| %>
+      <tr>
+        <% hab.each do |rg|%>
+        <td class='text-center'> <%= rg.try(:to_s) %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class='col-md-12'>&nbsp;</div>
+
+
+<!--GRAFICO NIVEL LOGRO ESTUDIANTES  -->
+<div id='chart_logro' class='col-md-12'  style="min-width: 1125px; min-height: 500px; margin: 0 auto"></div>
+
+<script type='text/javascript'>
+  chartBarCombinedGenerator({
+    container: "#chart_logro", 
+    title: { text: "Nivel de logro estudiantes" }, 
+    subtitle: { text: "Porcentaje de logro a nivel curso" }, 
+  }, {
+    xAxis: {categories: <%= @tabla_lg.map{|pme| pme[0]}.inspect.html_safe %> },
+            series: [<% @tabla_lh.each do |tl| %>{
+              dataLabels: {
+                format: '{y}%',
+                enabled: true,
+                align: 'right',
+                color: 'black',
+                x: -10,
+                style: {
+                  textShadow: false,
+                  fontSize:'16px'
+                }
+
+              },
+              name: '<%= tl[:nombre]%>' ,
+              data: <%= tl[:data]%>,
+              color: '<%= tl[:color]%>'
+            },<% end %>]
+
+           });  
+</script>
+'
+<div class ='col-md-12'>
+  <div class ='col-md-4 centered'></div>
+  <div class ='col-md-4 centered'>
+    <table class='centered-table table table-pdf table-condensed table-bordered ' >
+      <thead>
+        <th class='text-center'>Rango</th>
+        <th class='text-center'>Nivel</th>
+      </thead>
+      <tbody>
+        <% @color_ranges.each do |c| %>
+          <tr>  
+            <td class='text-center'><%= c.min.to_s+@sufix+" - "+c.max.to_s+@sufix %></td>
+            <td class='text-center' style="background-color: <%= c.color %>;"><%= c.nombre %></td>    
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

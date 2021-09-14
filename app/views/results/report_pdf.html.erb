@@ -1,0 +1,69 @@
+<html>
+  <head><meta charset="utf-8" />
+    <!-- <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/heatmap.js"></script> -->
+    <%= wicked_pdf_stylesheet_link_tag "application", media: "all" %>
+    <%= wicked_pdf_javascript_include_tag 'application' %>
+    <%= wicked_pdf_javascript_include_tag "https://code.highcharts.com/highcharts.js" %>
+    <%= wicked_pdf_javascript_include_tag "https://code.highcharts.com/highcharts-3d.js" %>
+    <%= wicked_pdf_javascript_include_tag "https://code.highcharts.com/modules/exporting.js" %>
+    <%= wicked_pdf_javascript_include_tag "https://code.highcharts.com/modules/heatmap.js" %>
+    <%= wicked_pdf_javascript_include_tag "chart_templates/chart_bar_combined" %>
+    <%= wicked_pdf_javascript_include_tag "chart_templates/chart_bar_contents" %>
+    <%= wicked_pdf_javascript_include_tag "chart_templates/chart_bar_students" %>
+    <%= wicked_pdf_javascript_include_tag "chart_templates/chart_bar" %>
+    <%= wicked_pdf_javascript_include_tag "chart_templates/chart_column" %>
+    <%= wicked_pdf_javascript_include_tag "chart_templates/chart_donut" %>
+    <%= wicked_pdf_javascript_include_tag "chart_templates/chart_heatmap" %>
+    <%= wicked_pdf_javascript_include_tag "chart_templates/chart_line" %>
+    <%= wicked_pdf_stylesheet_link_tag "results" -%>
+    <%= wicked_pdf_stylesheet_link_tag "bootstrap_and_overrides" -%>
+  </head>
+  <body>
+
+    <div class='centered' >
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <div class='spacer50'>&nbsp;</div>
+      <b><font color ="#2C4D76" style ="font-size: 50px;"> <%= @proccess_instrument.proccess.proc_type.nombre %> <br>
+        <%=  @proccess_instrument.grade.school.nombre %> </b><br>
+        <%=@instrument.evaluation.assignature.nombre+' '+@proccess_instrument.grade.level.nombre+' '+@proccess_instrument.grade.try(:letra) %></font>
+      <%= wicked_pdf_image_tag 'informe_portada2.jpg', style: 'width: 1140px; height: auto;' %>
+    </div>
+
+    <div class='col-md-12 text-center pb_before'>
+      <div class='col-md-12'>&nbsp;</div>
+
+      <div class='col-md-12'  style="font-size: 20px;">
+        <div class='col-md-12 tablaceleste'>ANALISIS
+        </div>
+        <div class='col-md-12 text-left'>
+          <b>Curso</b> : <%= @proccess_instrument.grade.level.nombre %>  <%= @proccess_instrument.grade.try(:letra) %><br>
+          <b>Matrícula</b> : <%= @total_alumnos %><br>
+          <b>Rendidos</b> : <%= @asistencia %><br>
+          <b>Ausentes</b> : <%= @ausentes %>
+        </div>
+        <div class='col-md-12 tablazul'>Análisis por curso
+        </div>
+      </div>
+    </div>
+
+    <%= render :partial => 'results/report_templates/report_'+@letter+'.html.erb' %>
+  </body>
+</html>

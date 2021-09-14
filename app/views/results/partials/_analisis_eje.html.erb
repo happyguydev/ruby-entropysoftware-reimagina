@@ -1,0 +1,61 @@
+<!--Item habilidad/eje/ PME-->
+<div class='col-md-12'>&nbsp;</div>
+<div class='col-md-12'>
+  <h3>Análisis por Eje</h3>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'>Eje</th>
+      <th class='text-center'>Cantidad preguntas</th>
+      <th class='text-center'>Promedio respuestas correctas</th>
+    </thead>
+    <tbody>
+      <% @analisis_eje.each do |p| %>
+      <tr>
+        <td><%= p[:nombre_pme].try(:mb_chars).try(:upcase).to_s %></td>    
+        <td class='text-center'><%= p[:cantidad_preguntas] %></td>
+        <td class='text-center'><%= p[:porcentaje] %>%</td>    
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!--Grafico Ejes PME-->
+<div id='chart_axis' class='col-md-12' style="min-width: 1150px; margin: 0 auto" ></div>
+
+<script type='text/javascript'>
+  chartBarContentsGenerator({
+    colors: <%=@chart_colors.inspect.html_safe%>,
+    container: "#chart_axis", 
+    title: { text: 'Ejes' }, 
+                            subtitle: { text: "Asignatura "+ <%= @instrument.evaluation.assignature.nombre.inspect.html_safe %> }, 
+                            }, { 
+                            labels: <%= @analisis_eje.map{|pme| pme[:nombre_pme]}.inspect.html_safe %>,
+                            series: { data: <%= @analisis_eje.each_with_index.map{|pme,i| {y: pme[:porcentaje], color: @chart_colors[i]}}.to_json.html_safe %> }
+
+                            });  
+</script>
+
+<% if @letter == 'g'%>
+<div class ='col-md-12'>
+  <div class ='col-md-4 text-center text-center tablazul' ><h2>Puntaje Aprox. Modelo SG por Curso : <%= (@promedio_curso[0]*2.05+156).round %></h2></div>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+<% end %>
+
+<% if @analisis_eje.sort_by{|pme| pme[:porcentaje] }.last[:porcentaje] != @analisis_eje.sort_by{|pme| pme[:porcentaje] }.first[:porcentaje]%>
+  <div class='col-md-12'>
+    <div class='col-md-12 text-center'>
+      <h5 style='font-size: 20px;'>Eje <span style='color:green;'>mejor</span> logrado fue: <b><%= @analisis_eje.sort_by{|pme| pme[:porcentaje] }.last[:nombre_pme] %></b> con <%= @analisis_eje.sort_by{|pme| pme[:porcentaje] }.last[:porcentaje] %>%</h5>
+    </div>
+  </div>
+  <div class='col-md-12'>
+    <div class='col-md-12 text-center'>
+      <h5 style='font-size: 20px;'>Eje <span style='color: red;'>menos</span> logrado: <b><%= @analisis_eje.sort_by{|pme| pme[:porcentaje] }.first[:nombre_pme] %></b> con un <%= @analisis_eje.sort_by{|pme| pme[:porcentaje] }.first[:porcentaje] %>%</h5>
+    </div>
+  </div>
+<% end %>
+<div class="pb_after"></div>

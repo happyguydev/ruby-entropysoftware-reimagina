@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @axis_program.nombre %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @axis_program.descripcion %>
+</p>
+
+<p>
+  <strong>Assignature:</strong>
+  <%= @axis_program.assignature %>
+</p>
+
+<%= link_to 'Edit', edit_axis_program_path(@axis_program) %> |
+<%= link_to 'Back', axis_programs_path %>

@@ -1,0 +1,158 @@
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body.grande {
+        font-family: "Arial";
+        font-size: 1.17em;
+      }
+
+      body.chico {
+        font-family: "Arial";
+        font-size: 1em;
+      }
+
+      table.grande {
+        font-family: "Arial";
+        font-size: 1.17em;
+      }
+
+      table.chico {
+        font-family: "Arial";
+        font-size: 1em;
+      }
+
+      ol{
+      }
+
+      ol.alpha {
+        counter-reset: alpha;
+        padding-left: 0;
+      }
+      ol.alpha li {
+        list-style: none;
+        position: relative;
+      }
+
+      ol.alpha > li .counter:before {
+        counter-increment: alpha;
+        content: counter(alpha, upper-alpha)") "
+      }
+
+      ol.alpha > li .litext {
+        padding-left: 4px;
+        width:100%;
+      }
+
+      .alternative_chico {
+      }
+
+      .alternative_grande {
+      }
+      
+      strong sub{
+  padding: 0 2px;
+      }
+    </style>
+    <%= wicked_pdf_javascript_include_tag "application" %>
+  </head>
+  <body onload="groupQuestions()" class="<%= set_style(@instrument) %>">
+    <br />
+    <%
+new_guide = 0
+if @instrument.guides.count == 0
+  new_guide = 1
+end
+%>
+
+    <p align='center'><b><%= @instrument.evaluation.nombre.mb_chars.upcase.to_s %><br />
+      <%= @instrument.evaluation.assignature.nombre.mb_chars.upcase.to_s %><br />
+  <%= @instrument.evaluation.level.nombre.mb_chars.upcase.to_s %></b></p>
+
+<%if set_style(@instrument) == "chico" %>
+<table class="chico">
+  <tr>
+    <td width="80%">Nombre:_________________________________________________ &nbsp;</td><td width="20%">Curso:_____________</td>
+  </tr>
+</table>
+
+<table  class="chico">
+  <tr>
+    <td width="30%">Puntaje Máximo: ____________&nbsp; </td><td width="30%">Puntaje Obtenido: ____________&nbsp; </td><td width="20%"> Nota: _____________</td>
+  </tr>
+</table>
+<% else %>
+
+<table class="grande">
+  <tr>
+    <td width="80%">Nombre:_____________________________________________&nbsp;</td><td width="20%">Curso:_________</td>
+  </tr>
+</table>
+
+<table class="grande">
+  <tr>
+    <td width="30%">Puntaje Máximo: _______&nbsp; </td><td width="30%">Puntaje Obtenido: ______&nbsp; </td><td width="20%"> Nota: ________</td>
+  </tr>
+</table>
+<% end %>
+<br>
+<p>
+  <u>INSTRUCCIONES:</u>
+<ul>
+  <li>
+    Lee con atención cada uno de los textos y luego encierra la alternativa que estimes
+    correcta en cada pregunta.
+  </li>
+</ul>
+</p>
+<ol>
+  <div style="line-height:10px;">&nbsp;</div>
+  <%- @positions.each_with_index do |p, i| %>
+  <% if p.question.group_question_id.present? %>
+  <% if !p.question.group_question_id.eql?(@positions[(i-1)].question.group_question_id) %>
+  <%- unless i.eql?(0)%>
+  <% end -%>
+  <div style="">
+    <div style="<%= i == 0 ? "" : "page-break-inside: avoid;" %>">
+      <%= p.question.group_question.statement.gsub("[PREGUNTAS]", @positions.where('question_id IN (?)', Question.where(group_question_id: p.question.group_question_id).pluck(:id)).pluck(:position).to_sentence).html_safe %>
+    </div>
+    <% end %>
+    <% end %>
+    <%- if p.question.group_question_id.nil? && @positions[(i-1)].question.group_question_id.present? %>
+    <% end -%>
+    <%= content_tag_for :li, p, :style => "page-break-inside: avoid;" do %>
+    <div style="">
+      <%= p.question.texto.html_safe %>
+      <div style="line-height:10px;">&nbsp;</div>
+      <ol class="alpha" style="page-break-inside: avoid;">
+        <%- p.instrument_alternatives_positions.order('position ASC').each do |a| %>
+          <%= content_tag_for :li, a, :style => "line-height: 33px;" do %>
+
+                <div style="display:inline;">
+                  <div style="display:table">
+                    <div style="display:table-row">
+                      <div style="display:table-cell"><div class="counter"></div></div>
+                      <div style="display:table-cell" class="litext">
+                        <%if set_style(@instrument) == "chico" %> <p class= "alternative_chico" style="display:inline;padding-left:inherit;"> <% else %> <p class= "alternative_grande" style="display:inline;padding-left:inherit;"> <% end %>
+          <%= ActionController::Base.helpers.sanitize(a.alternative.texto, :tags => ['img','sub','sup','span'],:attributes => %w(style class href name src type value width height data font-size)).html_safe %>        </p>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            
+          <% end %>
+
+        <% end %>
+      </ol>
+    </div>
+    <div style="line-height:10px;">&nbsp;</div>
+    <% end %>
+  
+  <% end %>
+</ol>
+</body>
+</html>
+

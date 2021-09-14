@@ -1,0 +1,881 @@
+<%
+  @color_series = [
+    "#71893F",
+    "#5C4776",
+    "#357D91",
+    "#B66D31",
+    "#426DA1",
+    "#A44340",
+    "#849F4B",
+    "#664D85",
+    "#3F92A9",
+    "#D37F3A",
+    "#4B7BB4",
+    "#B34441",
+    "#94B255",
+    "#7A5F9A",
+    "#47A4BD",
+    "#EC8F42",
+    "#7596C6",
+    "#D69897",
+    "#A9C379",
+    "#937FAD",
+    "#70B7CD",
+    "#FABF99",
+    "#A1B4D4",
+    "#D29998",
+    "#C0D2A4",
+    "#B3A8C4",
+    "#98C6D6",
+    "#F9BE9E",
+    "#A1B4D4",
+    "#D29998",
+    "#C0D2A4",
+    "#B3A8C4",
+    "#98C6D6",
+    "#F9BE9E",
+    "#A1B4D4",
+    "#D29998",
+    "#C0D2A4",
+    "#B3A8C4",
+    "#98C6D6",
+    "#F9BE9E",
+    "#71893F",
+    "#5C4776",
+    "#357D91",
+    "#B66D31",
+    "#426DA1",
+    "#A44340",
+    "#849F4B",
+    "#664D85",
+    "#3F92A9",
+    "#D37F3A",
+    "#4B7BB4",
+    "#B34441",
+    "#94B255",
+    "#7A5F9A",
+    "#47A4BD",
+    "#EC8F42",
+    "#7596C6",
+    "#D69897",
+    "#A9C379",
+    "#937FAD",
+    "#70B7CD"
+    ]
+%>
+
+<%= javascript_include_tag "http://www.google.com/jsapi"%>
+<%= wicked_pdf_javascript_include_tag 'chartkick'%>
+
+<style>
+  .pb_before { page-break-before:always !important; }
+  .pb_after  { page-break-after:always !important; }
+  .pbi_avoid { page-break-inside:avoid !important; }
+  .page-break { display:block; clear:both; page-break-after:always; }
+  .spacer25 { heigth: 25px; }
+  .spacer50 { heigth: 50px; }
+  body { font-size: 14px; }
+  h3 { font-size: 18px; }
+  h4 { font-size: 15px; }
+  .smaller-font { font-size: 10px; }
+  .table { background-color:white; }
+  .table th { text-align: center; border: 2px solid black !important; }
+  .table td { border: 2px solid black !important; }
+  .tablazul { background-color:#0070C0;color:white; }
+  .tablaceleste { background-color:#DAEEF3;color:black; }
+  .tablagua { background-color:#B8CCE4;color:black; }
+
+</style>
+
+<div class='col-md-12 text-center pb_after'>
+  <b><font size = 40, color ="#2C4D76"> <%= @data[20][0] %> <br>
+    <%= @data[20][1] %> </b><br>
+    <%= @data[20][2]+' '+@data[20][3] %></font>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <%= wicked_pdf_image_tag 'informe_portada2.jpg' %>
+</div>
+
+<div class='col-md-12 text-center pb_before'>
+  <div class='col-md-12'>
+    <div class='col-md-12 tablaceleste'>ANALISIS
+    </div>
+    <div class='col-md-12 text-left'>
+      <b>Curso</b> : <%= @data[20][3] %><br>
+      <b>Matrícula</b> : <%= @data[0].length %><br>
+      <b>Rendidos</b> : <%= @data[0].length - @data[17] %><br>
+      <b>Ausentes</b> : <%= @data[17] %>
+    </div>
+    <div class='col-md-12 tablagua'>Análisis por curso
+    </div>
+  </div>
+</div>
+
+<div class='col-md-12'>
+  <div class='col-md-12 text-center'>
+    <h3>Análisis por <%= @pauta[0][3] %></h3>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='col-md-10 col-md-offset-1'>
+    <table class="table table-bordered table-hover dataTable">
+      <thead class='tablazul'>
+        <th><%= @pauta[0][3] %></th>
+        <th>N° Preguntas</th>
+        <th>% Correctas</th>
+      </thead>
+      <tbody>
+        <% @data[6].each do |ah| %>
+        <tr>
+          <td><%= ah[0] %></td>
+          <td class='text-center'><%= ah[1] %></td>
+          <td class='text-center'><%= ah[3] %>%</td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <!-- <%= column_chart @data[6].map{|d| { name: d[0], data: {"#{d[3]}": d[3]}} },
+discrete: true,
+library: {
+  chartArea: {
+    left: 40,
+    top: 30,
+    width: 400,
+    height: 200
+    },
+  title: @data[20][2],
+  bar: {
+    groupWidth: '300%'
+  },
+  fontName: "Open Sans", 
+  vAxis: {
+    minValue: 0, 
+    maxValue: 100, 
+    format: "#\'%\'"  
+    },
+  hAxis: { 
+    textPosition: 'none' 
+  },
+  width: 1000
+  },
+height: 30
+%> -->
+  <div id="grafico_logro_habilidad" style="width: 700px; height: 400px;"></div>
+  <script type="text/javascript">
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(drawChart_habilidad);
+function drawChart_habilidad() {
+  var data = google.visualization.arrayToDataTable([
+    ["Nombre", "% Logro", { role: "style" }, { role: 'annotation' } ],
+    <%= @data[6].each_with_index.map {|a, i| [ a[0], a[3], @color_series[i], "#{a[3]}%" ]}.to_json[1..-1].html_safe %>);
+
+    var options = {
+      width: 700,
+      height: 400,
+      legend: { position: "none" },
+      hAxis: {
+        minValue: 0, 
+        maxValue: 100, 
+        format: "#\'%\'"
+      },
+      vAxis: {
+        textStyle: {
+         fontSize: 12
+        }
+      },
+      fontName: "Open Sans",
+      chartArea: {
+        left: 300,
+        top: 10,
+        bottom: 10,
+        width: 380,
+        height: 280
+      }
+    };
+    var chart = new google.visualization.BarChart(document.getElementById("grafico_logro_habilidad"));
+    chart.draw(data, options);
+    }
+  </script>
+  <div class='col-md-12 text-center'>
+    <p><%= @pauta[0][3] %> mejor lograda : <%= @data[6].sort {|a,b| a[3] <=> b[3]}.last[0] %>
+      con : <%= @data[6].sort {|a,b| a[3] <=> b[3]}.last[3] %> %</p>
+
+    <p><%= @pauta[0][3] %> menos lograda : <%= @data[6].sort {|a,b| a[3] <=> b[3]}.first[0] %>
+      con : <%= @data[6].sort {|a,b| a[3] <=> b[3]}.first[3] %> %</p>
+  </div>
+</div>
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-right'>Total Alumnos Rendidos <%= @data[0].length - @data[17] %></div>
+  <h3>Tabla Nivel de logro de acuerdo a <%= @pauta[0][3] %></h3>
+  <%  
+
+total_alumnos = @data[0].length
+
+arr_logro_habilidad = [['Nivel'], ['Ausente'], ['Bajo'], ['Medio Bajo'], ['Medio Alto'], ['Alto']]
+
+@data[3].each_with_index do |h, i|
+
+  arr_logro_habilidad[0] << h
+
+  arr_logro_habilidad[1] << ((@data[16][i][2][0]/total_alumnos.to_f)*100).round
+  arr_logro_habilidad[2] << ((@data[16][i][2][1]/total_alumnos.to_f)*100).round
+  arr_logro_habilidad[3] << ((@data[16][i][2][2]/total_alumnos.to_f)*100).round
+  arr_logro_habilidad[4] << ((@data[16][i][2][3]/total_alumnos.to_f)*100).round
+  arr_logro_habilidad[5] << ((@data[16][i][2][4]/total_alumnos.to_f)*100).round
+
+end
+
+%>
+
+  <table class="table table-bordered table-hover dataTable">
+    <thead>
+      <tr class='tablazul' rowspan=2>
+        <th style='visibility: hidden;'></th>
+        <th  class='text-center' colspan=5>Nivel de Logro <br /> Número de Estudiantes</th>
+      </tr>
+      <tr>
+        <th class='tablazul'><%= @pauta[0][3] %></th>
+        <th bgcolor="#BFBFBF" class='col-sm-1 text-center'>Ausente</th>
+        <th bgcolor="#FF0000" class='col-sm-1'>Bajo</th>
+        <th bgcolor="#FFC000" class='col-sm-1'>Medio Bajo</th>
+        <th bgcolor="#FFFF00" class='col-sm-1'>Medio Alto</th>
+        <th bgcolor="#92D050" class='col-sm-1'>Alto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @data[3].each_with_index do |h, i| %>
+      <tr>
+        <td><%= h %></td>
+        <td class='text-center'><%= @data[16][i][2][0] %></td>
+        <td class='text-center'><%= @data[16][i][2][1] %></td>
+        <td class='text-center'><%= @data[16][i][2][2] %></td>
+        <td class='text-center'><%= @data[16][i][2][3] %></td>
+        <td class='text-center'><%= @data[16][i][2][4] %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class='spacer25'>&nbsp;</div>
+  <div class='col-md-12 text-center'>
+<!--    <h4>Nivel de Logro Estudiantes</h4>-->
+  </div>
+  <div id="column_chart_logro_habilidad" style="width: 900px; height: 450px;"></div>
+  <script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawVisualization);
+
+    function drawVisualization() {
+      // Some raw data (not necessarily accurate)
+      var data = google.visualization.arrayToDataTable(<%= arr_logro_habilidad.inspect.html_safe %>);
+
+      var options = {
+        title : '',
+        vAxis: {
+          title: '% de logro',
+          minValue: 0, 
+          maxValue: 100,
+          format: "#\'%\'"
+        },
+        hAxis: {title: 'Nivel'},
+        seriesType: 'bars'
+      };
+
+                                           
+      var chart = new google.visualization.ComboChart(document.getElementById('column_chart_logro_habilidad'));
+      chart.draw(data, options);
+    };
+  </script>
+</div>
+
+  <div class='text-center'><b>El gráfico muestra distribución del nivel de logro de los estudiantes en términos porcentuales.</b></div>
+  
+   <div class='col-md-3'>
+    <div class='center-block' style='width: 300px;'>
+      <table class='table table-bordered'>
+        <thead>
+          <th class='col-sm-1 text-center' bgcolor='#FABF8F'>Rango</th>
+          <th class='col-sm-1 text-center' bgcolor='#FABF8F'>Nivel</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td class='text-center'>0% - 30%</td>
+            <td bgcolor='#FF0000'>Bajo</td>
+          </tr>
+          <tr>
+            <td class='text-center'>31% - 59%</td>
+            <td bgcolor='#FFC000'>Medio Bajo</td>
+          </tr>
+          <tr>
+            <td class='text-center'>60% - 75%</td>
+            <td bgcolor='#FFFF00'>Medio Alto</td>
+          </tr>
+          <tr>
+            <td class='text-center'>76% - 100%</td>
+            <td bgcolor='#92D050'>Alto</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-right'>Total Alumnos Rendidos <%= @data[0].length - @data[17] %></div>
+  <div class='col-md-12 text-center'>
+    <h3>Análisis por <%= @pauta[0][2]+' '+ @pauta[0][3] %></h3>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <% @data[8].each_with_index do |hc,i| %>
+  <% if i > 0 %>    
+  <div class='col-md-12 text-right'>Total Alumnos Rendidos <%= @data[0].length - @data[17] %></div>
+  <% end %>
+  <div class='col-md-10 col-md-offset-1 text-center'>
+    <h4><b><%= hc[0][0] %></b></h4>
+  </div>
+  <div class='col-md-10 col-md-offset-1'>
+    <h4>Tabla: corresponde al promedio de respuestas correctas de cada contenido</h4>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='col-md-10 col-md-offset-1'>
+    <table class="table table-bordered table-hover dataTable">
+      <thead class='tablazul'>
+        <th><%= @pauta[0][3] %></th>
+        <th><%= @pauta[0][2]+' '+ @pauta[0][3].split.first %></th>
+        <th>Cantidad Preguntas</th>
+        <th>Promedio Resp. Correctas</th>
+      </thead>
+      <tbody>
+        <% @data[8][i].each do |ah| %>
+        <tr>
+          <td><%= ah[0] %></td>
+          <td><%= ah[1] %></td>
+          <td class='text-center'><%= ah[2] %></td>
+          <td class='text-center'><%= ah[4] %>%</td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class='col-md-12 pb_after'>
+    <style>
+      .chart-wrapper {
+        width: 100%;
+/*        border: solid 1px black;*/
+      }
+      .chart-wrapper div {
+        margin: 0 auto;
+/*        border: solid 1px green;*/
+      }
+    </style>
+<!--    <%= @data[8].inspect.html_safe %>-->
+    
+    <div class='spacer25'>&nbsp;</div>
+    <div class='col-md-12 text-center'>
+      <h4><%= hc[0][0] %></h4>
+    </div>
+    <div class='chart-wrapper'>
+    <%= column_chart @data[8][i].map{|d| [ d[1], d[4] ] }, 
+
+      discrete: true,
+      library: {
+        chartArea: {
+          left: 40,
+          top: 30,
+          width: 700,
+          height: 200
+        },
+        title: "",
+        colors: [@color_series[i]],
+        bar: {
+          groupWidth: "61.8%"
+          },
+        fontName: "Open Sans", 
+        vAxis: {
+          minValue: 0, 
+          maxValue: 100, 
+          format: "#\'%\'"  
+        },
+        hAxis: { 
+          textStyle: {
+            fontSize: 9
+          }
+        },
+        width: 700
+        },
+      height: 20
+    %>
+    </div>
+  <div class='col-md-12 text-center'>
+      <h5>El grafico muestra todas las preguntas por contenido dentro del eje o habilidad</h5>
+  </div>
+  <div class='col-md-12 text-center'>
+  <!--  <p> <%= @pauta[0][2]+' '+ @pauta[0][3] %>  mejor logrado : <%= @data[8][i].sort {|a,b| a[4] <=> b[4]}.last[1] %>
+      con : <%= @data[8][i].sort {|a,b| a[4] <=> b[4]}.last[4] %> %</p>
+
+    <p><%= @pauta[0][2]+' '+ @pauta[0][3] %>  menos logrado : <%= @data[8][i].sort {|a,b| a[4] <=> b[4]}.first[1] %>
+      con : <%= @data[8][i].sort {|a,b| a[4] <=> b[4]}.first[4] %> %</p>
+  -->
+    <p>Mejor logrado : <%= @data[8][i].sort {|a,b| a[4] <=> b[4]}.last[1] %> : <b><%= @data[8][i].sort {|a,b| a[4] <=> b[4]}.last[4] %> %</b></p>
+    <p>Menos logrado: <%= @data[8][i].sort {|a,b| a[4] <=> b[4]}.first[1] %> : <b><%= @data[8][i].sort {|a,b| a[4] <=> b[4]}.first[4] %> %</b></p>
+  </div>
+</div> 
+  
+  </div>
+  <% end %>
+</div>
+<div class='col-md-12 pb_before'>
+ 
+  <div class='col-md-12 text-center'>
+    <h3><%= @pauta[0][3] +' y '+ @pauta[0][5] %> de cada pregunta.</h3>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='col-md-10 col-md-offset-1'>
+    <% @data[14].each_slice(20) do |slice| %>
+    <table class='table table-bordered table-condensed pb_after'>
+      <thead class='tablazul'>
+        <th>Nº</th>
+        <th><%= @pauta[0][3] %></th>
+        <th><%= @pauta[0][2] %></th>
+        <th><%= @pauta[0][5] %></th>
+        <th>Alumnos Lograron</th>
+        <th>Alumnos no Lograron</th>
+      </thead>
+
+      <tbody>
+        <% slice.each do |ae| %>
+        <tr>
+          <td><%= ae[0] %></td>
+          <td class='smaller-font text-center'><%= ae[1] %></td>
+          <td class='smaller-font text-center'><%= ae[2] %></td>
+          <td class='smaller-font text-center'><%= ae[3] %></td>
+          <td class='text-center'><%= ae[4] %></td>
+          <td class='text-center'><%= ae[5] %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+</div>
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3>Glosario</h3>
+  </div>
+  <table class='table table-bordered'>
+    <thead class='tablazul'>
+      <th><%= @pauta[0][5] %></th>
+      <th><%= @pauta[0][6] %></th>
+    </thead>
+
+    <tbody>
+      <% @data[5].each do |oa| %>
+      <tr>
+        <td class='smaller-font'><%= oa[0] %></td>
+        <td><%= oa[1] %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% @data[10][0].each_slice(30) do |p_slice| %>
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3><b>Logro por alumno</b></h3>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <table class='table table-bordered'>
+    <thead class='tablazul'>
+      <th>Nombre</th>
+      <th>Porcentaje</th>
+      <th>Nombre</th>
+      <th>Porcentaje</th>
+    </thead>
+    <tbody>
+      <% p_slice.each_slice(2) do |slice| %>
+      <tr>
+        <% slice.each do |ah| %>
+        <td><%= ah[0] %></td>
+        <td class='text-center'><%= ah[1] %>%</td>
+        <% end %>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>
+<div class='col-md-6'>
+  <table style='width: 500px; margin: 0 auto;'>
+    <tr> 
+      <td>Promedio Curso porcentaje de logro</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @data[10][1] %>%</td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr> 
+      <td>Nivel de logro promedio curso</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @data[10][2] %></td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr> 
+      <td>N° Alumnos que rindieron la evaluación</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @data[0].length - @data[17] %></td>
+    </tr>
+    <tr>
+      <td colspan=3>&nbsp;</td>
+    </tr>
+    <tr> 
+      <td>N° Alumnos ausentes</td>
+      <td class='col-md-2'>&nbsp;</td>
+      <td class="tablazul col-md-2 text-center" style='border: solid 2px black; font-weight: bold;'><%= @data[17] %></td>
+    </tr>
+  </table>
+</div>
+<!--
+<div class='col-md-12 pb_before'>
+<h1>Análisis de porcentaje de logro por alumno.</h1>
+<%= bar_chart @data[10][0].map {|a| [a[0], a[1]]}, 
+library: {
+  chartArea: {
+    left: 300,
+    top: 30,
+    bottom: 40,
+    width: 650,
+    height: 900
+    },
+  fontName: "Open Sans", 
+  hAxis: {
+    minValue: 0, 
+    maxValue: 100, 
+    format: "#\'%\'"
+    },
+  width: 1000
+  },
+height: 70
+
+%>
+</div>
+-->
+
+<div class='col-md-12 pb_before text-center'>
+  <h2>Análisis de porcentaje de logro por alumno</h2>
+  <div id="porcentaje_logro_alumno" style="width: 900px; height: 900px;"></div>
+  <script type="text/javascript">
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(drawChart);
+function drawChart() {
+  var data = google.visualization.arrayToDataTable([
+    ["Nombre", "% Logro", { role: "style" }, { role: 'annotation' } ],
+    <%= @data[10][0].each_with_index.map {|a, i| [ a[0], a[1], @color_series[i], "#{a[1]}%" ]}.to_json[1..-1].html_safe %>);
+
+    var options = {
+      width: 900,
+      height: 900,
+      legend: { position: "none" },
+      hAxis: {
+        minValue: 0, 
+        maxValue: 100, 
+        format: "#\'%\'"
+      },
+      vAxis: {
+        textStyle: {
+         fontSize: 12
+        }
+      },
+      fontName: "Open Sans",
+      chartArea: {
+        left: 300,
+        top: 30,
+        bottom: 40,
+        width: 500,
+        height: 700
+      }
+    };
+    var chart = new google.visualization.BarChart(document.getElementById("porcentaje_logro_alumno"));
+    chart.draw(data, options);
+    }
+  </script>
+</div>
+
+<div class= 'text-center' ><b>Gráfico muestra el porcentaje obtenido por el alumno en relación al total de preguntas.</b></div>
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3>CUADRO DE ALUMNOS POR NIVEL DE LOGROS CORRESPONDIENTE A LA EVALUACIÓN TOTAL</h3>
+  </div>
+  <table class='table table-bordered'>
+    <thead>
+      <th bgcolor="#BFBFBF">Ausente</th>
+      <th bgcolor="#FF0000">Bajo</th>
+      <th bgcolor="#FFC000">Medio Bajo</th>
+      <th bgcolor="#FFFF00">Medio Alto</th>
+      <th bgcolor="#92D050">Alto</th>
+    </thead>
+
+    <tbody>
+      <% @data[15][0].each do |ae| %>
+      <tr>
+        <td class='smaller-font'><%= ae[0] %></td>
+        <td class='smaller-font'><%= ae[1] %></td>
+        <td class='smaller-font'><%= ae[2] %></td>
+        <td class='smaller-font'><%= ae[3] %></td>
+        <td class='smaller-font'><%= ae[4] %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <table class='table table-bordered'>
+    <thead>
+      <th bgcolor="#BFBFBF">Ausente</th>
+      <th bgcolor="#FF0000">Bajo</th>
+      <th bgcolor="#FFC000">Medio Bajo</th>
+      <th bgcolor="#FFFF00">Medio Alto</th>
+      <th bgcolor="#92D050">Alto</th>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>Total <%= @data[15][2][0] %></td>
+        <td>Total <%= @data[15][2][1] %></td>
+        <td>Total <%= @data[15][2][2] %></td>
+        <td>Total <%= @data[15][2][3] %></td>
+        <td>Total <%= @data[15][2][4] %></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class='col-md-12 text-center pb_before'>
+    <h2>Nivel de Logro</h2>
+  </div>
+  <div id="nivel_logro_general" style="width: 900px; height: 300px;"></div>
+  <script type="text/javascript">
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(drawChart3);
+function drawChart3() {
+  var data = google.visualization.arrayToDataTable([
+    ["Nombre", "Logro", {role: 'style'}, { role: 'annotation' } ],
+    ["Ausente", <%= @data[15][2][0] %>, "#BFBFBF", "<%= @data[15][2][0] %>"],
+    ["Bajo", <%= @data[15][2][1] %>, "#FF0000", "<%= @data[15][2][1] %>"],
+    ["Medio Bajo", <%= @data[15][2][2] %>, "#FFC000", "<%= @data[15][2][2] %>"],
+    ["Medio Alto", <%= @data[15][2][3] %>, "#FFFF00", "<%= @data[15][2][3] %>"],
+    ["Alto", <%= @data[15][2][4] %>, "#92D050", "<%= @data[15][2][4] %>"],
+  ]);
+
+  var options = {
+    width: 900,
+    height: 300,
+    legend: { position: "none" },
+    hAxis: {
+      minValue: 0, 
+      maxValue: <%= total_alumnos %>, 
+      format: "#\'%\'"
+    },
+    vAxis: {
+      textStyle: {
+        fontSize: 12
+      }
+    },
+    fontName: "Open Sans",
+    chartArea: {
+      left: 50,
+      top: 30,
+      bottom: 40,
+      width: 800,
+      height: 250
+    }
+  };
+  var chart = new google.visualization.ColumnChart(document.getElementById("nivel_logro_general"));
+  chart.draw(data, options);
+}
+drawChart3();
+  </script>
+  <div class='spacer25 col-md-12'>&nbsp;</div>
+  <div class='col-md-12 text-center'>
+    <b>El gráfico muestra el nivel de logro del alumno, Bajo, Medio Bajo, Medio Alto o Alto.</b>
+  </div>
+</div>
+<% @data[3].each_with_index do |h, i| %>
+<div class='col-md-12 pb_before'>
+  <% if i == 0 %>
+  <div class='col-md-12 text-center'>
+    <h3><b>Análisis Alumnos por Habilidad o Eje – PME </b></h3>
+  </div>
+  <% end %>
+  <div class='col-md-12 text-center'>
+    <h3><b><%= h %></h3></b>
+  </div>
+  <div class='col-md-12'>
+    <div style=''>
+      <div id="nivel_logro_por_habilidad_<%= i %>" style="width: 930px; height: 330px;"></div>
+    </div>
+    <div class='spacer50'>&nbsp;</div>
+    <script type="text/javascript">
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(drawChart<%= i+4 %>);
+                         function drawChart<%= i+4 %>() {
+  var data = google.visualization.arrayToDataTable([
+    ["Nombre", "Logro", {role: 'style'}, { role: 'annotation' } ],
+    ["Ausente", <%= @data[16][i][2][0]  %>, "#BFBFBF", "<%= @data[16][i][2][0] %>"],
+    ["Bajo", <%= @data[16][i][2][1] %>, "#FF0000", "<%= @data[16][i][2][1] %>"],
+    ["Medio Bajo", <%= @data[16][i][2][2] %>, "#FFC000", "<%= @data[16][i][2][2] %>"],
+    ["Medio Alto", <%= @data[16][i][2][3] %>, "#FFFF00", "<%= @data[16][i][2][3] %>"],
+    ["Alto", <%= @data[16][i][2][4] %>, "#92D050", "<%= @data[16][i][2][4] %>"],
+  ]);
+
+  var options = {
+    width: 900,
+    height: 300,
+    legend: { position: "none" },
+    hAxis: {
+      minValue: 0, 
+      maxValue: <%= total_alumnos %>, 
+      format: "#\'%\'"
+    },
+    vAxis: {
+      textStyle: {
+        fontSize: 12
+      }
+    },
+    fontName: "Open Sans",
+    chartArea: {
+      left: 50,
+      top: 30,
+      bottom: 0,
+      width: 800,
+      height: 250
+    }
+  };
+  var chart = new google.visualization.ColumnChart(document.getElementById("nivel_logro_por_habilidad_<%= i %>"));
+  chart.draw(data, options);
+}
+drawChart<%= i+4 %>();
+    </script>
+  </div>
+  <div class='col-md-12'>
+    <% cont_por_habilidad = 0 %>
+    <% @data[16][i][0].each_slice(22) do |slice| %>
+    <table class='table table-bordered table-condensed <%= cont_por_habilidad > 0 ? "pb_before" : ""%>'>
+      <% cont_por_habilidad += 1 %>
+      <thead>
+        <th bgcolor="#BFBFBF">Ausente</th>
+        <th bgcolor="#FF0000">Bajo</th>
+        <th bgcolor="#FFC000">Medio Bajo</th>
+        <th bgcolor="#FFFF00">Medio Alto</th>
+        <th bgcolor="#92D050">Alto</th>
+      </thead>
+      <tbody>
+        <% slice.each do |l| %>
+        <tr>
+          <td class='smaller-font'><%= l[0] %></td>
+          <td class='smaller-font'><%= l[1] %></td>
+          <td class='smaller-font'><%= l[2] %></td>
+          <td class='smaller-font'><%= l[3] %></td>
+          <td class='smaller-font'><%= l[4] %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+</div>
+<% end %>
+<div class='col-md-12 pb_before'>
+  <% cont_final = 0 %>
+  <h3>Resumen de estado por estudiante por Habilidad o Eje - PME</h3>
+  <% @data[11][1].each_slice(20) do |slice| %>
+  <table class='table table-bordered <%= cont_final > 0 ? "pb_before" : "" %>'>
+    <% cont_final += 1 %>
+    <thead class='tablazul'>
+      <th rowspan=2>Alumno</th>
+      <% @data[11][0].each do |pme| %>
+      <th rowspan=2 class='smaller-font text-center'><%= @vc.word_wrap(pme, line_width: 15).gsub("\n", "<br />").html_safe %></th>
+      <% end %>
+      <th rowspan=2 class='text-center'>Promedio <br /><%= @data[20][2] %></th>
+    </thead>
+    <tbody>
+      <% slice.each do |rs| %>
+      <tr>
+        <% aaph_promedio_asignatura = 0 %>
+        <td class='smaller-font'><%= rs[1] %></td>
+        <% @data[11][0].length.times do |i| %>
+        <%
+    color_tabla_alumnos_por_habilidad = case rs[i+2]
+    when 0..30
+      "#FF0000"
+    when 31..59
+      "#FFC000"
+    when 60..75
+      "#FFFF00"
+    when 76..100
+      "#92D050"
+    end
+  %>
+
+        <td class='text-center' bgcolor="<%= color_tabla_alumnos_por_habilidad %>"><%= rs[i+2] %>%</td>
+        <% aaph_promedio_asignatura += rs[i+2] %>
+        <% end %>
+        <%
+  color_tabla_alumnos_por_habilidad_promedio = case (aaph_promedio_asignatura/@data[11][0].length.to_f).round
+  when 0..30
+    "#FF0000"
+  when 31..59
+    "#FFC000"
+  when 60..75
+    "#FFFF00"
+  when 76..100
+    "#92D050"
+  end
+%>
+        <td  class='text-center' bgcolor='<%= color_tabla_alumnos_por_habilidad_promedio %>'><%= (aaph_promedio_asignatura/@data[11][0].length.to_f).round %>%</td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% end %>
+  <div class='spacer50'>&nbsp;</div>
+
+  <div class='col-md-3'>
+    <div class='center-block' style='width: 300px;'>
+      <table class="table table-bordered table-hover dataTable">
+        <thead>
+          <th class='col-sm-1 text-center' bgcolor='#FABF8F'>Rango</th>
+          <th class='col-sm-1 text-center' bgcolor='#FABF8F'>Nivel</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td class='text-center'>0% - 30%</td>
+            <td bgcolor='#FF0000'>Bajo</td>
+          </tr>
+          <tr>
+            <td class='text-center'>31% - 59%</td>
+            <td bgcolor='#FFC000'>Medio Bajo</td>
+          </tr>
+          <tr>
+            <td class='text-center'>60% - 75%</td>
+            <td bgcolor='#FFFF00'>Medio Alto</td>
+          </tr>
+          <tr>
+            <td class='text-center'>76% - 100%</td>
+            <td bgcolor='#92D050'>Alto</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

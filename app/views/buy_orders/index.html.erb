@@ -1,0 +1,20 @@
+<div class='col-md-12 col-sm-12'>
+  <div class='col-md-12 col-sm-12'>
+    <table id='buy-orders-table' class="table table-bordered table-hover dataTable" data-source='<%= order_buy_orders_path(@order, format: :json) %>'>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Fecha</th>
+          <th>Monto</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<h3>Agregar Orden de compra</h3>
+
+<%= render :template => "buy_orders/_form" %> 

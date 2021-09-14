@@ -1,0 +1,8 @@
+<div class='col-md-3'>
+  <b>Seleccione año:</b>
+</div>
+
+<div class='col-md-3'>
+  <%= select_tag 'ending_year', options_for_select(@years), onchange: params[:report] == '7' || params[:report] == '8' ? 'getFilterUser()' : 'getFilterSchool()', class: 'chosen-select' %>
+</div>
+<br><br>

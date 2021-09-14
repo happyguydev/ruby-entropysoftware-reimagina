@@ -1,0 +1,67 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Órdenes General</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class='col-md-12 col-sm-12'>
+            <section class="content">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="overflow-x: auto">
+                <h3>Listado de ordenes, click para ver/asignar procesos</h3>
+                <table id='orders-table' class="table table-bordered table-hover dataTable" data-source='<%= orders_path(format: :json) %>'>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Año</th>
+                      <th>RBD</th>
+                      <th>Colegio</th>
+                      <th>Comuna</th>
+                      <th>Región</th>
+                      <th>Dependencia</th>
+                      <th>RUT</th>
+                      <th>Pagador</th>
+                      <th>Proceso</th>
+                      <th>Contrato</th>
+                      <th>Tipo de servicio</th>
+                      <th>Estado</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="box box-default collapsed-box">
+        <div class="box-header with-border">
+          <h3 class="box-title">Agregar Orden</h3>
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div style="display: none;" class="box-body">
+          <%= render 'form' %>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+  </div>
+</section>

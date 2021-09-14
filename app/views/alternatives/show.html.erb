@@ -1,0 +1,17 @@
+<p>
+  <strong>Texto:</strong>
+  <%= @alternative.texto %>
+</p>
+
+<p>
+  <strong>Correcta:</strong>
+  <%= @alternative.correcta %>
+</p>
+
+<p>
+  <strong>Question:</strong>
+  <%= @alternative.question %>
+</p>
+
+<%= link_to 'Edit', edit_alternative_path(@alternative) %> |
+<%= link_to 'Back', alternatives_path %>

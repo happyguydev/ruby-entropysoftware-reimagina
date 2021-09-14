@@ -1,0 +1,117 @@
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Histórico</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class='col-md-12 col-sm-12'>
+            <section class="content-header">
+              <h3>
+                Datos generales todas las ordenes
+              </h3>
+            </section>
+            <section class="content">
+              <div class="row">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="info-box">
+                    <span class="info-box-icon bg-blue"><i class="fa fa-check"></i></span>
+                    <div class="info-box-content">
+                      <span class="info-box-text">Órdenes </span>
+                      <span class="info-box-number"><%= @cant_ordenes %></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
+                  <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="info-box">
+                    <span class="info-box-icon bg-blue"><i class="fa fa-calendar"></i></span>
+
+                    <div class="info-box-content">
+                      <span class="info-box-text">Facturado  </span>
+                      <span class="info-box-number">$<%= @facturado %></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
+                  <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+
+                <!-- fix for small devices only -->
+                <div class="clearfix visible-sm-block"></div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="info-box">
+                    <span class="info-box-icon bg-blue"><i class="fa fa-files-o"></i></span>
+                    <div class="info-box-content">
+                      <span class="info-box-text">Adeudado </span>
+                      <span class="info-box-number"> </span>
+                      <span class="info-box-number">$<%= @adeudado %></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
+                  <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="info-box">
+                    <span class="info-box-icon bg-blue"><i class="fa fa-money"></i></span>
+                    <div class="info-box-content">
+                      <span class="info-box-text">No Facturado</span>
+                      <span class="info-box-number">$<%= @nofacturado %></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
+                  <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                  <div class="info-box">
+                    <span class="info-box-icon bg-blue"><i class="fa fa-money"></i></span>
+                    <div class="info-box-content">
+                      <span class="info-box-text">Pagado </span>
+                      <span class="info-box-number">$<%= @pagado %> </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                  </div>
+                  <!-- /.info-box -->
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="overflow-x: auto">
+                <h3>Listado de deudores</h3>
+                <table id='historicos-table' class="table table-bordered table-hover dataTable" data-source=' /orders/historico.json'>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Año</th>
+                      <th>RBD</th>
+                      <th>Colegio</th>
+                      <th>Comuna</th>
+                      <th>Región</th>
+                      <th>Dependencia</th>
+                      <th>RUT</th>
+                      <th>Pagador</th>
+                      <th>Proceso</th>
+                      <th>Contrato</th>
+                      <th>Tipo de servicio</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+          </div>
+
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>

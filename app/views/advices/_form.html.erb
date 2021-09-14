@@ -1,0 +1,10 @@
+<%= simple_form_for(@advice) do |f| %>
+<div class="field">
+  <label>Nombre</label>
+  <%= f.input :name,  as: :text,:label => false, input_html: {class: 'form-control', rows: 10} %>
+</div>
+
+<div class="actions">
+  <%= f.submit "Enviar"%>
+</div>
+<% end %>

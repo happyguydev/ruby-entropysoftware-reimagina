@@ -1,0 +1,41 @@
+        
+<script type='text/javascript'>
+ questions = <%=@macrotabla.inspect.html_safe%>
+ macrotablaTable(questions);
+</script>
+
+<section class="content">
+  <div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title">Instrucciones</h3>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="display: block;">
+      <ol type =1>
+        <li><p>En este menú podrá ingresar la macrotabla de Objetivos de Aprendizaje.</p></li>
+        <li><p>Aquellos OA que no existan se van a crear en sistema, los que ya existan se van a actualizar tanto descripción como unidades.</p></li>
+        <li><p>Separe unidades con guion "-" , ejemplo : 1-2-3-4.</p></li>
+        <li><p>Si un OA pertenece a 2 unidades con descripciones distintas ingrese 2 filas con la misma unidad y descripción distinta.</p></li>
+        <li><p>Si un OA pertenece a 2 unidades con descripciones iguales se mostrarán en filas separadas, sin embargo Ud. puede agregarlas en una sola fila utilizando guion .</p></li>
+        <li><p>IMPORTANTE : El envío de una nueva macrotabla reemplazará cualquier dato existente.</p></li>
+
+      </ol>   </div>
+    <!-- /.box-body -->
+  </div>
+   <div class="row">
+   <div class="col-xs-12">
+   <div class="box col-sm-12 col-md-12 col-lg-12">
+   <div class="box-header">
+      <h3 class="box-title">Ingreso Macrotabla</h3>
+      <%=@hola%>
+   </div>
+   <div class="box-body">
+      <div id='ingreso_macrotabla' class='handsontabla'></div>
+      <button class='btn btn-success' id='macrotabla_mass_input'>Enviar ingreso masivo</button>
+   </div>
+</section>

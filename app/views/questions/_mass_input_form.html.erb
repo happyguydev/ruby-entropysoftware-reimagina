@@ -1,0 +1,87 @@
+<%= simple_form_for @question, :remote => true do |f| %>
+<div class='col-md-12 col-sm-12'>
+  <% if @question.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+    <ul>
+      <% @question.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <% if @group_question && !@group_question.nil? %>
+    <%= f.input :group_question_id, as: :hidden, input_html: { value: @group_question.id } %>
+  <% end %>
+
+  <%= hidden_field_tag "tab_index", nil , :value => index %>
+
+  <div class='row col-md-12'>
+    <%if @question.group_question.present? %>
+    <h4>Enunciado grupal (click para editar)</h4>
+    <div>
+      <a class="btn btn-info" href="/edit_statement?question_id=<%= @question.id %>&all_questions_ids=<%= params[:all_questions_ids].join(',') rescue nil %>" data-remote ='true'><%= @question.group_question.statement.try(:html_safe) %></a>
+    </div>
+    <% end %>
+
+    <%= f.label "Pregunta : #{index+1} " %><br><br>
+    <%= f.text_area :texto, class: 'rich-text-alternative' %>
+
+    <br/><br/>
+  </div><br/><br/>
+  <!-- Nested Form Alternatives -->
+  <label class="string optional">Alternativas</label>
+  <% @nested_counter = 0 %>
+
+  <%= f.simple_fields_for :alternatives do |al| %>
+  <div class='row col-md-12'>
+    <br/>
+    <%= render 'questions/mass_input_alternative_fields', :f => al %>
+    <br/>
+  </div>
+  <% end %>
+  <div class='links text-center'>
+    <%= link_to_add_association 'Agregar alternativa', f, :alternatives, class: 'btn btn-success' %>
+    </div>
+
+  <!-- Nested Form Alternatives -->
+
+  <div class="form-group row col-md-12">
+    <%= f.submit "Aceptar", class: "btn btn-primary" %>
+  </div>
+
+</div>
+<% end %>
+
+<!-- Form Edit statement -->
+<div class="edit_statement_<%=@question.id %>">
+</div>
+<script type='text/javascript'>
+    $('.rich-text-alternative').froalaEditor({
+    placeholderText: 'Ingrese texto...',
+    language: 'es',
+    key: 'FwcnehmbblD6lA-8==',
+    toolbarButtons: ['fullscreen', 'bold', 'italic', 'underline', 'fontFamily', 'fontSize', 'color', 'paragraphStyle', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', 'quote', 'insertHR', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', 'undo', 'redo', 'clearFormatting','subscript','superscript'],
+    imageUploadToS3: {
+      bucket: $("body").data('bucket'),
+      region: 's3',
+      keyStart: $("body").data('key-start'),
+      callback: function (url, key) {
+        console.log(url);
+        console.log(key);
+      },
+      params: {
+        acl: $("body").data('acl'),
+        AWSAccessKeyId: $("body").data('access-key'),
+        policy: $("body").data('policy'),
+        signature: $("body").data('signature')
+      }
+    },
+    imageManagerLoadURL: '/upload_gallery.json'
+  });
+  $('.rich-text-alternative').on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+    var key = $(response).find('key').text()
+    $('#froalaImageTags').find('input[name="froala_image[key]"]').val(key)
+    $('#froalaImageTags').modal()
+  });
+</script>

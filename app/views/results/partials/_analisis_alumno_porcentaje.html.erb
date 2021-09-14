@@ -1,0 +1,71 @@
+<!-- RANKING POR LOGRO TOTAL 8 -->
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12'>&nbsp;</div>
+  <h3>Análisis de porcentaje de logro por alumno</h3>
+</div>
+
+<div id='chart_bar_students' style="height: 1500px; min-width: 500px; margin: 0 auto" class='col-md-12'></div>
+
+<% if @proccess_instrument.instrument.evaluation.evaluation_type.short_name == 'simce' %>
+<script type='text/javascript'>
+  chartBarStudentsSimceGenerator({ 
+    container: "#chart_bar_students", 
+    title: { text: 'Ranking alumnos' }, 
+    subtitle: { text: 'El color de la barra indica el nivel de logro total' }, 
+  }, { 
+    xAxis: { categories: [ 
+      <% @colors.each do |c| %>
+        ' <%= c[2].try(:mb_chars).try(:upcase).to_s %>',
+      <% end %>
+    ]},
+    series: { data: [
+      <% @colors.each_with_index do |c,i| %>   
+      {y: <%= c[0].try(:to_s) %>, color: '<%= c[1] %>'}, 
+
+       <% end %>]
+      }
+      }); 
+</script>
+<% else %>
+<script type='text/javascript'>
+  chartBarStudentsGenerator({ 
+    container: "#chart_bar_students", 
+    title: { text: 'Ranking alumnos' }, 
+    subtitle: { text: 'El color de la barra indica el nivel de logro total' }, 
+  }, { 
+    xAxis: { categories: [ 
+      <% @colors.each do |c| %>
+        ' <%= c[2].try(:mb_chars).try(:upcase).to_s %>',
+      <% end %>
+    ]},
+    series: { data: [
+      <% @colors.each_with_index do |c,i| %>   
+      {y: <%= c[0].try(:to_s) %>, color: '<%= c[1] %>'}, 
+
+       <% end %>]
+      }
+      }); 
+</script>
+<% end %>
+<table class="table table-pdf table-condensed table-bordered">
+  <thead>
+    <tr>
+      <th style="background-color: gray; color: black !important;" class='col-sm-1 text-center'>Ausente</th>
+      <% @color_ranges.each do |c| %>
+      <th style="background-color: <%= c.color %>; color: black !important;" class='col-sm-1 text-center'><%= c.nombre %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <% @tabla_lg_tot.each do |hab|%>
+      <td class='text-center'> Total : <%= hab %></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>
+
+<div class='col-md-12 centered'>
+  <i>Gráfico muestra el porcentaje obtenido por el alumno en relación al total de preguntas.</i>
+</div>

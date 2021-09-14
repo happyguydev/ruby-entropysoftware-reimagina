@@ -1,0 +1,143 @@
+  <!-- Modal -->
+  <div class="modal fade" id="edit_statement_<%=@question.id %>" tabindex="-1" role="dialog" aria-labelledby="manageGroupQuestionLabel"  data-backdrop="static" >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="modal_clean()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="manageGroupQuestionLabel">Editar grupo de preguntas</h4>
+        </div>
+        <div class="modal-body">
+        <%group_question = @question.group_question %>
+          <%= simple_form_for(group_question, :html => {:class => 'group_question_form', :id=> 'edit-group-question', :remote => true}) do |f| %>
+            <%= f.error_notification %>
+            <div class="box box-info">
+              <div class="box-header with-border">
+                <h3 class="box-title">Instrucciones</h3>
+                <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                  </button>
+                </div>
+                <!-- /.box-tools -->
+              </div>
+              <!-- /.box-header -->
+              <div class="box-body" style="display: block;">
+                <ol type =1>
+                  <li><p>Defina el enunciado general, por ejemplo : "Observe la imagen y conteste las preguntas"</p></li>
+                  <li><p>Escriba la etiqueta [PREGUNTAS] para definir la ubicación del número de las preguntas asociadas, ejemplo :
+                    "Observe la imagen y conteste las preguntas [PREGUNTAS]" , o "Conteste [PREGUNTAS] en base al texto".
+                    </p></li>
+                </ol>   </div>
+              <!-- /.box-body -->
+            </div>
+
+            <div class="form-inputs">
+              <label>Enunciado General</label>
+              <%= f.input :statement, label: false, input_html: { class: 'rich-text-group-question' , id: 'edit-statement'} %>
+              <div class="validate-statement"></div>
+            </div>
+            <div>
+
+             <!--  #Here logic must be something like this V -->
+             <br>
+             <p><label>Seleccione preguntas</label> </p>
+            <% @questions = Instrument.find(session[:current_instrument]).instrument_questions_positions.order('position ASC').collect(&:question).uniq %>
+            <div class="btn-toolbar" >
+              <% @questions.each_with_index do |question, index| %>
+               <!-- <div class="btn-group" data-toggle="buttons"> -->
+                <!-- <label class="btn btn-default <%#=  (group_question.questions.include? question) ? 'active' : '' %>"> -->
+          <div class="checkbox" style="margin-top: -5px !important;display: inline-block;margin-left: 20px !important;">
+            <label style="font-size: 1.5em">
+                    <%#= check_box_tag "question_ids[]", question.id,  (group_question.questions.include? question) %>
+                 <%#= index+1  %>
+                 <% checkox_content = (group_question.questions.include? question) ? {multiple: true, checked: true} : {multiple: true} %>
+                 <%= f.check_box :question_ids, checkox_content, question.id, nil %>
+                 <% if index < 9 %>0<% end %><%= index+1 %>
+                  &nbsp;&nbsp;
+                  </label>
+                </div>
+                <% end %>
+              </div>
+              <div class="validate-question"></div>
+              <!-- #where evaluation is the evaluation we just created from mass_input_edit view
+              #and add :
+              #if question.group_question == group_question
+              #checkbox is selected because question belongs to this group  -->
+               <% params[:all_questions_ids].split(",").each do |question_id| %>
+                 <%= hidden_field_tag "all_questions_ids[]", nil, :value => question_id %>
+               <% end %>
+            </div>
+            <%= hidden_field_tag "question_id", nil, :value => @question.id %>
+            <br />
+            <div class="form-actions">
+            <a href="#-" class="btn btn-success" id="submit-edit-button">Enviar</a>
+              <%#= f.submit "Enviar", class: 'btn btn-success' %>
+            </div>
+            <br />
+            <% end %>
+        </div>
+       <span id="added-alert"></span>
+      </div>
+    </div>
+  </div>
+<script type="text/javascript">
+
+</script>
+  <script type='text/javascript'>
+  $('.rich-text-group-question').froalaEditor({
+    language: 'es',
+    key: 'FwcnehmbblD6lA-8==',
+    imageUploadToS3: {
+      bucket: $("body").data('bucket'),
+      region: 's3',
+      keyStart: $("body").data('key-start'),
+      callback: function (url, key) {
+        console.log(url);
+        console.log(key);
+      },
+      params: {
+        acl: $("body").data('acl'),
+        AWSAccessKeyId: $("body").data('access-key'),
+        policy: $("body").data('policy'),
+        signature: $("body").data('signature')
+      }
+    },
+    imageManagerLoadURL: '/upload_gallery.json'
+  });
+  $('.rich-text-group-question').on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+    var key = $(response).find('key').text()
+    $('#froalaImageTags').find('input[name="froala_image[key]"]').val(key)
+    $('#froalaImageTags').modal()
+  });
+
+  $('#submit-edit-button').click(function(e){
+        if(validarFormularioEdit()==false){
+            e.preventDefault();
+        }
+        else{
+          $('#edit_statement_<%=@question.id %>').modal("hide");
+          $('#overlay, #please-wait').show();
+          $('#edit-group-question').submit();
+        }
+    });
+
+    function validarFormularioEdit(){
+        var valido = true;
+        var fecha1=$('#edit-statement').val();
+        var fecha2=$("input[type=checkbox]:checked");
+        if(fecha1.length < 1 && fecha2.length < 1){
+        }
+        else{
+
+            if (fecha1.length < 1){ $('.validate-statement').html('<span style="color:red;"> Ingresar enunciado. </span>') ;    valido = false;}
+            else{$('.validate-statement').html("");}
+            if (fecha2.length < 1){  $('.validate-question').html('<span style="color:red;">Marque al menos 1 pregunta.</span>') ;  valido = false;     } else{$('.validate-question').html("");}
+        }
+
+
+        return valido;
+   }
+</script>
+<script type="text/javascript">
+  function modal_clean(){
+    $('input[type=checkbox]').prop('checked', false);  }
+</script>

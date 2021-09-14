@@ -1,0 +1,16 @@
+<tr id='question<%= question.id %>'>
+	<td> 
+		<%#= link_to remove_question_group_question_path(question.group_question_id, { question_id: question.id }), remote: true, data: { confirm: "This action will completely DELETE the selected question. Are you sure?"}, class: 'removeQuestionBtn btn btn-danger' do %>
+			<!-- <i class='fa fa-times'></i> -->
+		<%# end -%>
+		<%= link_to '#', id: "removeQuestion#{question.id}", data: { toggle: 'modal', target: "#removeQuestionFromGroup#{question.id}" }, class: 'removeQuestionBtn btn btn-danger' do %>
+			<i class='fa fa-times'></i>
+		<% end -%>
+	</td>
+	<td><%= link_to strip_tags(question.texto), question_path(question) %></td>
+	<td><%= question.assignature.try(:nombre) %></td>
+	<td><%= question.level.try(:nombre) %></td>
+	<td><%= question.unit.try(:numero) %></td>
+	<td><%= question.try(:group_question_id) %></td>
+</tr>
+<%= render 'group_questions/remove_question_from_group_prompt', question: question %>

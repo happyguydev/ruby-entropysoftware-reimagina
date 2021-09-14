@@ -1,0 +1,51 @@
+<% if params[:question_ids].present? %>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="manageGroupQuestionLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="manageGroupQuestionLabel">Nuevo grupo de preguntas</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-inputs">
+        <label>Seleccione preguntas</label>
+          <%@questions = Question.where(:id => params[:question_ids])%>
+          <div class="btn-group" data-toggle="buttons">
+            <%@questions.each_with_index do |question, index|%>
+            <%= question.texto %>
+             <a class="btn btn-info" href="/edit_statement?question_id=<%= question.id %>" data-remote ='true'>Editar enunciado</a>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+<script type='text/javascript'>
+  $('.rich-text-group-question').froalaEditor({
+    language: 'es',
+    key: 'FwcnehmbblD6lA-8==',
+    imageUploadToS3: {
+      bucket: $("body").data('bucket'),
+      region: 's3',
+      keyStart: $("body").data('key-start'),
+      callback: function (url, key) {
+        console.log(url);
+        console.log(key);
+      },
+      params: {
+        acl: $("body").data('acl'),
+        AWSAccessKeyId: $("body").data('access-key'),
+        policy: $("body").data('policy'),
+        signature: $("body").data('signature')
+      }
+    },
+    imageManagerLoadURL: '/upload_gallery.json'
+  });
+  $('.rich-text-group-question').on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+    var key = $(response).find('key').text()
+    $('#froalaImageTags').find('input[name="froala_image[key]"]').val(key)
+    $('#froalaImageTags').modal()
+  });
+</script>

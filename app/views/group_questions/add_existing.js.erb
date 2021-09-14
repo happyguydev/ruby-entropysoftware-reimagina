@@ -1,0 +1,7 @@
+$('#newQuestion').hide();
+$('#manage-questions').prepend("<%= escape_javascript(render('group_questions/existing_questions', locales: {group_question: @group_question, questions: @questions})) %>");
+$('#questionsTable').DataTable(
+	{ 
+		"language": { url: "/assets/Spanish.json" }
+	}
+);

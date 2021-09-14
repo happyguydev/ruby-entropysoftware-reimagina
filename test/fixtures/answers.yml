@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  evaluation_id: 
+  question_id: 
+  student_id: 
+  letra: MyString
+
+two:
+  evaluation_id: 
+  question_id: 
+  student_id: 
+  letra: MyString

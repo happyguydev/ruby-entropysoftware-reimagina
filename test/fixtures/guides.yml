@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: MyString
+  instrument_id: 
+  question_id: 
+  alternative_id: 
+  question_index: 1
+  alternative_index: MyString
+
+two:
+  nombre: MyString
+  instrument_id: 
+  question_id: 
+  alternative_id: 
+  question_index: 1
+  alternative_index: MyString

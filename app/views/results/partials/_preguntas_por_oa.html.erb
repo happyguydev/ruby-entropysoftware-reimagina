@@ -1,0 +1,45 @@
+  <!-- Preguntas por OA SIMCE -->
+<div class='col-md-12 pb_before'>
+    <h3>Tabla: Preguntas por OA-AE-OF</h3>
+</div>
+    <div class='col-md-12'>
+      <table class='table table-pdf table-condensed table-bordered'>
+        <thead>
+          <th class='text-center'>AE-OA-OF</th>
+          <th class='text-center'>Cantidad preguntas</th>
+          <th class='text-center'>Promedio resp correctas</th>
+        </thead>
+        <tbody>
+          <% @tot_oas.each_with_index do |aa,i| %>
+            <tr>
+              <td class='text-center'><%= aa[:nombre_pme].try(:mb_chars).try(:upcase).to_s %></td>
+              <td class='text-center'><%= aa[:cantidad_preguntas] %></td>
+              <td class='text-center'><%= aa[:porcentaje] %>%</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <i>* Objetivo de aprendizaje del curso anterior</i>      
+    </div>
+<div id="preg_por_oa" class='col-md-12'style="min-width: 1125px; margin: 0 auto"></div>
+    <!--Grafico OAs por habilidad-->
+    <script type='text/javascript'>
+      chartBarContentsGenerator({ 
+        container: "#preg_por_oa", 
+        title: { text: "AE-OA-OF" }, 
+                                subtitle: { text: "Asignatura "+ <%= @instrument.evaluation.assignature.nombre.inspect.html_safe %> }, 
+                                }, { 
+                                labels: <%= @tot_oas.map{|pme| pme[:nombre_pme].try(:mb_chars).try(:upcase).to_s}.inspect.html_safe  %>,
+                                series: { data: <%= @tot_oas.map{|pme| {y: pme[:porcentaje]}}.to_json.html_safe %> }
+                                });  
+    </script>
+  <div class='col-md-12 text-center'>
+    <h5><b></h5>El gráfico muestra todos los OA-AE-OF medidos en la evaluación</b></h5>
+  </div>
+    <div class='col-md-12 text-center'>
+      <h5 style='font-size: 20px;'>OA/AE/OF <span style='color:green;'>mejor</span> logrado fue: <b><%= @tot_oas.sort_by{|pme| pme[:porcentaje] }.last[:nombre_pme].try(:mb_chars).try(:upcase).to_s  %></b> con <%= @tot_oas.sort_by{|pme| pme[:porcentaje] }.last[:porcentaje] %>%</h5>
+    </div>
+    <div class='col-md-12 text-center pb_after'>
+      <h5 style='font-size: 20px;'>OA/AE/OF <span style='color: red;'>menos</span> logrado: <b><%= @tot_oas.sort_by{|pme| pme[:porcentaje] }.first[:nombre_pme].try(:mb_chars).try(:upcase).to_s  %></b> con un <%= @tot_oas.sort_by{|pme| pme[:porcentaje] }.first[:porcentaje] %>%</h5>
+    </div>
+    

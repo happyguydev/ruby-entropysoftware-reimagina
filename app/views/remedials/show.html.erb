@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @remedial.nombre %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @remedial.content %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @remedial.level %>
+</p>
+
+<%= high_chart("some_id", @chart) %>
+
+<%= link_to 'Edit', edit_remedial_path(@remedial) %> |
+<%= link_to 'Back', remedials_path %>

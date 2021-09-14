@@ -1,0 +1,716 @@
+<% year = @comparative_years.last %>
+<% static_row = 5 %>
+<div style="clear: both; width: 100%; padding: 30px 0px;"></div>
+
+<div class='col-md-12 heading'>
+  <h1>Consolidado Evaluación Cobertura Curricular</h1>
+</div>
+<!-- Si es SIMCE agregar Puntajes SIMCE comunal -->
+    <% if @evaluation_type.short_name == 'simce' %>
+      <div class='col-md-12 heading'>
+        <h1>Puntajes SIMCE comunal</h1>
+      </div>
+
+      <% @levels.each do |level|%>
+        <table class='table table-pdf table-condensed table-bordered nobreak' style='width: 1050px; margin-bottom:50px;'>
+          <thead>
+            <tr>
+              <th>Establecimientos</th>
+              <th>Nivel</th>
+              <% assignatures_with_score(year, level).each do |assignature| %> <th> <%= assignature.try(:nombre)%> </th> <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% @for_school.each_with_index do |school,i| %>
+              <% if check_school_assignature_per_level(school,year,level).present? %>
+                <tr>
+                  <td> <%= school.try(:nombre) %></td>
+                  <td> <%= level.try(:nombre) %></td>
+                  <% assignatures_with_score(year, level).each do |ass| %> 
+                  <% porcentaje = school_assignature_level(year,school, ass,level) == 'N/D' ? 'N/D' : school_assignature_level(year,school, ass,level).gsub("%","").to_i  %>
+                    <td> <%= porcentaje == 'N/D' ? 'N/D' : (porcentaje*2.05+156).to_f.round %> </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            <% end %>
+            <tr>
+              <td colspan="2"> Promedio Comunal</td>
+                <% assignatures_with_score(year, level).each do |ass| %>
+                <% porcentaje = comunal_assignature_level(year, ass, level) == 'N/D' ? 'N/D' : comunal_assignature_level(year, ass, level).gsub("%","").to_i  %>
+                  <td> <%= porcentaje == 'N/D' ? 'N/D' : (porcentaje*2.05+156).to_f.round %></td>
+                <% end %>
+            </tr>
+          </tbody>
+        </table>
+      <% end %>
+
+      <table class='table table-pdf table-condensed table-bordered nobreak' style='width: 1050px; margin-bottom:50px;'>
+      <thead>
+      <tr>
+        <th colspan='<%= @assignatures.count%>' > Promedio General </th> 
+      </tr>
+
+        <tr>
+            <% @assignatures.each do |assignature|%>
+              <th> <%= assignature.try(:nombre)%> </th>
+            <% end %>
+        </tr>
+              </thead>
+
+                  <tbody>
+
+        <tr>
+            <% @assignatures.each do |assignature|%>
+            <% porcentaje = school_assignature_totals(year,assignature) == 'N/D' ? 'N/D' : school_assignature_totals(year,assignature).gsub("%","").to_i  %>
+            <td> <%= porcentaje == 'N/D' ? 'N/D' : (porcentaje*2.05+156).to_f.round %></td>
+            <% end %>
+        </tr>
+                  </tbody>
+
+      </table>
+      <div id='brake'></div>
+    <% end %>
+<!-- FIN SIMCE -->
+
+
+<!-- por habilidad pme -->
+<% @assignatures.each_with_index do |assignature, index| %>
+  <% @levels.each_with_index do |level, l| %>
+    <!-- mostrar pagina solo si hay data -->
+    <% if get_assignature_level_pme_abilities(assignature.id, level.id).count > 0 %>
+    <div class='col-md-12 heading'>
+      <h2><%= assignature.try(:nombre) %></h2>
+    </div>
+    <div class='col-md-12 heading'>
+      <h2><%= level.try(:nombre) %></h2>
+    </div>
+    <div class='col-md-12' style='width: 99%;'>
+      <% if @for_school.present? %>
+        <% first, last = 0, 0 %>
+        <% no_of_tables = (get_assignature_level_pme_abilities(assignature.id, level.id).size / (static_row + 1)) + ((get_assignature_level_pme_abilities(assignature.id, level.id).size % (static_row + 1)) > 0 ? 1 : 0) %>
+        <% no_of_tables.times do |index| %>
+          <% first = (index == 0) ? 0 : (first + static_row + 1) %>
+          <% last = (index + 1) == no_of_tables ? -1 : (index == 0) ? index+static_row : last+static_row %>
+          <table class='table table-pdf table-condensed table-bordered nobreak' style='width: 1050px; margin-bottom:50px;'>
+            <thead>
+              <tr>
+                <th> <%= '' %> </th>
+                <th colspan=<%=get_assignature_level_pme_abilities(assignature.id, level.id)[first..last].size%>>
+                  <%= 'Habilidad/Indicador PME / Promedio de Respuestas Correctas' %>
+                </th>
+                <% if last == -1 %>
+                  <th> <%= '' %> </th>
+                <% end %>
+              </tr>
+              <th>Establecimientos</th>
+              <% get_assignature_level_pme_abilities(assignature.id, level.id)[first..last].each do |pme_title| %>
+                <th> <%= pme_title.try(:nombre).try(:mb_chars).try(:upcase) %> </th>
+              <% end %>
+              <% if last == -1 %>
+                <th>Promedio Curso % Logro</th>
+              <% end %>
+            </thead>
+            <tbody>
+              <% @for_school.each_with_index do |school,i| %>
+                <% if @school_result_pme_abilities[school][year][assignature.id][level.id].compact.present? %>
+                  <tr>
+                    <td>
+                      <%= school.try(:nombre) %>
+                    </td>
+                    <% get_assignature_level_pme_abilities(assignature.id, level.id)[first..last].each do |pme_ability| %>
+                      <td style="text-align:center">
+                        <%= school_pme_ability_score_n_average(school,year,assignature,level,pme_ability) %>
+                      </td>
+                    <% end %>
+                    <% if last == -1 %>
+                      <td style="text-align:center">
+                        <%= school_pme_ability_avg(school,year,assignature,level) %>
+                      </td>
+                    <% end %>
+                  </tr>
+                <% end %>
+              <% end %>
+              <tr>
+                <td>Promedio Comunal</td>
+                <% get_assignature_level_pme_abilities(assignature.id, level.id)[first..last].each do |pme| %>
+                  <td style="text-align:center">
+                    <%= school_average_per_pme_ability(assignature.id,pme.id, year, level.id)%>
+                  </td>
+                <% end %>
+                <% if last == -1 %>
+                  <td style="text-align:center">
+                    <%= school_last_avg_pme_abilities(assignature.id,year,level.id)%>
+                  </td>
+                <% end %>
+              </tr>
+            </tbody>
+          </table>
+        <% end %>
+      <!-- mostrar grafico solo si hay data -->
+      <% if get_assignature_level_pme_abilities(assignature.id, level.id).count > 0 %>
+        <% if (@for_school.map{|school| @school_result_pme_abilities[school][year][assignature.id][level.id].compact.present? }.reject(&:blank?)).count * get_assignature_level_pme_abilities(assignature.id, level.id).count > 20 %> 
+          <div id='brake'></div>
+        <% end %>
+        <div class='col-md-12 heading'>
+          <h3>Consolidado Evaluación <%= @params['proccess'] %> -
+            <%= assignature.try(:nombre)%> - <%= level.try(:nombre)%>
+          </h3>
+        </div>
+              
+      <% get_assignature_level_pme_abilities(assignature.id, level.id).each_with_index do |ability, index_assig| %>      
+        <div id='assignature_level_pme_<%= assignature.short_name+"_"+level.short_name+"_"+ability.id.to_s %>' class='col-md-12' style="width: 1000px;"></div>
+      <% end %>
+      <% end %> 
+      <!-- mostrar grafico solo si hay data -->
+      <% end %>
+      <div id='brake'></div>
+    </div>
+    <% end %>
+    <!-- mostrar tabla solo si hay data -->
+  <% end %>
+<% end %>
+
+<!-- por asignatura general -->
+<div class='col-md-12 heading'>
+  <h3>Promedio por Asignatura</h3>
+</div>
+
+<!-- Result table / graph -->
+<div class='col-md-12' style='width: 99%;'>
+  <% if @for_school.present? %>
+    <% first, last = 0, 0 %>
+    <% no_of_tables = (@assignatures.size / (static_row + 1)) + ((@assignatures.size % (static_row + 1)) > 0 ? 1 : 0) %>
+    <div class='col-md-12' style='width: 99%;'>
+      <% no_of_tables.times do |index| %>
+        <% first = (index == 0) ? 0 : (first + static_row + 1) %>
+        <% last = (index + 1) == no_of_tables ? -1 : (index == 0) ? index+static_row : last+static_row %>
+        <table class='table table-pdf table-condensed table-bordered nobreak' style='width: 1050px; margin-bottom:50px;'>
+          <thead>
+            <th>Escuela</th>
+            <% @assignatures.each do |assignature| %>
+              <th><%= assignature.try(:nombre) %></th>
+            <% end %>
+          </thead>
+          <tbody>
+            <% @for_school.each_with_index do |school,i| %>
+              <% if check_school_assignature_level(school,year).present? %>
+                <tr>
+                  <td><%= school.try(:nombre) %></td>
+                  <% @assignatures[first..last].each do |assignature| %>
+                    <td style="text-align:center"><%= school_assignature_avg(school, year, assignature) %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            <% end %>
+            <tr>
+              <td>Promedio Comunal</td>
+              <% @assignatures[first..last].each do |assignature| %>
+                <td style="text-align:center"><%= school_assignature_totals(year,assignature) %></td>
+              <% end %>
+            </tr>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+    <% if (@for_school.map{|school| @assignatures.map{|a| @school_avrg[year][school][a.id].present?}}.flatten.reject(&:blank?)).count * @assignatures.count > 20 %> 
+      <div id='brake'></div> 
+    <% end %>
+    <div class='col-md-12 heading'>
+      <h3>Promedio por Asignatura</h3>
+    </div>
+    <div class='col-md-12' style='width: 99%;'>
+      <% @assignatures.each do |assig| %>
+          <div id='comunal_<%= assig.id.to_s %>' class='col-md-12' style="width: 1125px;"></div>
+      <% end %>
+
+    </div>
+  <% end %>
+</div>
+
+<div id='brake'></div>
+
+  <% @for_school.each_with_index do |school, school_index| %>
+  <% if check_school_assignature_level(school,year).present? %>
+  <div class='col-md-12' style='width: 99%;'>
+    <!-- por colegio por nivel -->
+    <div class='col-md-12 heading'>
+      <h1>Promedio por Establecimiento por Asignatura</h1>
+      <h3>
+        <%= school.try(:nombre) %>
+      </h3>
+    </div>
+
+    <!-- Result table / graph -->
+    <% if @for_school.present? %>
+      <% first, last = 0, 0 %>
+      <% no_of_tables = (@assignatures.size / (static_row + 1)) + ((@assignatures.size % (static_row + 1)) > 0 ? 1 : 0) %>
+      <% no_of_tables.times do |index| %>
+        <% first = (index == 0) ? 0 : (first + static_row + 1) %>
+        <% last = (index + 1) == no_of_tables ? -1 : (index == 0) ? index+static_row : last+static_row %>
+        <table class='table table-pdf table-condensed table-bordered nobreak' style='width: 1050px;'>
+          <thead>
+            <th>Nivel</th>
+            <% @assignatures.each do |assignature| %>
+              <th><%= assignature.try(:nombre) %></th>
+            <% end %>
+          </thead>
+          <tbody>
+            <% @levels.each_with_index do |level,i| %>
+              <% if check_school_assignature_per_level(school, year,level).present? %>
+                <tr>
+                  <td><%= level.try(:nombre) %></td>
+                  <% @assignatures[first..last].each do |assignature| %>
+                    <td style="text-align:center"><%= school_assignature_level(year,school, assignature,level) %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            <% end %>
+            <tr>
+              <td>Promedio Escuela</td>
+              <% @assignatures[first..last].each do |assignature| %>
+                <td style="text-align:center">
+                  <%= school_assignature_avg(school,year,assignature) %>
+                </td>
+              <% end %>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <div id='brake'></div> -->
+      <% end %>
+        <!-- <div id='brake'></div> -->
+      <div class='col-md-12 heading'>
+        <h1>Promedio Asignatura por Nivel</h1>
+      </div>
+      <% @assignatures.each_with_index do |ability, index_assig| %>
+        <div id='assignature_<%= index_assig.to_s %>_school_<%= school_index.to_s %>' class='col-md-12' style="width: 1125px;"></div>
+      <% end %>
+      <div id='brake'></div>
+    <% end %>
+    <div id='brake'></div>
+
+    <h1>Promedio por Asignatura por Nivel</h1>
+    <% @assignatures.each_with_index do |assignature, index| %>
+      <div id='chart_per_assignature_<%= index.to_s %>_school_<%= school_index.to_s %>' class='' style="width: 50%; float: left;"></div>
+    <% end %>
+    <div id='brake'></div>
+  <% end %>
+  </div>
+<% end %>
+
+<div id='brake'></div>
+<div style="clear: both; width: 100%; padding: 30px 0px;"></div>
+<h1>Nivel de logro PME alumnos </h1>
+<div class='col-md-12' style='width: 99%;'>
+  <% @assignatures.each_with_index do |assignature, index| %>
+    <h2><%= assignature.nombre.capitalize %></h2>
+    <% @levels.each do |level|%>
+      <% @for_school.each do |school|%>
+      <% grades = school.grades.where(year: year, level_id: level.id) %>
+       <% if grades.count > 1 %>
+          <% grades.sort_by(&:letra).each do |grade| %>
+            <% color_range(assignature, grade, @evaluation_type) %>
+            <% if @colors.present? %>
+              <div class='nobreak'>
+                <%= render partial: 'comparatives/partials/school_achievement_level_table', locals: { assignature: assignature, grade: grade, type: 'unjoined', year: year , school: school} %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% grade = school.grades.where(year: year, level_id: level.id).last %>
+        <% if check_school_assignature_level(school,year).present? %>
+          <div class='nobreak'>
+            <%= render partial: 'comparatives/partials/school_joined_table_based_on_level', locals: { assignature: assignature, grade: grade, type: 'joined', year: year, school: school  } %>
+          </div>
+       <% end %>
+      <% end %>
+    <% end %>
+    <% if @assignatures.count != index + 1 %>
+      <div id='brake'></div>
+    <% end %>
+  <% end %>
+</div>
+
+<script>
+<% @assignatures.each do | assignature | %>
+      <% barsamount = @for_school.map{|sc| @school_avrg[year][sc][assignature.id].present?}.reject(&:blank?).count %>
+      <% barsamount = barsamount < 4 ? 4 : barsamount %>
+      <% barh = barsamount * 50 + 220 %>
+      <% botmarg = (barh + (barsamount * 15)) - (barh - 25) %>
+    
+      var chart = new Highcharts.Chart({
+                                                    container: '#comunal_<%= assignature.id.to_s %>',
+                                                    colors: <%= @colors_set %>,
+                                                      chart: {
+                                                  type: 'bar',
+                                                    renderTo: 'comunal_<%= assignature.id.to_s %>',
+                                                    margin: [50, 50, <%= botmarg %>, 200],
+                                                    height: <%= barsamount * 50 + 200 %>
+
+
+
+                                                },
+                                                exporting: {
+                                                  enabled: false
+                                                },
+                                                legend: {
+                                                  itemStyle: {
+                                                    fontSize: '15px',
+                                                      font: '15pt Trebuchet MS, Verdana, sans-serif',
+                                                  }
+                                                },
+                                                credits: false,
+                                                  title: {
+                                                  text: '',
+                                                    style: {
+                                                    fontWeight: 'bold',
+                                                      fontSize: 16
+                                                  }
+                                                },
+                                                subtitle: {
+                                                  text: ''
+                                                },
+                                                xAxis: {
+                                                  categories: ['<%= assignature.nombre %>'],
+                                                    crosshair: true,
+                                                      labels: {
+                                                    style: {
+                                                      fontSize: '15px',
+                                                        width: '200px'
+                                                    }
+                                                  }
+                                                },
+                                                yAxis: {
+                                                  min: 0,
+                                                    max: 100,
+                                                      tickInterval: 10,
+                                                        title: {
+                                                    text: ''
+                                                  },
+                                                  labels: {
+                                                    style: {
+                                                      fontSize: '15px'
+                                                    }
+                                                  }
+                                                },
+                                                tooltip: {
+                                                  headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                                                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y} %</b></td></tr>',
+                                                      footerFormat: '</table>',
+                                                        shared: true,
+                                                          useHTML: true
+                                                },
+                                                plotOptions: {
+                                                  series: {
+                                                    animation: false
+                                                  },
+                                                  bar: {
+                                                    pointPadding: 0.2,
+                                                      pointWidth: 25,
+                                                        borderWidth: 0
+                                                  }
+                                                },
+                                                series: [
+          <% @for_school.each do | school | %>
+                    <% if @school_avrg[year][school][assignature.id].present? %>
+                                                  {
+                                                    name: "<%= school.nombre %>",
+                                                    data: [<%= (@school_avrg[year][school][assignature.id].try(:flatten).try(:compact).inject{|sum, el| sum + el }.to_f / @school_avrg[year][school][assignature.id].try(:flatten).try(:compact).size).round %>],
+                                                dataLabels: {
+                                                  enabled: true,
+                                                    format: '{point.y}%', // zero decimal
+                                                      y: 0, // 10 pixels down from the top
+                                                        style: {
+                                                    fontSize: '15px',
+                                                      fontFamily: 'Verdana, sans-serif'
+                                                  }
+                                                }
+              },
+            <% end %>
+          <% end %>
+        ]
+      });
+      <% end %>
+
+
+
+
+                           <% @for_school.each_with_index do | school, school_index | %>
+                              <% @assignatures.each_with_index do | assignature, index | %>
+                                <% if school_chart_required_data_present?(year, assignature, school) %>
+                                var chart = new Highcharts.Chart({
+                                container: '#assignature_<%= index.to_s %>_school_<%= school_index.to_s %>',
+                                colors: <%= @colors_set %>,
+                                  chart: {
+                              type: 'column',
+                                renderTo: 'assignature_<%= index.to_s %>_school_<%= school_index.to_s %>'
+                            },
+                            exporting: {
+                              enabled: false
+                            },
+                            legend: {
+                              itemStyle: {
+                                fontSize: '15px',
+                                  font: '15pt Trebuchet MS, Verdana, sans-serif',
+                                    }
+                            },
+                            credits: false,
+                              title: {
+                              text: '',
+                                style: {
+                                fontWeight: 'bold',
+                                  fontSize: 16
+                              }
+                            },
+                            subtitle: {
+                              text: ''
+                            },
+                            xAxis: {
+                              categories: ['<%= assignature.nombre %>'],
+                                crosshair: true,
+                                  labels: {
+                                style: {
+                                  fontSize: '15px',
+                                    width: '200px'
+                                }
+                              }
+                            },
+                            yAxis: {
+                              min: 0,
+                                max: 100,
+                                  tickInterval: 10,
+                                    title: {
+                                text: ''
+                              },
+                              labels: {
+                                style: {
+                                  fontSize: '15px'
+                                }
+                              }
+                            },
+                            tooltip: {
+                              headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y} %</b></td></tr>',
+                                  footerFormat: '</table>',
+                                    shared: true,
+                                      useHTML: true
+                            },
+                            plotOptions: {
+                              series: {
+                                animation: false
+                              },
+                              bar: {
+                                pointPadding: 0.2,
+                                  pointWidth: 25,
+                                    borderWidth: 0
+                              }
+                            },
+                            series: [
+                                    <% @levels.each do | level | %>
+                                      <% if @school_result[year][school][assignature.id][level.id].present? %>
+                              {
+                                name: "<%= level.nombre %>",
+                                data: [<%= @school_result[year][school][assignature.id][level.id].to_i %>],
+                            dataLabels: {
+                              enabled: true,
+                                format: '{point.y}%', // zero decimal
+                                  y: 0, // 10 pixels down from the top
+                                    style: {
+                                fontSize: '15px',
+                                  fontFamily: 'Verdana, sans-serif'
+                              }
+                            }
+                                        },
+                                      <% end %>
+                                    <% end %>
+                                  ]
+                                });
+                                <% end %>
+                            <% end %>
+                         <% end %>
+
+
+      <% @for_school.each_with_index do | school, school_index | %>
+                             <% @assignatures.each_with_index do | assignature, index | %>
+                                <% if school_chart_required_data_present?(year, assignature, school) %>
+        var chart_1 = new Highcharts.Chart({
+                                                    container: "#chart_per_assignature_<%= index.to_s %>_school_<%= school_index.to_s %>",
+                                                    colors: ["#7cb5ec", "brown"],
+                                                    chart: {
+                                                      type: 'bar',
+                                                      height: <%= @levels.count* 50 + 200 %>,
+                                                        margin: [50, 50, 100, 200],
+                                                          renderTo: "chart_per_assignature_<%= index.to_s %>_school_<%= school_index.to_s %>"
+                        },
+                                                credits: false,
+                                                  title: {
+                                                  text: 'Análisis por asignatura - <%= assignature.nombre %>'
+                                                },
+                                                subtitle: {
+                                                  text: ''
+                                                },
+                                                xAxis: {
+                                                  type: 'category',
+                                                    labels: {
+                                                    rotation: -45,
+                                                      style: {
+                                                      fontSize: '15px',
+                                                        fontFamily: 'Verdana, sans-serif'
+                                                    }
+                                                  },
+                                                  // categories: <%= raw [assignature.nombre].push('Promedio Comunal') %>,
+                                                  crosshair: true
+                                                },
+                                                yAxis: {
+                                                  min: 0,
+                                                    max: 100,
+                                                      tickInterval: 10,
+                                                        title: {
+                                                    text: 'Total (%)'
+                                                  },
+                                                  labels: {
+                                                    style: {
+                                                      fontSize: '15px'
+                                                    }
+                                                  }
+                                                },
+                                                legend: {
+                                                  enabled: false
+                                                },
+                                                tooltip: {
+                                                  pointFormat: 'Puntaje en <%= assignature.nombre %>: <b>{point.y} %</b>'
+                                                },
+                                                plotOptions: {
+                                                  series: {
+                                                    animation: false
+                                                  },
+                                                  bar: {
+                                                    pointPadding: 0.2,
+                                                      pointWidth: 25,
+                                                        borderWidth: 0
+                                                  }
+                                                },
+                                                series: [{
+                                                  name: 'Resultado',
+                                                  data: <%= raw school_get_chart_data(school) %>,
+                                                  dataLabels: {
+                                                    enabled: true,
+                                                    rotation: 0,
+                                                    format: '{point.y}%', // zero decimal
+                                                    y: 0, // 10 pixels down from the top
+                                                    style: {
+                                                      fontSize: '15px',
+                                                      fontFamily: 'Verdana, sans-serif'
+                                                    }
+                                                  }
+                                                }]
+                    });
+      <% end %>
+    <% end %>
+<% end %>
+  <% @assignatures.each_with_index do | assignature, index | %>
+     <% @levels.each_with_index do | level, index_level | %>
+    <% get_assignature_level_pme_abilities(assignature.id, level.id).each_with_index do |pme_hab, pme_hab_i| %>
+    <% if school_chart_required_data_present?(year, assignature, @for_school.last) && get_assignature_level_pme_abilities(assignature.id, level.id).count > 0 %>
+      <% barsamount = (@for_school.map{|school| @school_result_pme_abilities[school][year][assignature.id][level.id][pme_hab.id].present? }.reject(&:blank?)).count  %>
+      <% barsamount = barsamount < 4 ? 4 : barsamount %>
+      <% barh = barsamount * 55 + 215 %>
+      <% botmarg = (barh + (barsamount * 15)) - (barh - 50) %>
+      var chart = new Highcharts.Chart({
+                                                    container: "#assignature_level_pme_<%= assignature.short_name+"_"+level.short_name+"_"+pme_hab.id.to_s %>",
+                                                    colors: <%= @colors_set %>,
+                                                      chart: {
+                                                      type: 'bar',
+                                                      renderTo: "assignature_level_pme_<%= assignature.short_name+"_"+level.short_name+"_"+pme_hab.id.to_s %>",
+                                                      margin: [50, 50, <%= botmarg %>, 200],
+                                                      height: <%= barsamount * 50 + 220 %>
+
+                                                },
+                                                exporting: {
+                                                  enabled: false
+                                                },
+                                                legend: {
+                                                  itemStyle: {
+                                                    fontSize: '15px',
+                                                      font: '15pt Trebuchet MS, Verdana, sans-serif',
+                                                  }
+                                                },
+                                                credits: false,
+                                                  title: {
+                                                  text: '',
+                                                    style: {
+                                                    fontWeight: 'bold',
+                                                      fontSize: 16
+                                                  }
+                                                },
+                                                subtitle: {
+                                                  text: ''
+                                                },
+                                                xAxis: {
+                                                  categories: ['<%= pme_hab.nombre %>'],
+                                                    crosshair: true,
+                                                      labels: {
+                                                    style: {
+                                                      fontSize: '15px',
+                                                        width: '200px'
+                                                    }
+                                                  }
+                                                },
+                                                yAxis: {
+                                                  min: 0,
+                                                    max: 100,
+                                                      tickInterval: 10,
+                                                        title: {
+                                                    text: ''
+                                                  },
+                                                  labels: {
+                                                    style: {
+                                                      fontSize: '15px'
+                                                    }
+                                                  }
+                                                },
+                                                tooltip: {
+                                                  headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                                                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' + '<td style="padding:0"><b>{point.y} %</b></td></tr>',
+                                                      footerFormat: '</table>',
+                                                        shared: true,
+                                                          useHTML: true
+                                                },
+                                                plotOptions: {
+                                                  series: {
+                                                    animation: false
+                                                  },
+                                                  bar: {
+                                                    pointPadding: 0.2,
+                                                      pointWidth: 25,
+                                                        borderWidth: 0
+                                                  }
+                                                },
+                                                series: [
+          <% @for_school.each do | school | %>
+            <% if @school_result_pme_abilities[school][year][assignature.id][level.id][pme_hab.id].present? %>
+            <% number = 10 %>
+            <% @for_school.count > 5 || get_assignature_level_pme_abilities(assignature.id, level.id).count > 5 ? number = 10 : number = 15 %>
+                                                  {
+                                                    name: "<%= school.nombre %>",
+                                                    data: <%=[@school_result_pme_abilities[school][year][assignature.id][level.id][pme_hab.id].to_i] %>,
+                                                dataLabels: {
+                                                  enabled: true,
+                                                  allowOverlap: true,
+                                                    format: '{point.y}%', // zero decimal
+                                                      y: 0, // 10 pixels down from the top
+                                                        style: {
+                                                    fontSize: "<%= number %>px",
+                                                      fontFamily: 'Verdana, sans-serif'
+                                                  }
+                                                }
+              },
+            <% end %>
+          <% end %>
+        ]
+      });
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% end %>
+ </script>

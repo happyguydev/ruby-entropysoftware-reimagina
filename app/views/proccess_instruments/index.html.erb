@@ -1,0 +1,31 @@
+<ul class="nav nav-tabs" role="tablist">
+  <li><%= link_to 'Orden', orders_path %></li>
+  <li class="active"><%= link_to 'Procesos', order_proccesses_path(@order) %></li>
+  <li><%= link_to 'Pagos', order_payments_path(@order) %></li>
+  <li><%= link_to 'Historial', order_order_statuses_path(@order) %></li>
+  <li><%= link_to 'Facturas', order_invoices_path(@order) %></li>
+</ul>
+
+<div class='col-md-12 col-sm-12'>
+  <div class='col-md-6 col-sm-6'>
+    <h2>Instrumentos asociados al proceso <%= @proccess.id %> <%= @order.school.nombre %></h2>
+  </div>
+  <div class='col-md-12 col-sm-12'>
+    <table id='proccess_instruments-table'  class="table table-bordered table-hover dataTable" data-source='<%= order_proccess_proccess_instruments_path(@order,@proccess format: :json) %>'>
+      <thead>
+        <tr>
+          <th>Asignatura</th>
+          <th>Nivel</th>
+          <th>Evaluacion</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%= render 'form' %>
+
+

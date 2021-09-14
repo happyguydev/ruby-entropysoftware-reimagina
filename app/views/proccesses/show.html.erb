@@ -1,0 +1,66 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Evaluaciones asociadas a proceso <%= @proccess.proc_type.nombre%></h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class='col-md-12 col-sm-12'>
+            <section class="content">
+              <div class='col-md-12 col-sm-12'>
+                <h3>Evaluaciones ya agregadas al proceso</h3>
+                <table id='proccess_instruments-table' class="table table-bordered table-hover dataTable" data-source='<%= order_proccess_proccess_instruments_path(@order, @proccess , format: :json) %>'>
+                  <thead>
+                    <tr>
+                      <th>Quitar?</th>
+                      <th>Asignatura</th>
+                      <th>Curso</th>
+                      <th>Letra</th>
+                      <th>Evaluacion</th>
+                      <th>Tipo</th>
+                      <th>Año evaluación</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div class="co-xs-12">
+            <div class="box-header">
+              <h3 class="box-title">Agregar evaluaciones al proceso</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class='col-md-12 col-sm-12'>
+                <section class="content">
+                  <div class='col-md-12 col-sm-12'>
+                    <h3>Listado de evaluaciones disponibles</h3>
+                    <table id='process_intruments_by_order' class="table table-bordered table-hover dataTable" data-source='<%= instruments_by_order_instruments_path(@order, format: :json) %>'>
+                      <thead>
+                        <th>Agregar?</th>
+                        <th>Asignatura</th>
+                        <th>Nivel</th>
+                        <th>Evaluacion</th>
+                        <th>Tipo</th>
+                        <th>Año evaluación</th>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              </div>
+            </div>
+          <!-- /.box-body -->
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+
+</section>

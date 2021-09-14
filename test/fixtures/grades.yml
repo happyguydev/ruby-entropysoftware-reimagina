@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  school_id: 1
+  grado: MyString
+  letra: MyString
+  year: 1
+
+two:
+  school_id: 1
+  grado: MyString
+  letra: MyString
+  year: 1

@@ -1,0 +1,206 @@
+
+<section class="content-header">
+  <h1>
+    Orden N° <%= @order.number %>, Monto total: <%= @cobrado %> <%= link_to '(Editar)', edit_order_path(@order) %>
+  </h1>
+</section>
+
+<section class="content">
+  <!-- Iconos resumen -->
+  <div class='col-md-12 col-sm-12'>
+    <div class='col-md-3 col-sm-3'>
+      <div class="info-box">
+        <span class="info-box-icon bg-blue"><i class="fa fa-check-square-o"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Cobrado</span>
+          <span class="info-box-number"><%= number_to_clp(@order.try(:proccesses).sum(:monto))  %></span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+    <div class='col-md-3 col-sm-3'>
+      <div class="info-box">
+        <!-- Apply any bg-* class to to the icon to color it -->
+        <span class="info-box-icon bg-blue"><i class="fa fa-exclamation-triangle"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Sin facturar</span>
+          <span class="info-box-number"><%= number_to_clp(@sin_facturar) %> </span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+    <div class='col-md-3 col-sm-3'>
+      <div class="info-box">
+        <!-- Apply any bg-* class to to the icon to color it -->
+        <span class="info-box-icon bg-blue"><i class="fa fa-money"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Pagado</span>
+          <span class="info-box-number"><%= number_to_clp(@pagado) %> </span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+    <div class='col-md-3 col-sm-3'>
+      <div class="info-box">
+        <!-- Apply any bg-* class to to the icon to color it -->
+        <span class="info-box-icon bg-blue"><i class="fa fa fa-credit-card"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Deuda total</span>
+          <span class="info-box-number"><%= number_to_clp(@adeudado) %> </span>
+        </div><!-- /.info-box-content -->
+      </div><!-- /.info-box -->
+    </div>
+  </div>
+
+  <!-- Categorias principales -->
+  <div class='col-md-12 col-sm-12'>
+    <div class='col-md-3 col-sm-3'>
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <h3 class="profile-username text-center"><%= @order.try(:school).try(:nombre) %></h3>
+          <p class="text-muted text-center"><%= @order.try(:school).try(:commune).try(:name) %>, <%= @order.try(:school).try(:commune).try(:region).try(:name) %></p>
+          <ul class="list-group list-group-unbordered">
+            <li class="list-group-item">
+              <b>RBD</b> <a class="pull-right"><%= @order.try(:school).try(:rbd) %></a>
+            </li>
+            <li class="list-group-item">
+              <b>Dependencia</b> <a class="pull-right"><%= @order.try(:school).try(:dependencia) %></a>
+            </li>
+            <li class="list-group-item">
+              <b>Proceso</b> <a class="pull-right">Nivel</a>
+            </li>
+            <li class="list-group-item">
+              <b>Año</b> <a class="pull-right"><%= @order.year %></a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.box-body -->
+      </div>
+    </div>
+    <div class='col-md-3 col-sm-3'>
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <h3 class="profile-username text-center">Datos Cobranza</h3>
+          <p class="text-muted text-center">Rol usuario: <%= @encargado.user_type.name%></p>
+          <ul class="list-group list-group-unbordered">
+            <li class="list-group-item">
+              <b>Nombre</b> <a class="pull-right"><%= @encargado.try(:first_name)%> <%= @encargado.try(:second_name)%></a>
+            </li>
+            <li class="list-group-item">
+              <b>Mail</b> <a class="pull-right"><%= @encargado.try(:email) %></a>
+            </li>
+            <li class="list-group-item">
+              <b>Teléfono</b> <a class="pull-right"><%= @encargado.try(:tel) %></a>
+            </li>
+            <li class="list-group-item">
+              <b>Forma de pago</b> <a class="pull-right">OC</a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.box-body -->
+      </div>
+    </div>
+    <div class='col-md-3 col-sm-3'>
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <h3 class="profile-username text-center">Última Facturación</h3>
+          <p class="text-muted text-center">&nbsp;</p>
+          <ul class="list-group list-group-unbordered">
+            <li class="list-group-item">
+              <b>Factura</b> <a class="pull-right"><%= @order.try(:invoices).try(:last).try(:numero) %> </a>
+            </li>
+            <li class="list-group-item">
+              <b>Monto</b> <a class="pull-right"><%= number_to_clp(@order.try(:invoices).try(:last).try(:monto))  %> </a>
+            </li>
+            <li class="list-group-item">
+              <b>Fecha de emisión</b> <a class="pull-right"><%=  @order.try(:invoices).try(:last).try(:fecha) %></a>
+            </li>
+            <li class="list-group-item">
+              <b>OC</b> <a class="pull-right"><%= (@order.buy_orders.present?) ? @order.buy_orders.last.numero : 'Sin OC'  %></a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.box-body -->
+      </div>
+    </div>
+    <div class='col-md-3 col-sm-3'>
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <h3 class="profile-username text-center">Estado de pago</h3>
+          <p class="text-muted text-center">&nbsp;</p>
+          <ul class="list-group list-group-unbordered">
+            <li class="list-group-item">
+              <b>CP</b> <a class="pull-right"><%= @order.try(:payments).order(:fecha).where(paid: [false,nil]).last.try(:fecha) %> </a>
+            </li>
+            <li class="list-group-item">
+              <b>Monto</b> <a class="pull-right"><%= number_to_clp(@order.payments.order(:fecha).where(paid: [false,nil]).last.try(:monto)) %></a>
+            </li>
+            <li class="list-group-item">
+              <b>Estado</b> <a class="pull-right"><%=@order.try(:order_statuses).last.status_type.try(:nombre) %></a>
+            </li>
+            <li class="list-group-item">
+              <b>Licitación</b> <a class="pull-right"><%= (@order.licitacion.present?) ? @order.licitacion : 'Sin Licitación'  %></a>
+            </li>
+          </ul>
+        </div>
+        <!-- /.box-body -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Categorias colapsables -->
+  <div class='col-md-12 col-sm-12'>
+    <div class='col-md-12 col-sm-12'>
+      <div id="facturas" class="box box-danger">
+        <div class="box-header with-border">
+          <h3 class="box-title">Facturas</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div><!-- /.box-tools -->
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <%= render :template => "invoices/index" %> 
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+
+    <div class='col-md-12 col-sm-12' >
+      <div id="pagos" class="box box-success">
+        <div class="box-header with-border">
+          <h3 class="box-title" >Pagos</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div><!-- /.box-tools -->
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <%= render :template => "payments/index" %> 
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+
+    <div class='col-md-12 col-sm-12'>
+      <div id="historial" class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Historial</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div><!-- /.box-tools -->
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <%= render :template => "order_statuses/index" %> 
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+
+    <div id="ocs" class='col-md-12 col-sm-12'>
+      <div class="box box-warning">
+        <div class="box-header with-border">
+          <h3 class="box-title">Órdenes de compra</h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div><!-- /.box-tools -->
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <%= render :template => "buy_orders/index" %> 
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+  </div>
+</section>

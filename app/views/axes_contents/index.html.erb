@@ -1,0 +1,29 @@
+<h1>Listing Axes Contents</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Axis</th>
+      <th>Nombre</th>
+      <th>Descripcion</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @axes_contents.each do |axes_content| %>
+      <tr>
+        <td><%= axes_content.axis %></td>
+        <td><%= axes_content.nombre %></td>
+        <td><%= axes_content.descripcion %></td>
+        <td><%= link_to 'Show', axes_content %></td>
+        <td><%= link_to 'Edit', edit_axes_content_path(axes_content) %></td>
+        <td><%= link_to 'Destroy', axes_content, method: :delete, data: { confirm: 'Estás seguro?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Axes content', new_axes_content_path %>

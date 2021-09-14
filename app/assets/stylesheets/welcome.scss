@@ -1,0 +1,20 @@
+// Place all the styles related to the Welcome controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+#overlay{ 
+  position:fixed;
+  top:0;
+  left:0;
+  background:rgba(0,0,0,0.6);
+  z-index:5;
+  width:100%;
+  height:100%;
+  display:none;
+  }
+#overlay #please-wait {
+  color: white;
+  font-size: 34px;
+  text-align: center;
+  top: 50%;
+  position: relative;
+}

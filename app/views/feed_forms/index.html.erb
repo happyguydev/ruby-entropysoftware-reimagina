@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Feed Forms</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feedback</th>
+      <th>Feed item</th>
+      <th>Feed score</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @feed_forms.each do |feed_form| %>
+      <tr>
+        <td><%= feed_form.feedback %></td>
+        <td><%= feed_form.feed_item %></td>
+        <td><%= feed_form.feed_score %></td>
+        <td><%= link_to 'Show', feed_form %></td>
+        <td><%= link_to 'Edit', edit_feed_form_path(feed_form) %></td>
+        <td><%= link_to 'Destroy', feed_form, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Feed form', new_feed_form_path %>

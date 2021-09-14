@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="404 Not Found">
+<meta name="author" content="">
+<title>404 No encontrado</title>
+<!-- Bootstrap core CSS -->
+<style>
+/* Error Page Inline Styles */
+body {
+  padding-top: 20px;
+}
+/* Layout */
+.jumbotron {
+  font-size: 21px;
+  font-weight: 200;
+  line-height: 2.1428571435;
+  color: inherit;
+  padding: 10px 0px;
+}
+/* Everything but the jumbotron gets side spacing for mobile-first views */
+.masthead, .body-content, {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  background-color: transparent;
+}
+.jumbotron .btn {
+  font-size: 21px;
+  padding: 14px 24px;
+}
+/* Colors */
+.green {color:#5cb85c;}
+.orange {color:#f0ad4e;}
+.red {color:#d9534f;}
+</style>
+<script type="text/javascript">
+  function loadDomain() {
+    var display = document.getElementById("display-domain");
+    display.innerHTML = document.domain;
+  }
+</script>
+</head>
+<body onload="javascript:loadDomain();">
+<!-- Error Page Content -->
+<div class="container">
+  <!-- Jumbotron -->
+  <div class="jumbotron">
+    <h1><i class="fa fa-frown-o red"></i> 404 No encontrado</h1>
+    <p class="lead">No pudimos encontrar la página que estás abriendo. <em><span id="display-domain"></span></em>.</p>
+    <p><a onclick=javascript:checkSite(); class="btn btn-default btn-lg"><span class="green">Llévame al Home</span></a>
+        <script type="text/javascript">
+            function checkSite(){
+              var currentSite = window.location.hostname;
+                window.location = "http://" + currentSite;
+            }
+        </script>
+    </p>
+  </div>
+</div>
+<div class="container">
+  <div class="body-content">
+    <div class="row">
+      <div class="col-md-6">
+        <h2>Qué pasó?</h2>
+        <p class="lead">Un error 404 significa que la página que estás tratando de visitar no existe.</p>
+      </div>
+      <div class="col-md-6">
+        <h2>Qué puedo hacer?</h2>
+        <p class="lead">Si eres visitante</p>
+        <p>Escríbenos a través del formulario de Contacto para solucionar el problema. </p>
+        <p class="lead">Si eres el dueño del sitio Web.</p>
+         <p>Asegúrate de estar en la zona correcta, de ser así contacta al WebMaster.</p>
+     </div>
+    </div>
+  </div>
+</div>
+<!-- End Error Page Content -->
+<!--Scripts-->
+<!-- jQuery library -->
+</body>
+</html>

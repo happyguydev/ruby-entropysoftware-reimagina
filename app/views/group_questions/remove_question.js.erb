@@ -1,0 +1,16 @@
+$("#removeQuestionFromGroup<%= @question.id %>").modal('hide')
+
+if ("<%= @error %>" === "true") {
+	$('.presentQuestions > tbody > tr#question<%= @question.id %>').remove();
+	$.bootstrapGrowl("No se pudo borrar la pregunta, pero sí quitarla del grupo", { type: 'warning'});
+} else {
+	$('.presentQuestions > tbody > tr#question<%= @question.id %>').remove();
+	switch("<%= @commit %>") {
+		case "unassign":
+			$.bootstrapGrowl("Pregunta desagrupada exitosamente", { type: 'info'});
+			break;
+		case "delete":
+			$.bootstrapGrowl("Pregunta borrada exitosamente", { type: 'success'});
+			break;
+	}
+}

@@ -1,0 +1,24 @@
+<%= simple_form_for(@feedback) do |f| %>
+<%= f.error_notification %>
+
+<div class="form-inputs">
+  <%= f.association :order,:label_method => lambda { |item| "N° #{item.number} #{item.year} #{item.school.nombre}".html_safe }, value_method: :id, input_html: {class: 'chosen-select'}, collection: Order.where("id NOT IN (SELECT order_id FROM feedbacks)")
+%>
+  <%= f.input :comentario, input_html: {class: 'form-control'} %>
+</div>
+<% FeedItem.all.each do |fi| %>
+<%= f.simple_fields_for :feed_form do |feed_form|%>
+<div class='form-inputs'>
+  <%= feed_form.label fi.nombre %>
+  <%= feed_form.select fi.nombre, FeedScore.all.pluck(:nombre)%>
+</div>
+<% end %>
+<% end %>
+
+<div class="form-group col-md-12">
+  <%= f.button :submit , 'Enviar'%>
+</div>
+
+<% end %>
+
+

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: MyString
+  evaluation_type_id: 
+  assignature_id: 
+  level_id: 
+
+two:
+  nombre: MyString
+  evaluation_type_id: 
+  assignature_id: 
+  level_id: 

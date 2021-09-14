@@ -1,0 +1,10 @@
+  <div class="flash" style= "display:none;">
+  <% flash.each do |key, value| %>
+    <div class="<%= flash_class(key) %>  alert-dismissable growlyflash growlyflash-right fade in" role="alert" style="top: 20px; position: fixed;">
+	    <button type="close" class="close" data-dismiss="alert" aria-label="Close">
+	    <span aria-hidden="true">×</span>
+	    </button>
+	    <strong><%= key %>!</strong> <%= value %>
+    </div>
+    <%end%>
+  </div>

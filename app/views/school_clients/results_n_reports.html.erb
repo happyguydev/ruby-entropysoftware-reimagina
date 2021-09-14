@@ -1,0 +1,66 @@
+<section class="content">
+  <div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title">Instrucciones</h3>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="display: block;">
+      <ol type =1>
+        <li><p>En esta ventana podrá ver todas las evaluaciones asignadas a su establecimiento, e ingresar las respuestas/generar informes según corresponda.</p></li>
+
+        <li><p>Si Ud. no ha enviado respuestas aparecerá el ícono de "Ingresar respuestas <i class="fa fa-check-circle" aria-hidden="true"></i>" . Una vez se hayan ingresado las respuestas aparecerá el íconos de "Descargar informe <i class="fa fa-download"></i>.
+          </p></li>
+
+        <li><p>Con el ícono <i class="fa fa-file-text"></i> podrá descargar la evaluación en PDF.
+          </p></li>
+      </ol>   </div>
+
+      
+    <!-- /.box-body -->
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Instrumentos asignados</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="dataTables_wrapper form-inline dt-bootstrap" id="example2_wrapper">
+            <div class="row">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <table id='school-result_n_report-table'  class="table table-bordered table-hover dataTable" data-source='<%=  school_client_results_n_reports_path(format: :json) %>'>
+                  <thead>
+                    <tr>
+                      <th>Año</th>
+                      <th>Establecimiento</th>
+                      <th>Curso</th>
+                      <th>Letra</th>
+                      <th>Asignatura</th>
+                      <th>Proceso</th>
+                      <th>Resp/Informe</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row"></div>
+            <div class="col-sm-7"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>

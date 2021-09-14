@@ -1,0 +1,49 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Establecimientos</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="dataTables_wrapper form-inline dt-bootstrap" id="example2_wrapper">
+            <div class="row">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <table id='schools-table' class="table table-bordered table-hover dataTable" data-source='<%= schools_path(format: :json) %>'>
+                  <thead>
+                    <tr>
+                      <th>RBD</th>
+                      <th>Nombre</th>
+                      <th>Comuna</th>
+                      <th>Región</th>
+                      <th>Dependencia</th>
+                      <th>Teléfono</th>
+                      <th>E-mail</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row"></div>
+            <div class="col-sm-7"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<section class ="content">
+  <div class='col-md-12 col-sm-12'>
+    <%= link_to 'Nuevo Establecimiento', new_school_path, class: 'btn btn-primary pull-right' %>
+  </div>
+</section>

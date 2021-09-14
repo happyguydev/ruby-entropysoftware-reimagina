@@ -1,0 +1,21 @@
+<div class='col-md-12 col-sm-12'>
+  <div class='col-md-6 col-sm-6'>
+    <h1>Facturas asociadas</h1>
+  </div>
+  <div class='col-md-12 col-sm-12'>
+    <table id='invoices-table' class="table table-bordered table-hover dataTable" data-source='<%= order_invoices_path(@order, format: :json) %>'>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Fecha</th>
+          <th>Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <div class='col-md-12 col-sm-12'>
+    <%= link_to 'Agregar factura', new_order_invoice_path(@order), class: 'btn btn-primary pull-right' %>
+  </div>
+</div>

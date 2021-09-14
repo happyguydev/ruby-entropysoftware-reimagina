@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @color_range.nombre %>
+</p>
+
+<p>
+  <strong>Min:</strong>
+  <%= @color_range.min %>
+</p>
+
+<p>
+  <strong>Max:</strong>
+  <%= @color_range.max %>
+</p>
+
+<p>
+  <strong>Color:</strong>
+  <%= @color_range.color %>
+</p>
+
+<p>
+  <strong>Evaluation type:</strong>
+  <%= @color_range.evaluation_type %>
+</p>
+
+<p>
+  <strong>Simce range:</strong>
+  <%= @color_range.simce_range %>
+</p>
+
+<%= link_to 'Edit', edit_color_range_path(@color_range) %> |
+<%= link_to 'Back', color_ranges_path %>

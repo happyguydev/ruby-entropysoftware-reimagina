@@ -1,0 +1,7 @@
+<% @colors = ColorRange.assignature_level_based_evaluation(assignature, grade, @evaluation_type) %>
+
+<div class='nobreak'>
+  <% if @colors.present? %>
+    <%= render partial: 'comparatives/partials/school_achievement_level_table', locals: { assignature: assignature, grade: grade, type: 'joined', year: year, school: school } %>
+  <% end %>
+</div>

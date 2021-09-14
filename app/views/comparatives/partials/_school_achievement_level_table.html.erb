@@ -1,0 +1,47 @@
+<% school_get_all_pme_ability_score(grade, assignature, type, year, school) %>
+<% if @data.values.reject{|d| d.blank?}.present? %>
+<% grade_name = type == 'joined' ? grade.level.nombre : grade_level_name(grade) %>
+  <div class='col-md-12 report-table'>
+    <table class='table table-pdf table-condensed table-bordered habilidad-table'>
+      <thead>
+        <tr>
+          <th class="no-border" style="width:50%">
+            <%= school.nombre %> - <%= grade_name %>
+          </th>
+          <th colspan="5" style="width:50%">
+            <%= 'Nivel de Logro Número de Estudiantes' %>
+          </th>
+        </tr>
+        <tr>
+          <th>Habilidad PME</th>
+          <th style='color:#000 !important;'>Ausente</th>
+          <% @colors.sort_by(&:min).each do |range| %>
+            <th style='color:#000 !important; background-color: <%= range.try(:color) %>'>
+              <%= range.nombre %>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% get_assignature_level_pme_abilities(assignature.id, grade.level.id).each do |pme_ability| %>
+          <% data = school_group_students_with_their_level(grade, assignature, pme_ability, type, year, school) %>
+          <% #if data.present? %>
+            <tr>
+              <td>
+                <%= pme_ability.nombre %>
+              </td>
+              <td>
+                <%= @school_student_by_level[school]['absent'] %>
+              </td>
+              <% @colors.sort_by(&:min).each do |range| %>
+                <td>
+                  <%= @school_student_by_level[school][srip_and_downcase(range.nombre)] %>
+                </td>
+              <% end %>
+            </tr>
+          <% #end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

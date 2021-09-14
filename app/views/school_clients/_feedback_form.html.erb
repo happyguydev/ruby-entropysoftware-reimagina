@@ -1,0 +1,42 @@
+<% if @feedback.present? %>
+  <div class='feed-back-form'>
+    <%= form_for @feedback, url: update_client_feedback_path, method: :post do |f| %>
+      <%= hidden_field_tag :order_id, @feedback.order_id %>
+
+      <% FeedItem.all.each_with_index do |f_item,index| %>
+        <div class='row'>
+          <%= hidden_field_tag ('feed['+ f_item.id.to_s) +'][item]', f_item.id.to_s %>
+          <%= hidden_field_tag ('feed['+ f_item.id.to_s) +'][score]', '' %>
+          <div class="item-name col-md-3"><%= f_item.nombre %>: </div>
+          <div class='item-score col-md-9' id="star_score_<%= f_item.id.to_s %>" ></div>
+        </div>
+      <% end %>
+
+      <br>
+      <div class="field">
+        <%= f.text_area :comentario, label: false, rows:3, cols: 50, input_html: {class: 'form-control feed-text'}, placeholder: 'Comentarios' %>
+      </div>
+
+      <div class="form-group col-md-12 update-feed">
+        <%= f.submit "Enviar" %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <%= @msg %>
+<% end %>
+
+<script>
+  $(function () {
+    $.each(<%= FeedItem.all.collect(&:id) %>, function(index,id){
+      $("#star_score_"+id).rateYo({
+        rating: 0,
+        spacing: "10px",
+        starWidth: "30px",
+        onSet: function (rating, rateYoInstance) {
+          $('#feed_'+id+'_score').val(Math.round(rating));
+        }
+      });
+    });
+  });
+</script>

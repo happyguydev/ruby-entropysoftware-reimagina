@@ -1,0 +1,6 @@
+var existingQueElement = $('#manage-questions').find('#existingQuestions')
+if (existingQuestions !== undefined) {
+	existingQuestions.remove();
+}
+$('#newQuestion').show();
+//$('#manage-questions').html("<%= escape_javascript(render('group_questions/new_question', questions: @questions)) %>");

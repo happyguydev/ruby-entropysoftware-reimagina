@@ -1,0 +1,8 @@
+<label>Objetivos de aprendizaje</label>
+<div class='select_goal'>
+  <%= select_tag 'unit[learning_goal_ids]', options_for_select(@learning_goals), label: false, multiple: true, class: "chosen-select" %>
+</div>
+
+<script>
+  $('.chosen-select').attr("data-placeholder", "Seleccione OA(s)").chosen();
+</script>

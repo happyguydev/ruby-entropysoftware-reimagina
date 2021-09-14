@@ -1,0 +1,3 @@
+$('#assigned_schools').modal('show');
+$('#assigned_schools').find('.modal-title').html('Establecimientos asignados');
+$('#assigned_schools').find('.modal-body').html("<%= escape_javascript render partial: 'assigned_schools' %>")

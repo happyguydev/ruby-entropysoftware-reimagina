@@ -1,0 +1,29 @@
+<h1>Lista de alumnos</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Rut</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @students.each do |student| %>
+      <tr>
+        <td><%= student.nombre %></td>
+        <td><%= student.apellido %></td>
+        <td><%= student.rut %></td>
+        <td><%= link_to 'Show', grade_student_path(@grade, student) %></td>
+        <td><%= link_to 'Edit', edit_grade_student_path(@grade, student) %></td>
+        <td><%= link_to 'Destroy', grade_student_path(@grade, student), method: :delete, data: { confirm: 'Seguro de que quieres borrar el registro?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Nuevo alumno', new_grade_student_path %>

@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  texto: MyText
+  assignature_id: 
+  level_id: 
+  bloom_ability_id: 
+  axes_content_id: 
+  ability_content_id: 
+  unit_id: 
+  learning_goal_id: 
+
+two:
+  texto: MyText
+  assignature_id: 
+  level_id: 
+  bloom_ability_id: 
+  axes_content_id: 
+  ability_content_id: 
+  unit_id: 
+  learning_goal_id: 

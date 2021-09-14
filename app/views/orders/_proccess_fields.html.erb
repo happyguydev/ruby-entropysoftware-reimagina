@@ -1,0 +1,31 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <!-- /.box-header -->
+        <div class="box-body">
+            <section class="content">
+              <div class='col-md-12 col-sm-12'>
+                  <div class='nested-fields'>
+                      <div class="field">
+                        <label>Proceso</label>
+                        <%= f.association :proc_type,:label_method => :nombre, :label => false, input_html: { class: 'form-control' } %></div>
+                      <div class="field">
+                        <label>Fecha activación</label>
+                        <%= f.input :fecha, :as => :date_picker , :label => false, input_html: {class: 'form-control'} %>
+                      </div>
+                      <div class="field">
+                        <label>Monto</label>
+                        <%= f.input :monto, :label => false, input_html: {class: 'form-control'} %>
+                      </div>
+                      <div class="field">
+                      <%= link_to_remove_association "Borrar proceso", f %>
+                      </div>
+                  </div>
+              </div>
+            </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

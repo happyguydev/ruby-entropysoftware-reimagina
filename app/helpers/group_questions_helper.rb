@@ -1,0 +1,2 @@
+module GroupQuestionsHelper
+end

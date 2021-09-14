@@ -1,0 +1,12 @@
+<p>
+  <strong>Nombre:</strong>
+  <%= @bloom_ability.nombre %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @bloom_ability.descripcion %>
+</p>
+
+<%= link_to 'Editar', edit_bloom_ability_path(@bloom_ability) %> |
+<%= link_to 'Volver', bloom_abilities_path %>

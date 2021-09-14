@@ -1,0 +1,54 @@
+<section class="content">
+
+  <div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title">Instrucciones</h3>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="display: block;">
+      <p>En esta ventana podrá generar los informes comparativos y consolidados.</p>
+      <ol type =1>
+        <li><p>Consolidado NIVEL : Evaluaciones NIVEL dentro de un año para un establecimiento.  </p></li>
+        <li><p>Consolidado SIMCE : Evaluaciones SIMCE dentro de un año para un establecimiento.  </p></li>
+        <li><p>Consolidado NIVEL Sostenedor : Evaluaciones NIVEL dentro de un año para todos los establecimientos de un sostenedor.  </p></li>
+        <li><p>Consolidado SIMCE Sostenedor : Evaluaciones SIMCE dentro de un año para todos los establecimientos de un sostenedor.  </p></li>
+        <li><p>Comparativo NIVEL : Comparación procesos NIVEL dentro de un año para un establecimiento.</p></li>
+        <li><p>Comparativo SIMCE : Comparación procesos SIMCE dentro de un año para un establecimiento.</p></li>
+      </ol>   
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <%= form_tag(compare_report_path, method: :post) do |f| %>
+        <div class="box col-sm-12 col-md-12 col-lg-12">
+          <div class="box-header">
+            <h3 class="box-title">Informes comparativos y consolidados</h3>
+          </div>
+          <div class="box-body">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 comparative-form">
+                <div class='col-md-3'>
+                  <b>Seleccione informe</b>
+                </div>
+                <div class='col-md-5'>
+                  <%= select_tag 'report', options_for_select(report_options, params[:report]), class: 'select_report chosen-select', onchange: "getFilterDate()" %>
+                </div>
+                <br><br>
+                <div id="filterDate"></div>
+                <div id="filterSchool"></div>
+                <div id="filterProccess"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

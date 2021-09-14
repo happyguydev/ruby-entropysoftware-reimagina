@@ -1,0 +1,101 @@
+<%= simple_form_for @question, defaults: { input_html: { class: '' } } do |f| %>
+<div class='col-md-12 col-sm-12'>
+  <% if @question.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+
+    <ul>
+      <% @question.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <% if @group_question && !@group_question.nil? %>
+    <%= f.input :group_question_id, as: :hidden, input_html: { value: @group_question.id } %>
+  <% end %>
+  <div class='col-md-3'>
+    <div class="form-group">
+      <%= f.label :assignature_id, "Asignatura" %><br>
+      <%= f.association :assignature, label: false, input_html: { class: 'form-control chosen-select' } %>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="form-group">
+      <%= f.label :level_id, "Nivel" %><br>
+      <%= f.association :level, label: false, disabled: true, input_html: { class: 'form-control chosen-select' } %>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="form-group">
+      <%= f.label :content_id, "Contenido" %><br>
+      <%= f.association :content, label: false, disabled: true, input_html: { class: 'form-control chosen-select' } %>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="form-group">
+      <%= f.label :bloom_ability_id, "Habilidad cognitiva" %><br>
+      <%= f.association :bloom_ability, label: false, input_html: { class: 'form-control chosen-select' } %>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="form-group">
+      <%= f.label :assignatur_ability_id, "Hab. propia de la asignatura" %><br>
+      <%= f.association :assignature_ability, label: false, disabled: true, input_html: { class: 'form-control chosen-select' } %>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="form-group">
+      <%= f.label :axis_id, "Eje asignatura" %><br>
+      <%= f.association :axis, label: false, disabled: true, input_html: { class: 'form-control chosen-select' } %>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="form-group">
+      <%= f.label :axis_program_id, "Eje programa" %><br>
+      <%= f.association :axis_program, label: false, disabled: true, input_html: { class: 'form-control chosen-select' } %>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="form-group">
+      <%= f.label :pme_ability_id, "Indicador PME" %><br>
+      <%= f.association :pme_ability, label: false, disabled: true, input_html: { class: 'form-control chosen-select' } %>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="form-group">
+      <%= f.label :learning_goal_id, "OA/AE/AF" %><br>
+      <%= f.association :learning_goal, label: false, disabled: true, input_html: { class: 'form-control chosen-select' } %>
+    </div>
+  </div>
+  <div class='col-md-3'>
+    <div class="form-group">
+      <%= f.label :difficulty_level_id, "Nivel de dificultad" %><br>
+      <%= f.association :difficulty_level, label: false, input_html: { class: 'form-control chosen-select' } %>
+    </div>
+  </div>
+  <div class='row col-md-12'>
+    <%= f.label "Enunciado pregunta" %><br><br>
+    <%= f.text_area :texto, class: 'rich-text-area-question', input_html: { class: 'form-control' } %>
+  </div>
+  <!-- Nested Form Alternatives -->
+  <%= f.simple_fields_for :alternatives do |al| %>
+  <div class='row col-md-12'>
+    <br/>
+    <label class="string optional">Alternativas</label>
+    <%= render 'questions/alternative_fields', :f => al %>
+    <br/>
+    <div class='links text-center'>
+      <%= link_to_add_association 'Agregar alternativa', f, :alternatives, class: 'btn btn-success' %>
+    </div>
+    <br/>
+  </div>
+  <% end %>
+
+  <!-- Nested Form Alternatives -->
+
+  <div class="form-group row col-md-12">
+    <%= f.submit "Aceptar", class: "btn btn-primary" %>
+  </div>
+</div>
+<% end %>

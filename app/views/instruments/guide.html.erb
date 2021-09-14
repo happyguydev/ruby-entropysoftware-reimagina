@@ -1,0 +1,54 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Pauta de correccion <%= @instrument.nombre %>, <%= @instrument.evaluation.assignature.nombre %>, <%= @instrument.evaluation.level.nombre %>, <%= @instrument.evaluation.try(:year) %></h3><br>
+        <button type="button" class="btn btn-default"><%= link_to 'Generar PDF', guide_instrument_url(@instrument, format: :pdf), target: "_blank" %></button>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class='col-md-12 col-sm-12 col-lg-12'>
+            <table class='table table-condensed table-bordered text-center'>
+              <thead>
+                <th class='text-center'>Reactivo</th>
+                <th class='text-center'>Clave</th>
+                <th class='text-center'>Contenido</th>
+                <th class='text-center'>Eje de asignatura</th>
+                <th class='text-center'>Eje de programa</th>
+                <th class='text-center'>Indicador PME</th>
+                <th class='text-center'>Habilidad Cognitiva</th>
+                <th class='text-center'>Habilidad propia de la asignatura</th>
+                <th class='text-center'>Unidad</th>
+                <th class='text-center'>OA Nº</th>
+                <th class='text-center'>Nivel de dificultad</th>
+                <th class='text-center'>Remedial</th>
+              </thead>
+              <tbody>
+                <% @instrument.guides.order(:question_index).each do |g| %>
+                <tr>
+                  <td><%= g.question_index %></td>
+                  <td><%= g.alternative_index %></td>
+                  <td><%= g.question.try(:content).try(:nombre).try(:mb_chars).try(:upcase) %></td>
+                  <td><%= g.question.try(:axis).try(:nombre).try(:mb_chars).try(:upcase) %></td>
+                  <td><%= g.question.try(:axis_program).try(:nombre).try(:mb_chars).try(:upcase) %></td>
+                  <td><%= g.question.try(:pme_ability).try(:nombre).try(:mb_chars).try(:upcase) %></td>
+                  <td><%= g.question.try(:bloom_ability).try(:nombre).try(:mb_chars).try(:upcase) %></td>
+                  <td><%= g.question.try(:assignature_ability).try(:nombre).try(:mb_chars).try(:upcase) %></td>
+                  <td><%= g.question.try(:units).try(:map){|u| u.try(:numero)}.reject { |e| e.to_s.empty? }.uniq.try(:sort).try(:join, ("-")) %></td>
+                  <td><%= g.question.try(:learning_goals).try(:map){|oa| oa.try(:nombre)}.reject { |e| e.to_s.empty? }.try(:sort).try(:join, ("-")) %></td>
+                  <td><%= g.question.try(:difficulty_level).try(:name).try(:mb_chars).try(:upcase) %></td>
+                  <td><%= g.question.try(:advice).try(:name).try(:mb_chars).try(:upcase) %></td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+
+
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>

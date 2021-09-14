@@ -1,0 +1,29 @@
+
+<%= simple_form_for([@order,@payment]) do |f| %>
+<%= f.error_notification %>
+
+<div class="form-group col-md-2">
+  <label>Fecha de pago</label>
+  <%= f.input :fecha, :as => :date_picker, :label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="form-group col-md-2">
+  <label>Monto</label>
+  <%= f.input :monto, :label => false, input_html: {class: 'form-control',  min: '0', step: 'any'} %>
+</div>
+
+<div class="form-group col-md-2">
+  <label>Comentario</label>
+  <%= f.input :comentario, :label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="form-group col-md-2">
+  <label>Pagado</label>
+  <%= f.input :paid, :label => false, as: :radio_buttons,:item_wrapper_class => 'inline', :default => false %>
+</div>
+
+<div class="form-group col-md-12">
+  <%= f.button :submit , 'Enviar'%>
+</div>
+
+<% end %>

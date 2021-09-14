@@ -1,0 +1,43 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <%= link_to 'Crear preguntas asociadas', new_group_question_path, remote: true, class: 'btn btn-info pull-right'%>
+          <h3 class="box-title">Grupos de preguntas asociadas</h3>
+        </div>
+        <h4>Click en el enunciado para ver las preguntas que contiene el grupo.</h4>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="form-inline dt-bootstrap">
+            <div class="row">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="overflow-x: auto">
+                <table id='group_questions-table' class="table table-bordered table-hover dataTable" data-source='<%= group_questions_path(format: :json) %>'>
+                  <thead>
+                    <tr>
+                      <th>Id de grupo</th>
+                      <th>Enunciado general</th>
+                      <th>Cant. preguntas</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row"></div>
+            <div class="col-sm-7"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+

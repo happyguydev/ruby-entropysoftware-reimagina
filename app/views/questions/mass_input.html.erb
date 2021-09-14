@@ -1,0 +1,83 @@
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box col-sm-12 col-md-12 col-lg-12">
+                <div class="box-header">
+                    <h3 class="box-title">Ingreso masivo de evaluaciones</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="dataTables_wrapper form-inline dt-bootstrap" id="example2_wrapper">
+                        <div id="mass-input">
+                            <div class="col-md-12">
+
+                                <div class="field">
+                                  <label for="evaluacion">Nombre</label>
+                                    <input class='form-control' id="evaluation_name" style="width: 100%;"></input>
+                                    <span class="validate-evaluation_name"></span>
+                                </div>
+
+                                <div class="field">
+                                    <label for="evaluacion">Cantidad de alternativas por pregunta</label>
+                                    <select id="alternatives_amount" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true">
+                                        <% (1..5).each do |y| %>
+                                        <% if y == 4 %>
+                                        <option value='<%=y  %>' selected="selected"><%= y %></option>
+                                        <%else%>
+                                        <option value='<%=y  %>'><%= y %></option>
+                                        <%end%>
+                                        <%end%>
+                                    </select>
+                                </div>
+
+                                <label for="evaluacion">Año</label>
+                                <select id="evaluation_year" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true">
+                                    <% (2000..2040).each do |y| %>
+                                    <% if y == DateTime.now.year%>
+                                    <option value='<%=y  %>' selected="selected"><%= y %></option>
+                                    <%else%>
+                                    <option value='<%=y  %>'><%= y %></option>
+                                    <%end%>
+                                    <%end%>
+                                </select>
+
+                                <div class="field">
+                                    <label for="evaluacion">Curso</label>
+                                    <select id="level_id" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true">
+                                        <% Level.all.each do |l| %>
+                                        <option value='<%=l.short_name %>'><%= l.nombre%></option>
+                                        <%end%>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label for="evaluacion">Tipo</label>
+                                    <select id="evaluation_type" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true">
+                                        <% EvaluationType.all.each do |e| %>
+                                        <option value='<%=e.short_name %>'><%= e.nombre%></option>
+                                        <%end%>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label for="asignatura">Asignatura</label>
+                                    <select id="assignature_id" class="form-control select2 select2-hidden-accessible" style="width: 100%;" aria-hidden="true">
+                                        <% Assignature.all.each do |a| %>
+                                        <option value='<%=a.short_name %>'><%= a.nombre%></option>
+                                        <%end%>
+                                    </select>
+                                </div>
+                                <div id='ingreso_especificaciones' class='handsontable'></div>
+                                <button class='btn btn-success' id="mq_bt">Enviar ingreso masivo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- /.box-body -->
+    </div>
+</div>
+</section>

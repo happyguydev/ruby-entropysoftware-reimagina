@@ -1,0 +1,2 @@
+module AssignedSchoolsHelper
+end

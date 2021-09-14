@@ -1,0 +1,51 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Preguntas</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="dataTables_wrapper form-inline dt-bootstrap" id="example2_wrapper">
+            <div class="row">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="overflow-x: auto">
+                <table id='questions-list-table' class="table table-bordered table-hover dataTable" data-source='<%= questions_path(format: :json) %>'>
+                  <thead>
+                    <tr>
+                      <th>Enunciado</th>
+                      <th>Asignatura</th>
+                      <th>Nivel</th>
+                      <th>Contenido</th>
+                      <th>Hab. cognitiva</th>
+                      <th>Hab. prop. asig.</th>
+                      <th>Eje asignatura</th>
+                      <th>Eje programa</th>
+                      <th>Indicador PME</th>
+                      <th>Unidad</th>
+                      <th>OA</th>
+                      <th>Dificultad</th>
+                      <th>Pregunta de grupo Id</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row"></div>
+            <div class="col-sm-7"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<%= link_to 'Nueva Pregunta', new_question_path %>

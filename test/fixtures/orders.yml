@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  school_id: 1
+  year: 1
+  paymethod: MyString
+  contract: MyString
+
+two:
+  school_id: 1
+  year: 1
+  paymethod: MyString
+  contract: MyString

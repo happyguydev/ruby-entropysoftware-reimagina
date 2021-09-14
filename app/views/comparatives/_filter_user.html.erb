@@ -1,0 +1,7 @@
+<div class='col-md-3'>
+  <b>Seleccione usuario DAEM:</b>
+</div>
+<div class='col-md-5'>
+  <%= select_tag 'user', options_for_select(@users), class: 'select_school chosen-select', onchange: 'getFilterProccess()' %>
+</div><br><br>
+

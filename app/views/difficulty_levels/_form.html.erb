@@ -1,0 +1,10 @@
+<%= simple_form_for(@difficulty_level) do |f| %>
+<div class="form-inputs">
+  <label>Nombre</label>
+  <%= f.input :name , label: false, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="form-actions">
+  <%= f.button :submit , 'Enviar' %>
+</div>
+<% end %>

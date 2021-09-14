@@ -1,0 +1,105 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Facturas</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class='col-md-12 col-sm-12'>
+            <section class="content-header">
+              <h3>
+                Resumen facturas por año
+              </h3>
+            </section>
+            <section class="content">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="overflow-x: auto">
+                <h3>Facturas emitidas</h3>
+                <h4>Filtre columna "año" y luego exporte a Excel</h4>
+                <table id='facturas-table' class="table table-bordered table-hover dataTable" data-source=' /orders/facturas.json'>
+                  <thead>
+                    <tr>
+                      <th>Año orden</th>
+                      <th>Colegio</th>
+                      <th>Comuna</th>
+                      <th>Región</th>
+                      <th>Folio</th>
+                      <th>Monto</th>
+                      <th>Fecha Emision</th>
+                      <th>Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+          </div>
+
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Resumenes</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class='col-md-12 col-sm-12'>
+            <section class="content-header">
+              <h3>
+                Resumen facturas y pagos por año
+              </h3>
+            </section>
+            <section class="content">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="overflow-x: auto">
+                <h3>Facturas y pagos por año</h3>
+    			<table class="table table-bordered table-hover dataTable">
+                  <thead>
+                    <tr>
+                      <th>Año</th>
+                      <th>Total facturado</th>
+                      <th>Total no facturado</th>
+                      <th>Total cobrado </th>
+                      <th>Total adeudado</th>
+                      <th>Total pagado</th>
+                      <th>Cantidad ordenes</th>
+                      <th>Cantidad facturas</th>
+                      <th>Cantidad OC</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  	<% @resumen.each_with_index do |p,i| %>
+                  	<tr>
+                  	<% p.each_with_index do |pq,pi| %>
+                      <%if (1..5).include?(pi) %>
+                  		<td><%= number_to_clp(pq)%> </td>
+                      <%else%>
+                        <td><%= pq%> </td>
+                      <%end%>
+                  	<%end%>
+                  	</tr>
+                  	<%end%>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+          </div>
+
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>

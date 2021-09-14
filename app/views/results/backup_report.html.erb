@@ -1,0 +1,320 @@
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+<style>
+  .pb_before { page-break-before:always !important; }
+  .pb_after  { page-break-after:always !important; }
+  .pbi_avoid { page-break-inside:avoid !important; }
+  .page-break { display:block; clear:both; page-break-after:always; }
+  .spacer50 { heigth: 50px; }
+  body { font-size: 14px; }
+  h3 { font-size: 18px; }
+  h4 { font-size: 15px; }
+  .smaller-font { font-size: 10px; }
+</style>
+
+<div class='col-md-12 text-center pb_after'>
+  <h1><%= @data[20][0] %></h1>
+  <h1><%= @data[20][1] %></h1>
+  <h2><%= @data[20][2]+' '+@data[20][3] %></h2>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <%= wicked_pdf_image_tag 'informe_portada.jpg' %>
+</div>
+
+<div class='col-md-12'>
+  <div class='col-md-12 text-center'>
+    <h3>Analisis por <%= @pauta[0][4] %></h3>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='col-md-10 col-md-offset-1'>
+    <table class="table table-bordered table-hover dataTable">
+      <thead>
+        <th><%= @pauta[0][4] %></th> 
+        <th>Cantidad de Preguntas</th>
+        <th>Promedio Resp. Correctas</th>
+      </thead>
+
+      <tbody>
+        <% @data[12].each do |ae| %>
+        <tr>
+          <td><%= ae[0] %></td>
+          <td><%= ae[1] %></td>
+          <td><%= ae[3] %>%</td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class='col-md-12 text-center'>
+    <%= column_chart @data[12].map{|d| [d[0], d[3]] } %>
+  </div>
+  <div class='col-md-12 text-center'>
+    SG: <%= @data[13] %>
+    Ausentes : <%= @data[17] %>
+    Rendidos : <%= @data[0].length - @data[17] %>
+    Matrícula : <%= @data[0].length %>
+  </div>
+</div>
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3>Análisis por <%= @pauta[0][3] %></h3>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='col-md-10 col-md-offset-1'>
+    <table class="table table-bordered table-hover dataTable">
+      <thead>
+        <th><%= @pauta[0][3] %></th>
+        <th>N° Preguntas</th>
+        <th>% Correctas</th>
+      </thead>
+      <tbody>
+        <% @data[6].each do |ah| %>
+        <tr>
+          <td><%= ah[0] %></td>
+          <td><%= ah[1] %></td>
+          <td><%= ah[3] %>%</td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <%= column_chart @data[6].map{|d| [d[0], d[3]] } %>
+
+  <p><%= @pauta[0][3] %> mejor lograda : <%= @data[6].sort {|a,b| a[3] <=> b[3]}.last[0] %>
+    con : <%= @data[6].sort {|a,b| a[3] <=> b[3]}.last[3] %> %</p>
+
+  <p><%= @pauta[0][3] %> menos lograda : <%= @data[6].sort {|a,b| a[3] <=> b[3]}.first[0] %>
+    con : <%= @data[6].sort {|a,b| a[3] <=> b[3]}.first[3] %> %</p>
+</div>
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3>Análisis por <%= @pauta[0][2]+' '+ @pauta[0][3] %></h3>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <% @data[8].each_with_index do |hc,i| %>
+  <div class='col-md-10 col-md-offset-1'>
+    <h4><%= hc[0][0] %></h4>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='col-md-10 col-md-offset-1'>
+    <table class="table table-bordered table-hover dataTable">
+      <thead>
+        <th><%= @pauta[0][3] %></th>
+        <th><%= @pauta[0][2]+' '+ @pauta[0][3].split.first %></th>
+        <th>Cantidad Preguntas</th>
+        <th>Promedio Resp. Correctas</th>
+      </thead>
+      <tbody>
+        <% @data[8][i].each do |ah| %>
+        <tr>
+          <td><%= ah[0] %></td>
+          <td><%= ah[1] %></td>
+          <td><%= ah[2] %></td>
+          <td><%= ah[4] %>%</td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class='col-md-12 pb_after'>
+    <%= column_chart @data[8][i].map{|d| [d[1], d[3]] } %>
+  </div>
+  <% end %>
+</div>
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3><%= @pauta[0][3] +' y '+ @pauta[0][5] %> de cada pregunta.</h3>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <div class='col-md-10 col-md-offset-1'>
+    <% @data[14].each_slice(20) do |slice| %>
+    <table class='table table-bordered table-condensed pb_after'>
+      <thead>
+        <th>Nº</th>
+        <th><%= @pauta[0][3] %></th>
+        <th><%= @pauta[0][2] %></th>
+        <th><%= @pauta[0][5] %></th>
+        <th>Alumnos Lograron</th>
+        <th>Alumnos no Lograron</th>
+      </thead>
+
+      <tbody>
+        <% slice.each do |ae| %>
+        <tr>
+          <td><%= ae[0] %></td>
+          <td class='smaller-font'><%= ae[1] %></td>
+          <td class='smaller-font'><%= ae[2] %></td>
+          <td class='smaller-font'><%= ae[3] %></td>
+          <td><%= ae[4] %></td>
+          <td><%= ae[5] %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% end %>
+  </div>
+</div>
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3>Logro por alumno</h3>
+  </div>
+  <div class='spacer50'>&nbsp;</div>
+  <table class='table table-bordered'>
+    <thead>
+      <th>Nombre</th>
+      <th>Porcentaje</th>
+      <th>Nombre</th>
+      <th>Porcentaje</th>
+    </thead>
+    <tbody>
+      <% @data[10][0].each_slice(2) do |slice| %>
+      <tr>
+        <% slice.each do |ah| %>
+        <td><%= ah[0] %></td>
+        <td><%= ah[1] %>%</td>
+        <% end %>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  Promedio Curso % de logro : <%= @data[10][1] %>%
+  Nivel de logro promedio curso : <%= @data[10][2] %>
+  N° Alumnos que rindieron la evaluación : <%= @data[0].length - @data[17] %>
+  N° Alumnos ausentes : <%= @data[17] %>
+</div>
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3>CUADRO DE ALUMNOS POR NIVEL DE LOGROS CORRESPONDIENTE A LA EVALUACIÓN TOTAL</h3>
+  </div>
+  <table class='table table-bordered'>
+    <thead>
+      <th>Ausente</th>
+      <th>Bajo</th>
+      <th>Medio Bajo</th>
+      <th>Medio Alto</th>
+      <th>Alto</th>
+    </thead>
+
+    <tbody>
+      <% @data[15][0].each do |ae| %>
+      <tr>
+        <td><%= ae[0] %></td>
+        <td><%= ae[1] %></td>
+        <td><%= ae[2] %></td>
+        <td><%= ae[3] %></td>
+        <td><%= ae[4] %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <table class='table table-bordered'>
+    <thead>
+      <th bgcolor="gray">Ausente</th>
+      <th bgcolor="red">Bajo</th>
+      <th bgcolor="yellow">Medio Bajo</th>
+      <th bgcolor="orange">Medio Alto</th>
+      <th bgcolor="green">Alto</th>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>Total <%= @data[15][2][0] %></td>
+        <td>Total <%= @data[15][2][1] %></td>
+        <td>Total <%= @data[15][2][2] %></td>
+        <td>Total <%= @data[15][2][3] %></td>
+        <td>Total <%= @data[15][2][4] %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3>Análisis por <%= @pauta[0][2]+' '+ @pauta[0][4]%> </h3>
+  </div>
+  <% @data[19].each_with_index do |hc,i| %>
+   <div class='col-md-10 col-md-offset-1'>
+    <h4><%= hc[0][0] %></h4>
+  </div>
+  <table class="table table-bordered table-hover dataTable">
+    <thead>
+      <th>Eje</th>
+      <th>Contenidos Eje</th>
+      <th>Cantidad Preguntasd</th>
+      <th>Promedio Resp. Correctas</th>
+    </thead>
+    <tbody>
+      <% @data[19][i].each do |ah| %>
+      <tr>
+        <td><%= ah[0] %></td>
+        <td><%= ah[1] %></td>
+        <td><%= ah[2] %></td>
+        <td><%= ah[4] %>%</td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class='col-md-12 pb_after'>
+    <%= column_chart @data[19][i].map{|d| [d[1], d[4]] }  %>
+  </div>
+  <% end %>
+</div>
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3><%= @pauta[0][5] %></h3>
+  </div>
+  <table class='table table-bordered'>
+    <thead>
+      <th><%= @pauta[0][6] %></th>
+      <th>Cantidad de Preguntas</th>
+      <th>Promedio Resp. Correctas</th>
+    </thead>
+    <tbody>
+      <% @data[18].each do |ah| %>
+      <tr>
+        <td><%= ah[0][1] %></td>
+        <td><%= ah[1] %></td>
+        <td><%= ah[3] %>%</td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<p><%= @pauta[0][5].split.first %> mejor logrado : <%= @data[18].sort {|a,b| a[3] <=> b[3]}.last[0][1] %>
+  con : <%= @data[18].sort {|a,b| a[3] <=> b[3]}.last[3] %> %</p>
+
+<p><%= @pauta[0][5].split.first %> menos logrado : <%= @data[18].sort {|a,b| a[3] <=> b[3]}.first[0][1] %>
+  con : <%= @data[18].sort {|a,b| a[3] <=> b[3]}.first[3] %> %</p>
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12 text-center'>
+    <h3>Glosario OA</h3>
+  </div>
+  <table class='table table-bordered'>
+    <thead>
+      <th><%= @pauta[0][5] %></th>
+      <th><%= @pauta[0][6] %></th>
+    </thead>
+
+    <tbody>
+      <% @data[5].each do |oa| %>
+      <tr>
+        <td><%= oa[0] %></td>
+        <td><%= oa[1] %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

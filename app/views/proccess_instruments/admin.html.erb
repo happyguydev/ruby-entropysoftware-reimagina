@@ -1,0 +1,91 @@
+<% if cookies[:added_to_sidekiq] %>
+<div class="modal fade in sidekiq_modal" tabindex="-1" role="dialog" style="display: block;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Generando informe</h4>
+      </div>
+      <div class="modal-body">
+        <p>El informe se está generando, favor refrescar la página en unos minutos.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default close-modal" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script type="text/javascript">
+  $(document).on('click', '.close-modal', function(){
+    $('.sidekiq_modal').hide();
+  })
+</script>
+<% cookies.delete :added_to_sidekiq %>
+<% end %>
+<section class="content">
+  <div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title">Instrucciones</h3>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="display: block;">
+      <ol type =1>
+        <li><p>En esta ventana podrá ver todas las evaluaciones asignadas a los Establecimientos, e ingresar las respuestas/generar informes según corresponda.</p></li>
+
+        <li><p>Si el Establecimiento no ha enviado respuestas aparecerá el ícono de "Ingresar respuestas <i class="fa fa-check-circle" aria-hidden="true"></i>" . Una vez se hayan ingresado las respuestas aparecerán los íconos de "Descargar informe <i class="fa fa-download" aria-hidden="true"></i>" y "Borrar respuestas ingresadas <i class="fa fa-times" aria-hidden="true"></i>".
+          </p></li>
+
+                    <li><p> Mientras el informe se esté generando se mostrará el ícono <i class="fa fa-clock" aria-hidden="true"></i>" junto a las opciones .</p></li>
+
+
+          <li><p>Pasado un tiempo los informes se borrarán del sistema, pudiendo volver a generarlos con el botón "Re-generar informe <i class="fa fa-undo" aria-hidden="true"></i>".</p></li>
+
+      </ol>   </div>
+    <!-- /.box-body -->
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Instrumentos asignados</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="dataTables_wrapper form-inline dt-bootstrap" id="example2_wrapper">
+            <div class="row">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="overflow-x: auto">
+                <table id='proccess_instrument_admin-table'  class="table table-bordered table-hover dataTable" data-source='<%=  admin_proccess_instruments_path(format: :json) %>'>
+                  <thead>
+                    <tr>
+                      <th>Año</th>
+                      <th>Establecimiento</th>
+                      <th>Curso</th>
+                      <th>Letra</th>
+                      <th>Asignatura</th>
+                      <th>Proceso</th>
+                      <th>Acciones</th>
+                      <th>Resultados</th>                      
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row"></div>
+            <div class="col-sm-7"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>

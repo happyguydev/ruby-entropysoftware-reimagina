@@ -1,0 +1,17 @@
+<p>
+  <strong>Nombre:</strong>
+  <%= @student.nombre %>
+</p>
+
+<p>
+  <strong>Apellido:</strong>
+  <%= @student.apellido %>
+</p>
+
+<p>
+  <strong>Rut:</strong>
+  <%= @student.rut %>
+</p>
+
+<%= link_to 'Edit', edit_student_path(@student) %> 
+<%= link_to 'Back', grade_students_path(@grade) %>

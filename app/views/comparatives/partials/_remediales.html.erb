@@ -1,0 +1,44 @@
+<!-- REMEDIALES  6-->
+
+<div class='col-md-12 pb_before'>
+  <div class='col-md-12'>&nbsp;</div>
+  <h3>Remediales por contenido</h3>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'>Pregunta</th>
+      <th class='text-center'>Contenido</th>
+      <th class='text-center'>Remediales</th>
+    </thead>
+    <tbody>
+      <% @remediales_table.each do |oa| %>
+        <tr>
+          <td class='text-center'><%= oa[:num] %></td>
+          <td class='text-center'><%= oa[:contenido] %></td>
+          <td class='text-left'><%= oa[:remedial] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'>Pregunta</th>
+      <th class='text-center'>Contenido</th>
+      <th class='text-center'>Remediales</th>
+    </thead>
+    <tbody>
+      <% @remediales_table_2.each do |oa| %>
+        <tr>
+          <td class='text-center'><%= oa[:num] %></td>
+          <td class='text-center'><%= oa[:contenido] %></td>
+          <td class='text-left'><%= oa[:remedial] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

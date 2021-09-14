@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order_id: 1
+  numero: 1
+  fecha: 2015-09-28 02:31:52
+  monto: 1
+
+two:
+  order_id: 1
+  numero: 1
+  fecha: 2015-09-28 02:31:52
+  monto: 1

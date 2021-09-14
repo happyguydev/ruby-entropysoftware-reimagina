@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  assignature_id: 
+  level_id: 
+  numero: MyString
+  descripcion: MyText
+
+two:
+  assignature_id: 
+  level_id: 
+  numero: MyString
+  descripcion: MyText

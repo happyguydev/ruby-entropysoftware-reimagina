@@ -1,0 +1,107 @@
+<%= simple_form_for @school do |f| %>
+<div class="field">
+  <label>RBD</label>
+  <%= f.input :rbd, :label => false, input_html: {class: 'form-control'} %>
+</div>
+<div class="field">
+  <label>Nombre</label>
+  <%= f.input :nombre, :label => false, input_html: {class: 'form-control'} %>
+</div>
+  <% if !@school.new_record? and @school.commune %>
+  <div class="field">
+    <label>Región</label>
+    <%= f.select(:region, options_for_select( Region.all.map{ |r| [r.name , r.id] },  @school.commune.region.id), {}, {class: "form-control"} ) %>
+  </div>
+  <div class="form-group">
+    <label>Comuna</label>
+    <%= f.select(:commune_id, options_for_select([[@school.commune.name, @school.commune.id]]), {}, {class: "form-control"}) %>
+  </div>
+  <% else %>
+  <div class="field">
+    <label>Región</label>
+    <%= f.select(:region, options_for_select(Region.all.map{ |r| [r.name , r.id] }), {:include_blank => "Seleccione región"}, {class: "form-control"}) %>
+  </div>
+  <div class="form-group">
+    <label>Comuna</label>
+    <%= f.select(:commune_id, options_for_select([]), {:include_blank => "Seleccione región"}, {class: "form-control"}) %>
+  </div>
+  <% end %>
+
+<div class="form-group">
+  <label>Dependencia</label>
+  <%= f.select(:dependencia, options_for_select(["Municipal", "Particular Subvencionado", "Particular No Subvencionado"]), {}, {class: "form-control"}) %>
+</div>
+
+<div class="field">
+  <label>RUT Facturas</label>
+  <%= f.input :rut, :label => false, input_html: {class: 'form-control'} %>
+</div>
+<div class="field">
+  <label>Razón Social</label>
+  <%= f.input :socialmean, :label => false, input_html: {class: 'form-control'} %>
+</div>
+<div class="field">
+  <label>Dirección</label>
+  <%= f.input :direccion, :label => false, input_html: {class: 'form-control'} %>
+</div>
+<div class="field">
+  <label>Correo electrónico</label>
+  <%= f.input :email, :label => false, input_html: {class: 'form-control'} %>
+</div>
+<div class="field">
+  <label>Teléfono</label>
+  <%= f.input :telefono, :label => false, input_html: {class: 'form-control'} %>
+</div>
+<div class="field">
+  <label>Comentarios</label>
+  <%= f.input :info_contacto, :label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<%if current_user.user_type.role.eql?('admin')|| current_user.has_role?(:general)%>
+<div class="field">
+      <%= f.label :logo %><br />
+      <%= f.file_field :logo ,  onchange: "validateFiles(this);",
+    data: { max_file_size: 1.megabytes }%><%=image_tag @school.logo.url(:thumb)%>
+    </div>
+<%end%>
+
+  <h3>Cuentas de usuario</h3>
+  <div id='users'>
+    <%= f.simple_fields_for :users do |user| %>
+      <%= render 'user_fields', :f => user %>
+    <% end %>
+    <div class='links'>
+      <%= link_to_add_association 'Agregar usuario', f, :users %>
+    </div>
+  </div>
+    <%= f.submit 'Guardar', class: 'btn btn-primary pull-left' %>
+<% end %>
+
+
+<script type="text/javascript">
+  function validateFiles(inputFile) {
+  var maxExceededMessage = "Tamaño máximo de logo 1MB";
+  var extErrorMessage = "Sólo extensones: .jpg, .jpeg, .gif or .png permitidas";
+  var allowedExtension = ["jpg", "jpeg", "gif", "png","JPG","JPEG","GIF","PNG"];
+
+  var extName;
+  var maxFileSize = $(inputFile).data('max-file-size');
+  var sizeExceeded = false;
+  var extError = false;
+
+  $.each(inputFile.files, function() {
+    if (this.size && maxFileSize && this.size > parseInt(maxFileSize)) {sizeExceeded=true;};
+    extName = this.name.split('.').pop();
+    if ($.inArray(extName, allowedExtension) == -1) {extError=true;};
+  });
+  if (sizeExceeded) {
+    window.alert(maxExceededMessage);
+    $(inputFile).val('');
+  };
+
+  if (extError) {
+    window.alert(extErrorMessage);
+    $(inputFile).val('');
+  };
+}
+</script>

@@ -1,0 +1,12 @@
+<p>
+  <strong>Nombre:</strong>
+  <%= @evaluation_type.nombre %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @evaluation_type.descripcion %>
+</p>
+
+<%= link_to 'Edit', edit_evaluation_type_path(@evaluation_type) %> |
+<%= link_to 'Back', evaluation_types_path %>

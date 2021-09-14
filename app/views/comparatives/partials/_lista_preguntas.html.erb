@@ -1,0 +1,58 @@
+<!--Item 4 Contenidos habilidad/eje PME--> 
+
+<div class='col-md-12'>
+  <div class='col-md-12'>&nbsp;</div>
+  <h3><%= @pme_oa_title %> de cada pregunta</h3>
+</div>
+<div class='col-md-12'>&nbsp;</div>
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'>N°</th>
+      <th class='text-center'><%= @pme_oa_title_1 %></th>
+      <th class='text-center'><%= @pme_oa_title_2 %></th>
+      <th class='text-center'><%= @pme_oa_title_3 %></th>
+      <th class='text-center'>Alumnos lograron</th>
+      <th class='text-center'>Alumnos no lograron</th>
+    </thead>
+    <tbody>
+      <% @pme_oa.each do |aa| %>
+        <tr <% if aa[:lograron] <= @descendidos %> style="background-color: yellow;" <% end %>>
+          <td><%= aa[:num] %></td>
+          <td><%= aa[:pme] %></td>
+          <td><%= aa[:contenido] %></td>
+          <td class='text-center'><%= aa[:oa] %></td>
+          <td class='text-center'><%= aa[:lograron] %></td>
+          <td class='text-center'><%= aa[:no_lograron] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <i>* Objetivo de aprendizaje del curso anterior</i>    
+</div>
+<div class='col-md-12'>
+  <table class='table table-pdf table-condensed table-bordered'>
+    <thead>
+      <th class='text-center'>N°</th>
+      <th class='text-center'><%= @pme_oa_title_1 %></th>
+      <th class='text-center'><%= @pme_oa_title_2 %></th>
+      <th class='text-center'><%= @pme_oa_title_3 %></th>
+      <th class='text-center'>Alumnos lograron</th>
+      <th class='text-center'>Alumnos no lograron</th>
+    </thead>
+    <tbody>
+      <% @pme_oa_2.each do |aa| %>
+        <tr <% if aa[:lograron] <= @descendidos %> style="background-color: yellow;" <% end %>>
+          <td><%= aa[:num] %></td>
+          <td><%= aa[:pme] %></td>
+          <td><%= aa[:contenido] %></td>
+          <td class='text-center'><%= aa[:oa] %></td>
+          <td class='text-center'><%= aa[:lograron] %></td>
+          <td class='text-center'><%= aa[:no_lograron] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div id='chart_contents_pme' class='col-md-12'></div>
+</div>

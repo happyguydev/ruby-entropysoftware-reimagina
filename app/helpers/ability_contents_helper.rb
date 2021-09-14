@@ -1,0 +1,2 @@
+module AbilityContentsHelper
+end

@@ -1,0 +1,66 @@
+<section class="content">
+  <div class="box box-info">
+    <div class="box-header with-border">
+      <h3 class="box-title">Instrucciones</h3>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        </button>
+      </div>
+      <!-- /.box-tools -->
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" style="display: block;">
+      <ol type =1>
+        <li><p>En esta ventana podrá descargar las evaluaciones y guías asociadas a estas para posteriormente enviar los resultados y generar el informe..</p></li>
+
+        <li><p>Si Ud. tiene pendiente el envío de resultados podrá descargar la evaluación en PDF mediante el botón  "<i class="fa fa-download"></i>" . Una vez se hayan ingresado las respuestas ya no estarán disponibles las evaluaciones para descargar.
+          </p></li>
+
+        <li><p>Con el ícono <i class="fa fa-info-circle"></i> podrá descargar la guía en PDF si hubiera disponible.
+          </p></li>
+      </ol>   </div>
+
+    <!-- /.box-body -->
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <h3 class="box-title">Evaluaciones</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="dataTables_wrapper form-inline dt-bootstrap" id="example2_wrapper">
+            <div class="row">
+              <div class="col-sm-6"></div>
+              <div class="col-sm-6"></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="overflow-x: auto">
+                <table id='school-evaluations-table' class="table table-bordered table-hover dataTable" data-source='<%= school_client_evaluation_path(format: :json) %>'>
+                  <thead>
+                    <tr>
+                      <th>Año</th>
+                      <th>Nombre</th>
+                      <th>Tipo</th>
+                      <th>Asignatura</th>
+                      <th>Nivel</th>
+                      <th>Opciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row"></div>
+            <div class="col-sm-7"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<%= render 'assigned_schools/assigned_schools_modal' %>

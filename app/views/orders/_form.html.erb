@@ -1,0 +1,47 @@
+<%= simple_form_for @order do |f| %>
+
+<div class="field">
+  <label>Establecimiento</label>
+  <%= f.association :school,:label_method => lambda { |item| "RBD #{item.rbd } -  #{item.try(:nombre)} - #{item.commune.try(:name)} ".html_safe }, value_method: :id, input_html: {class: 'chosen-select'}, collection: School.all, :label => false
+%>
+</div>
+
+<div class="field">
+  <label>Año</label>
+  <%= f.input :year, :label => false, collection: 2015..2025, selected: DateTime.now.year, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="field">
+  <label>Forma de pago</label><br>
+  <%= f.input :paymethod , collection: ["Licitacion", "OC Directa","Gratis","Mensual","Semestral","Anual"] , prompt: "Seleccione una opcion",:label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="field">
+  <label>N° Licitacion</label><br>
+  <%= f.input :licitacion, :label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="field">
+  <label>Contrato</label><br>
+  <%= f.input :contract, collection: [ "SI", "NO"], prompt: "Seleccione una opcion", :label => false, input_html: { class: 'form-control'} %>
+</div>
+<div class="field">
+  <label>Pagador</label>
+  <%= f.association :payer_type, input_html: {class: 'chosen-select'},:label => false,:label_method => :nombre
+%>
+</div>
+<div class="field">
+  <label>Servicio</label>
+  <%= f.association :service_type, input_html: {class: 'chosen-select'},:label => false
+%>
+</div>
+
+<div class="field">
+  <label>Puede descargar evaluaciones</label>
+  <%= f.input :can_download, :label => false, as: :radio_buttons,:item_wrapper_class => 'inline', :default => true %>
+</div>
+
+<div class="actions">
+  <%= f.button :submit , 'Enviar'%>
+</div>
+<% end %>

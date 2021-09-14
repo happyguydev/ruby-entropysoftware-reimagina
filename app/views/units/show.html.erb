@@ -1,0 +1,41 @@
+<p>
+  <strong>Assignature:</strong>
+  <%= @unit.assignature %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @unit.level %>
+</p>
+
+<p>
+  <strong>Numero:</strong>
+  <%= @unit.numero %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @unit.descripcion %>
+</p>
+
+<div id="hot"></div>
+<script>
+  var data = [
+    ["", "Kia", "Nissan", "Toyota", "Honda"],
+    ["2008", 10, 11, 12, 13],
+    ["2009", 20, 11, 14, 13],
+    ["2010", 30, 15, 12, 13]
+  ];
+
+  var container = document.getElementById('hot');
+  var hot = new Handsontable(container,
+    {
+      data: data,
+      minSpareRows: 1,
+      colHeaders: true,
+      contextMenu: true
+    });
+</script>
+
+<%= link_to 'Edit', edit_unit_path(@unit) %> |
+<%= link_to 'Volver', units_path %>

@@ -1,0 +1,25 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box col-sm-12 col-md-12 col-lg-12">
+        <div class="box-header">
+          <div class="pull-right">
+              <%= link_to 'Crear grupo de preguntas', '#', class: 'btn btn-info'%>
+          </div>
+          <h3 class="box-title">Editando pregunta</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <%= render 'form' %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+</section>
+
+<%= link_to 'Volver', questions_path %>

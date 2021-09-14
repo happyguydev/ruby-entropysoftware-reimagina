@@ -1,0 +1,18 @@
+<%= simple_form_for(@feed_score) do |f| %>
+  <%= f.error_notification %>
+
+<div class="form-group col-md-2">
+  <label>Nombre</label>
+  <%= f.input :nombre, :label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="form-group col-md-2">
+  <label>Puntaje (%)</label>
+  <%= f.input :score, :label => false, input_html: {class: 'form-control'} %>
+</div>
+
+<div class="form-group col-md-12">
+  <%= f.button :submit , 'Enviar'%>
+</div>
+
+<% end %>

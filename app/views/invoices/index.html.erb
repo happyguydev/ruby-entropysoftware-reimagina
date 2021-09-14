@@ -1,0 +1,40 @@
+<div class='col-md-12 col-sm-12'>
+
+  <div class='col-md-12 col-sm-12'>
+    <table class="table table-bordered table-hover dataTable">
+      <thead>
+        <tr>
+          <th>Folio</th>
+          <th>Fecha</th>
+          <th>Monto</th>
+          <th>Estado</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @order.invoices.order(:fecha).each do |p| %>
+        <tr>
+          <td><%= p.numero %></td>
+          <td><%= p.fecha.to_date %></td>
+          <td><%= number_to_clp(p.monto) %></td>
+          <td><%= (p.paid?) ? 'Pagada' : 'Pendiente' %></td>
+          <td> <%= link_to( '<i class="fa fa-pencil"></i>'.html_safe, edit_order_invoice_path(@order,p)) %>
+
+          <%= link_to( '<i class="fa fa-trash-o"></i>'.html_safe, order_invoice_path(@order,p, :anchor => 'pagos'), method: :delete, data: { confirm: 'Seguro que quieres eliminar el registro?' }) %>
+
+
+            <%= link_to approve_link_text(p),
+toggle_approve_order_invoice_path(@order,p),
+:remote => true, :id => "approve_link_#{p.id}" %> <%= link_to('<i class="fa fa-download"></i>'.html_safe,p.document.url, target: "_blank")%> </td>
+
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <h3>Agregar Factura</h3>
+
+    <%= render :template => "invoices/_form" %>
+
+  </div>
+</div>

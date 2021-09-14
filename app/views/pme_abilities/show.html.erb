@@ -1,0 +1,33 @@
+<h1><%= @pme_ability.nombre %> <%= link_to 'Editar', edit_pme_ability_path(@pme_ability) %></h1>
+<p>
+  <strong>Nombre:</strong>
+  <%= @pme_ability.nombre %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @pme_ability.descripcion %>
+</p>
+
+<div class ="field">
+  <h3>Contenidos Habilidad  <%= @pme_ability.nombre %> </h3>
+
+  <div class='col-md-12 col-sm-12'>
+    <table id='ability_contents-table' class="table table-bordered table-hover dataTable" data-source='<%= pme_ability_ability_contents_path(@pme_ability, format: :json) %>'>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Descripcion</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+
+    </table>
+    <%= link_to 'Nuevo Contenido', new_pme_ability_ability_content_path(@pme_ability), class: 'btn btn-primary pull-right' %>
+  </div>
+
+
+</div>
+<%= link_to 'Volver', pme_abilities_path %>

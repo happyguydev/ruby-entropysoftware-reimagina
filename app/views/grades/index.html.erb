@@ -1,0 +1,31 @@
+<h1>Listing Grades</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>School</th>
+      <th>Grado</th>
+      <th>Letra</th>
+      <th>Year</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @grades.each do |grade| %>
+      <tr>
+        <td><%= grade.school_id %></td>
+        <td><%= grade.grado %></td>
+        <td><%= grade.letra %></td>
+        <td><%= grade.year %></td>
+        <td><%= link_to 'Show', school_grade_path(@school, grade) %></td>
+        <td><%= link_to 'Edit', edit_school_grade_path(@school, grade) %></td>
+        <td><%= link_to 'Destroy', school_path(@school), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Grade', new_school_grade_path %>

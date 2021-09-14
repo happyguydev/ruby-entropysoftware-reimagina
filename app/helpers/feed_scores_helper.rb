@@ -1,0 +1,2 @@
+module FeedScoresHelper
+end

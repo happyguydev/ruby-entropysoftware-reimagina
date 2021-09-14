@@ -1,0 +1,61 @@
+<html>
+  <head><meta charset="utf-8" />
+    <script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+    <%= wicked_pdf_stylesheet_link_tag "application", media: "all" %>
+    <%= wicked_pdf_javascript_include_tag 'application' %>  
+    <%= wicked_pdf_stylesheet_link_tag "results" -%>
+    <%= wicked_pdf_stylesheet_link_tag "bootstrap_and_overrides" -%>
+    <style>
+      #brake{
+        page-break-after: always;
+      }
+
+      .achievement_chart tr:first-child th:last-child {
+        background: cornflowerblue;
+      }
+      .achievement_chart tr:last-child {
+        background: cornflowerblue;
+      }
+      .result_chart tr:last-child {
+        background: cornflowerblue;
+      }
+      .table-heading, .heading {
+        text-align: center;
+      }
+      div.alwaysbreak { page-break-before: always; }
+      div.nobreak:before { clear:both; }
+      div.nobreak{ page-break-inside: avoid; }
+
+      table.nobreak {
+        font-size: 15px !important;
+        table-layout: auto;
+        width: 1100px;
+     }
+
+    </style>
+  </head>
+    <body>
+
+
+    <div class='centered' >
+      <div style="clear: both; width: 100%; padding: 70px 0px;"></div>
+
+      <b><font color ="#2C4D76" style ="font-size: 50px;"> <%= get_report_heading(@report.to_i) %></b></font>
+      <br>
+      <%= wicked_pdf_image_tag 'informe_portada2.jpg', style: 'width: 1140px; height: auto;' %>
+      <%#= image_tag 'informe_portada2.jpg', style: 'width: 1140px; height: auto;' %>
+      <%#= wicked_pdf_image_tag "#{Rails.root.join('informe_portada2.jpg')}", style: 'width: 1140px; height: auto;' %>
+    </div>
+    <div id='brake'></div>
+    <% if @report.to_i == 9 %>
+    <%= render :partial => 'comparatives/report_templates/report_8.html.erb' %>
+    <% else %>
+    <%= render :partial => 'comparatives/report_templates/report_'+@report.to_s+'.html.erb' %>
+    <% end %>
+  </body>
+  
+</html>
